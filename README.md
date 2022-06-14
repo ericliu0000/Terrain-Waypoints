@@ -1,1 +1,1 @@
-# Earth-API-Waypoints
+# Terrain Waypoints

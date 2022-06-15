@@ -25,8 +25,8 @@ class XYZReader:
 
                     row = []
 
-                # Add values (from survey feet to meters)
-                row.append((float(x) * 1200 / 3937, float(y) * 1200 / 3937, float(z)))
+                # Add values
+                row.append((float(x), float(y), float(z)))
                 last = y
 
             self.points.append(row)

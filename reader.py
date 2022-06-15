@@ -33,5 +33,5 @@ class XYZReader:
 
 
 if __name__ == "__main__":
-    reader = XYZReader("data/cloud_simplified.txt")
+    reader = XYZReader("data/ncsutest.txt")
     print(reader.points[0])

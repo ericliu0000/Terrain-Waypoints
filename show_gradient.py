@@ -46,7 +46,7 @@ def siteTest():
     z_max = z2.max()
 
     plt.subplot(1, 2, 1)
-    plt.contourf(X, Y, Z, 40, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
+    plt.contourf(X, Y, Z, 100, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     # gradient
@@ -58,7 +58,7 @@ def siteTest():
     Z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
-    plt.contourf(X, Y, Z, 40, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
+    plt.contourf(X, Y, Z, 100, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     plt.show()

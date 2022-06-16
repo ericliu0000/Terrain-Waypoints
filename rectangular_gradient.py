@@ -1,31 +1,51 @@
-from reader import XYZReader
+from reader import *
 import numpy
 
-# Calculate x and y partial derivative from every single point in points from XYZReader
-reader = XYZReader("data/ncsutest.xyz")
-points = reader.points
 
-gradients = []
+class SlopeGradient:
+    def __init__(self):
+        # Calculate x and y partial derivative from every single point in points from XYZReader
+        reader = XYZReader("data/ncsutest.xyz")
+        points = reader.points
 
-for i in range(1, len(points) - 1):
-    for j in range(1, len(points[i]) - 1):
-        # Calculate partial derivative
-        x_deriv = (points[i][j + 1][2] - points[i][j - 1][2]) / (points[i][j + 1][0] - points[i][j - 1][0])
-        y_deriv = (points[i + 1][j][2] - points[i - 1][j][2]) / (points[i + 1][j][1] - points[i - 1][j][1]) 
+        gradients = []
 
-        # print(x_deriv, y_deriv)
-        print(f"z1 {points[i][j + 1][2]} z2 {points[i][j - 1][2]}\nx1 {points[i][j + 1][0]} x2 {points[i][j - 1][0]} xderiv {x_deriv}\ny1 {points[i + 1][j][1]} y2 {points[i - 1][j][1]} yderiv {y_deriv}")
-        print(numpy.cross((1, 0, x_deriv), (0, 1, y_deriv)))
+        for i in range(1, len(points) - 1):
+            for j in range(1, len(points[i]) - 1):
+                # Calculate partial derivative
+                x_deriv = (points[i][j + 1][2] - points[i][j - 1][2]) / (points[i][j + 1][0] - points[i][j - 1][0])
+                y_deriv = (points[i + 1][j][2] - points[i - 1][j][2]) / (points[i + 1][j][1] - points[i - 1][j][1])
 
-        # Get normal vector from x and y partial derivative
-        normal = numpy.cross((1, 0, x_deriv), (0, 1, y_deriv))
+                # print(x_deriv, y_deriv)
+                print(f"z1 {points[i][j + 1][2]} z2 {points[i][j - 1][2]}\nx1 {points[i][j + 1][0]} x2 {points[i][j - 1][0]} xderiv {x_deriv}\ny1 {points[i + 1][j][1]} y2 {points[i - 1][j][1]} yderiv {y_deriv}")
+                print(numpy.cross((1, 0, x_deriv), (0, 1, y_deriv)))
 
-        # get unit normal
-        normal = normal / numpy.linalg.norm(normal)
+                # Get normal vector from x and y partial derivative
+                normal = numpy.cross((1, 0, x_deriv), (0, 1, y_deriv))
 
-        print(normal)
-        # add to gradients
-        gradients.append(normal)
+                # get unit normal
+                normal = normal / numpy.linalg.norm(normal)
 
-        print()
-        input()
+                print(normal)
+                # add to gradients
+                gradients.append(normal)
+
+                print()
+                input()
+
+
+class NumpyGradient:
+    def __init__(self):
+        reader = PandasReader("data/ncsutest.h5")
+        spacing, values = reader.spacing, reader.values
+
+        # print(spacing)
+        # print(spacing[0][..., 0])
+
+        gradient = numpy.gradient(values, spacing[0][..., 0], spacing[..., 1][:, 0])
+
+        print(gradient)
+
+if __name__ == "__main__":
+    # gradient = SlopeGradient()
+    gradient = NumpyGradient()

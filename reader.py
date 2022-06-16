@@ -74,7 +74,8 @@ class PandasReader:
 
         # only works if data is square
         self.points = numpy.reshape(self.points, (1600, 1600, 3))
-        print(self.points)
+        self.spacing = self.points[..., 0:2]
+        self.values = self.points[..., 2]
         """        
         last = 0
         row = []

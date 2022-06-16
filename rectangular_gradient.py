@@ -30,26 +30,21 @@ class SlopeGradient:
                 # add to gradients
                 gradients.append(normal)
 
-                print()
-                input()
-
 
 class NumpyGradient:
     def __init__(self):
         reader = PandasReader("data/ncsutest.h5")
         self.spacing, self.values = reader.spacing, reader.values
 
-        # print(spacing)
-        # print(spacing[0][..., 0])
-
         # x and y partials
         self.gradient = numpy.gradient(self.values, self.spacing[0][..., 0], self.spacing[..., 1][:, 0])
 
-        # get overall of gradient
+        # get magnitude gradient
         self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
         # print(self.gradient)
         # print(self.gradient[0].shape)
+
 
 if __name__ == "__main__":
     # gradient = SlopeGradient()

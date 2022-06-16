@@ -37,15 +37,17 @@ class SlopeGradient:
 class NumpyGradient:
     def __init__(self):
         reader = PandasReader("data/ncsutest.h5")
-        spacing, values = reader.spacing, reader.values
+        self.spacing, self.values = reader.spacing, reader.values
 
         # print(spacing)
         # print(spacing[0][..., 0])
 
-        gradient = numpy.gradient(values, spacing[0][..., 0], spacing[..., 1][:, 0])
+        self.gradient = numpy.gradient(self.values, self.spacing[0][..., 0], self.spacing[..., 1][:, 0])
 
-        print(gradient)
+        # print(self.gradient)
+        # print(self.gradient[0].shape)
 
 if __name__ == "__main__":
     # gradient = SlopeGradient()
     gradient = NumpyGradient()
+    print(gradient.gradient)

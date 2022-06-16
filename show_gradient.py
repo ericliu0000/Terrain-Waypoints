@@ -21,24 +21,14 @@ plt.colorbar()
 # gradient
 calculator = NumpyGradient()
 gradient = calculator.magnitude
-# gradient, points = calculator.gradient, calculator.spacing
 
-# X, Y = points[..., 0].flatten(), points[..., 1].flatten()
 z_min = -1
 z_max = 1
 
 Z = numpy.clip(gradient, z_min, z_max)
-print(type(Z))
-
-# x_i = numpy.linspace(X.min(), X.max(), 1600)
-# y_i = numpy.linspace(Y.min(), Y.max(), 1600)
-
-# print(gradient[0].max(), gradient[0].min())
-
 
 plt.subplot(1, 2, 2)
 plt.contourf(x_i, y_i, Z, 80, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
 plt.colorbar()
-
 
 plt.show()

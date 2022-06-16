@@ -31,7 +31,7 @@ print(Z.min(), Z.max())
 print("done 3")
 
 # Interpolate for plotting
-zi = griddata((X, Y), Z, (xi[None, :], yi[:, None]), method='cubic')
+zi = griddata((X, Y), Z, (xi[None, :], yi[:, None]), method='linear')
 
 print("done 4")
 
@@ -40,6 +40,8 @@ print("done 4")
 zmin = 3300
 zmax = 3700
 zi[(zi < zmin) | (zi > zmax)] = None
+print(zi[1])
+
 
 print("done 5")
 

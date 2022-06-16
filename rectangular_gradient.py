@@ -1,5 +1,6 @@
 from reader import *
 import numpy
+import scipy.interpolate
 
 
 class SlopeGradient:
@@ -42,11 +43,47 @@ class NumpyGradient:
         # get magnitude gradient
         self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
+
+        print(self.values, self.values.shape)
+        print("\n\nx")
+        print(self.spacing[0][..., 0], self.spacing[0][..., 0].shape)
+        print("\n\ny")
+        print(self.spacing[..., 1][:, 0], self.spacing[..., 1][:, 0].shape)
+        print()
+
         # print(self.gradient)
         # print(self.gradient[0].shape)
+
+class InterpolatedGridGradient:
+    scale = 1
+
+    def __init__(self, file):
+        self.data = pandas.read_hdf(file, "test").to_numpy()
+        self.spacing, self.values = self.data[..., :2], self.data[..., 2]
+
+        x_max, x_min = self.spacing[:, 0].max(), self.spacing[:, 0].min()
+        y_max, y_min = self.spacing[:, 1].max(), self.spacing[:, 1].min()
+        x_length, y_length = x_max - x_min, y_max - y_min
+
+        # create grid
+        x_grid = numpy.linspace(x_min, x_max, int(x_length * self.scale))
+        y_grid = numpy.linspace(y_min, y_max, int(y_length * self.scale))
+
+        self.points = numpy.nan_to_num(scipy.interpolate.griddata(self.spacing, self.values, (x_grid[None, :], y_grid[:, None]), method="linear"))
+        
+        print(self.points, self.points.shape)
+        print("\n\nx")
+        print(x_grid, x_grid.shape)
+        print("\n\ny")
+        print(y_grid, y_grid.shape)
+        print()
+        self.gradient = numpy.gradient(self.points, x_grid, y_grid)
 
 
 if __name__ == "__main__":
     # gradient = SlopeGradient()
-    gradient = NumpyGradient()
-    print(gradient.magnitude)
+    # gradient = NumpyGradient()
+    # print(gradient.magnitude)
+
+    gradient = InterpolatedGridGradient("data/cloud_simplified.h5")
+    # print(gradient.gradient)

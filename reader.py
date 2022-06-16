@@ -70,28 +70,13 @@ class PandasReader:
 
     def __init__(self, file):
         self.points = pandas.read_hdf(file, "test").to_numpy()
+        # self.points = pandas.read_csv(file)
         # self.points.to_hdf("data/ncsutest.h5", "test")
 
         # only works if data is square
         self.points = numpy.reshape(self.points, (1600, 1600, 3))
         self.spacing = self.points[..., 0:2]
         self.values = self.points[..., 2]
-        """        
-        last = 0
-        row = []
-
-        for point in self.points:
-            # If y value has advanced, add row to the list
-            # print(point)
-            if point[1] != last:
-                if len(row) != 0:
-                    self.array.append(row)
-                row = []
-
-            # Add values
-            row.append((point[0], point[1], point[2]))
-            last = point[1]
-        """
 
 
 if __name__ == "__main__":

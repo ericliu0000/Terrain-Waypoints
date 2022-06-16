@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Gradient {
     public static void main(String[] args) throws IOException {
-        ArrayList<ArrayList<double[]>> points = new ArrayList<>();
-        ArrayList<double[]> row = new ArrayList<>();
+        ArrayList<ArrayList<double[]>> points = new ArrayList<>(1600);
+        ArrayList<double[]> row = new ArrayList<>(1600);
         double x, y, z, last = 0;
 
         try (BufferedReader reader = Files.newBufferedReader(Path.of("data/ncsutest.xyz"))) {

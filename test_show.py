@@ -46,7 +46,7 @@ print(zi[1])
 print("done 5")
 
 # Create the contour plot
-CS = plt.contourf(xi, yi, zi, zmax - zmin, cmap=plt.cm.rainbow,
+CS = plt.contourf(xi, yi, zi, 10, cmap=plt.cm.rainbow,
                   vmax=zmax, vmin=zmin)
 
 print("done 6")

@@ -43,13 +43,16 @@ class NumpyGradient:
         # get magnitude gradient
         self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
+        print(type(self.spacing[..., 1][:, 0]))
+        print(self.spacing[..., 1][:, 0])
 
-        print(self.values, self.values.shape)
-        print("\n\nx")
-        print(self.spacing[0][..., 0], self.spacing[0][..., 0].shape)
-        print("\n\ny")
-        print(self.spacing[..., 1][:, 0], self.spacing[..., 1][:, 0].shape)
-        print()
+
+        # print(self.values, self.values.shape)
+        # print("\n\nx")
+        # print(self.spacing[0][..., 0], self.spacing[0][..., 0].shape)
+        # print("\n\ny")
+        # print(self.spacing[..., 1][:, 0], self.spacing[..., 1][:, 0].shape)
+        # print()
 
         # print(self.gradient)
         # print(self.gradient[0].shape)
@@ -69,15 +72,18 @@ class InterpolatedGridGradient:
         x_grid = numpy.linspace(x_min, x_max, int(x_length * self.scale))
         y_grid = numpy.linspace(y_min, y_max, int(y_length * self.scale))
 
-        self.points = numpy.nan_to_num(scipy.interpolate.griddata(self.spacing, self.values, (x_grid[None, :], y_grid[:, None]), method="linear"))
+        print(type(y_grid))
+        print(y_grid)
+
+        print(x_grid[2] - x_grid[1])
+        print(x_length)
+
+        print(y_grid[2] - y_grid[1])
+        print(y_length)
+
+        self.points = scipy.interpolate.griddata(self.spacing, self.values, (x_grid[None, :], y_grid[:, None]), method="linear")
         
-        print(self.points, self.points.shape)
-        print("\n\nx")
-        print(x_grid, x_grid.shape)
-        print("\n\ny")
-        print(y_grid, y_grid.shape)
-        print()
-        self.gradient = numpy.gradient(self.points, x_grid, y_grid)
+        self.gradient = numpy.gradient(self.points, 1.00307, 1.0005)
 
 
 if __name__ == "__main__":
@@ -86,4 +92,4 @@ if __name__ == "__main__":
     # print(gradient.magnitude)
 
     gradient = InterpolatedGridGradient("data/cloud_simplified.h5")
-    # print(gradient.gradient)
+    print(gradient.gradient)

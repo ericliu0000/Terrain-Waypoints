@@ -69,21 +69,14 @@ class InterpolatedGridGradient:
         x_length, y_length = x_max - x_min, y_max - y_min
 
         # create grid
-        x_grid = numpy.linspace(x_min, x_max, int(x_length * self.scale))
-        y_grid = numpy.linspace(y_min, y_max, int(y_length * self.scale))
+        self.x_grid = numpy.linspace(x_min, x_max, int(x_length * self.scale))
+        self.y_grid = numpy.linspace(y_min, y_max, int(y_length * self.scale))
 
-        print(type(y_grid))
-        print(y_grid)
-
-        print(x_grid[2] - x_grid[1])
-        print(x_length)
-
-        print(y_grid[2] - y_grid[1])
-        print(y_length)
-
-        self.points = scipy.interpolate.griddata(self.spacing, self.values, (x_grid[None, :], y_grid[:, None]), method="linear")
+        self.points = scipy.interpolate.griddata(self.spacing, self.values, (self.x_grid[None, :], self.y_grid[:, None]), method="linear")
         
         self.gradient = numpy.gradient(self.points, 1.00307, 1.0005)
+        self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
+
 
 
 if __name__ == "__main__":
@@ -92,4 +85,4 @@ if __name__ == "__main__":
     # print(gradient.magnitude)
 
     gradient = InterpolatedGridGradient("data/cloud_simplified.h5")
-    print(gradient.gradient)
+    print(gradient.points)

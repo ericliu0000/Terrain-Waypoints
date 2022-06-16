@@ -20,14 +20,14 @@ plt.colorbar()
 
 # gradient
 calculator = NumpyGradient()
-gradient = calculator.gradient
+gradient = calculator.magnitude
 # gradient, points = calculator.gradient, calculator.spacing
 
 # X, Y = points[..., 0].flatten(), points[..., 1].flatten()
 z_min = -1
 z_max = 1
 
-Z = numpy.clip(gradient[0], z_min, z_max)
+Z = numpy.clip(gradient, z_min, z_max)
 print(type(Z))
 
 # x_i = numpy.linspace(X.min(), X.max(), 1600)

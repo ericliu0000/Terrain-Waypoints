@@ -42,7 +42,11 @@ class NumpyGradient:
         # print(spacing)
         # print(spacing[0][..., 0])
 
+        # x and y partials
         self.gradient = numpy.gradient(self.values, self.spacing[0][..., 0], self.spacing[..., 1][:, 0])
+
+        # get overall of gradient
+        self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
         # print(self.gradient)
         # print(self.gradient[0].shape)
@@ -50,4 +54,4 @@ class NumpyGradient:
 if __name__ == "__main__":
     # gradient = SlopeGradient()
     gradient = NumpyGradient()
-    print(gradient.gradient)
+    print(gradient.magnitude)

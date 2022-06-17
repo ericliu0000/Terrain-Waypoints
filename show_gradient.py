@@ -34,6 +34,7 @@ def NCSUTest():
 
     plt.show()
 
+
 def siteTest():
     # elevations
     obj = InterpolatedGridGradient("data/cloud_simplified.h5")
@@ -46,25 +47,22 @@ def siteTest():
     z_max = z2.max()
 
     plt.subplot(1, 2, 1)
-    plt.contourf(X, Y, Z, 100, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
+    plt.contourf(X, Y, Z, 50, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     # gradient
     gradient = obj.magnitude
 
-    z_min = -1
-    z_max = 1
+    z_min = 0
+    z_max = 2
 
     Z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
-    plt.contourf(X, Y, Z, 100, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
+    plt.contourf(X, Y, Z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     plt.show()
-
-
-    # TODO complete this. do the same as the above function but just adapt the points to the interpolated ones instead
 
 
 if __name__ == "__main__":

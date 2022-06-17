@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 def ncsu_test():
     # elevations
-    obj = NumpyGradient()
+    obj = NumpyGradient("data/ncsutest.h5")
     elevations = obj.points
     x, y = elevations[..., 0].flatten(), elevations[..., 1].flatten()
     z = elevations[..., 2]
@@ -65,6 +65,24 @@ def site_test():
     plt.show()
 
 
+def site_slope_only():
+    obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
+    x, y = obj.x_grid, obj.y_grid
+    gradient = obj.magnitude
+
+    z_min = 0
+    z_max = 2
+
+    z = numpy.clip(gradient, z_min, z_max)
+
+    plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.colorbar()
+
+    plt.show()
+
+
+
 if __name__ == "__main__":
-    ncsu_test()
-    site_test()
+    # ncsu_test()
+    # site_test()
+    site_slope_only()

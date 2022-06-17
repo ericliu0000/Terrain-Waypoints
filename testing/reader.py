@@ -38,7 +38,7 @@ class PandasReader:
     array = []
 
     def __init__(self, file):
-        self.points = pandas.read_hdf(file, "test").to_numpy()
+        self.points = pandas.read_hdf(file, "a").to_numpy()
 
         # only works if data is square
         self.points = numpy.reshape(self.points, (1600, 1600, 3))
@@ -46,6 +46,13 @@ class PandasReader:
         self.values = self.points[..., 2]
 
 
+class ConvertHDF:
+    def __init__(self, file, out):
+        self.points = pandas.read_csv(file, delimiter=" ")
+        self.points.to_hdf(out, "a")
+
+
 if __name__ == "__main__":
-    print("a")
+    # print("a")
+    ConvertHDF("data/cloud_simplified_2.txt", "data/cloud_simplified_2.h5")
     # print(reader.spacing[0], "\n", reader.values[0])

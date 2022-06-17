@@ -5,7 +5,7 @@ import pandas
 
 scale = 1
 
-data = pandas.read_hdf("data/cloud_simplified.h5", "test").to_numpy()
+data = pandas.read_hdf("data/cloud_simplified.h5", "a").to_numpy()
 points, values = data[:, :2], data[:, 2]
 
 x_max, x_min = points[:, 0].max(), points[:, 0].min()

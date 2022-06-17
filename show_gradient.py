@@ -1,6 +1,5 @@
 from rectangular_gradient import *
 import numpy
-from scipy.interpolate import griddata
 import matplotlib.pyplot as plt
 
 

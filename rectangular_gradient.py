@@ -47,5 +47,4 @@ if __name__ == "__main__":
     # gradient = NumpyGradient()
     # print(gradient.magnitude)
 
-    gradient = InterpolatedGridGradient("data/cloud_simplified.h5")
-    print(gradient.points)
+    gradient = InterpolatedGridGradient("data/cloud_simplified_2.h5")

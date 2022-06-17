@@ -1,7 +1,7 @@
-import scipy.interpolate
-import numpy
 import matplotlib.pyplot as plt
+import numpy
 import pandas
+import scipy.interpolate
 
 scale = 1
 

@@ -4,8 +4,8 @@ import pandas
 
 
 class NumpyGradient:
-    def __init__(self, file):
-        self.points = pandas.read_hdf(file, "a").to_numpy()
+    def __init__(self, doc):
+        self.points = pandas.read_hdf(doc, "a").to_numpy()
 
         # only works if data is square
         s = self.points.shape[0] ** 0.5
@@ -25,8 +25,8 @@ class NumpyGradient:
 class InterpolatedGridGradient:
     scale = 1
 
-    def __init__(self, file):
-        self.data = pandas.read_hdf(file, "a").to_numpy()
+    def __init__(self, doc):
+        self.data = pandas.read_hdf(doc, "a").to_numpy()
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]
 
         x_max, x_min = self.spacing[:, 0].max(), self.spacing[:, 0].min()

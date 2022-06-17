@@ -1,7 +1,7 @@
 # from https://stackoverflow.com/a/39401259gi
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy.interpolate import griddata
 
 # Load data from CSV
@@ -35,13 +35,10 @@ zi = griddata((X, Y), Z, (xi[None, :], yi[:, None]), method='linear')
 
 print("done 4")
 
-# I control the range of my colorbar by removing data
-# outside of my range of interest
 zmin = 3300
 zmax = 3700
 zi[(zi < zmin) | (zi > zmax)] = None
 print(zi[1])
-
 
 print("done 5")
 

@@ -3,21 +3,21 @@ import numpy
 import matplotlib.pyplot as plt
 
 
-def NCSUTest():
+def ncsu_test():
     # elevations
-    obj = NumpyGradient("data/ncsutest.h5")
+    obj = NumpyGradient()
     elevations = obj.points
-    X, Y = elevations[..., 0].flatten(), elevations[..., 1].flatten()
-    Z = elevations[..., 2]
+    x, y = elevations[..., 0].flatten(), elevations[..., 1].flatten()
+    z = elevations[..., 2]
 
-    x_i = numpy.linspace(X.min(), X.max(), 1600)
-    y_i = numpy.linspace(Y.min(), Y.max(), 1600)
+    x_i = numpy.linspace(x.min(), x.max(), 1600)
+    y_i = numpy.linspace(y.min(), y.max(), 1600)
 
-    z_min = Z.min()
-    z_max = Z.max()
+    z_min = z.min()
+    z_max = z.max()
 
     plt.subplot(1, 2, 1)
-    plt.contourf(x_i, y_i, Z, 160, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
+    plt.contourf(x_i, y_i, z, 160, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     # gradient
@@ -26,28 +26,28 @@ def NCSUTest():
     z_min = -1
     z_max = 1
 
-    Z = numpy.clip(gradient, z_min, z_max)
+    z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
-    plt.contourf(x_i, y_i, Z, 80, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
+    plt.contourf(x_i, y_i, z, 80, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     plt.show()
 
 
-def siteTest():
+def site_test():
     # elevations
     obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
-    X, Y = obj.x_grid, obj.y_grid
-    Z = obj.points
+    x, y = obj.x_grid, obj.y_grid
+    z = obj.points
 
-    z2 = Z[~numpy.isnan(Z)]
+    z2 = z[~numpy.isnan(z)]
 
     z_min = z2.min()
     z_max = z2.max()
 
     plt.subplot(1, 2, 1)
-    plt.contourf(X, Y, Z, 50, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
+    plt.contourf(x, y, z, 50, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     # gradient
@@ -56,15 +56,15 @@ def siteTest():
     z_min = 0
     z_max = 2
 
-    Z = numpy.clip(gradient, z_min, z_max)
+    z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
-    plt.contourf(X, Y, Z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     plt.show()
 
 
 if __name__ == "__main__":
-    NCSUTest()
-    siteTest()
+    ncsu_test()
+    site_test()

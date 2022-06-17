@@ -1,9 +1,9 @@
 """
 Read data to latitude, longitude, and elevation
 """
-import pyproj
-import pandas
 import numpy
+import pandas
+import pyproj
 
 
 class XYZReader:
@@ -32,6 +32,7 @@ class XYZReader:
                 last = y
 
             self.points.append(row)
+
 
 class PandasReader:
     points = []

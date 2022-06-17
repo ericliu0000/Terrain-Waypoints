@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 
 
 def NCSUTest():
-    elevations = PandasReader("data/ncsutest.h5").points
+    # elevations
+    obj = NumpyGradient("data/ncsutest.h5")
+    elevations = obj.points
     X, Y = elevations[..., 0].flatten(), elevations[..., 1].flatten()
     Z = elevations[..., 2]
 
@@ -20,8 +22,7 @@ def NCSUTest():
     plt.colorbar()
 
     # gradient
-    calculator = NumpyGradient()
-    gradient = calculator.magnitude
+    gradient = obj.magnitude
 
     z_min = -1
     z_max = 1
@@ -66,4 +67,5 @@ def siteTest():
 
 
 if __name__ == "__main__":
-    siteTest()
+    NCSUTest()
+    # siteTest()

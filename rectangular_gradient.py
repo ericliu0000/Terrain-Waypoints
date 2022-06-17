@@ -1,61 +1,26 @@
-from reader import *
 import numpy
 import scipy.interpolate
-
-
-class SlopeGradient:
-    def __init__(self):
-        # Calculate x and y partial derivative from every single point in points from XYZReader
-        reader = XYZReader("data/ncsutest.xyz")
-        points = reader.points
-
-        gradients = []
-
-        for i in range(1, len(points) - 1):
-            for j in range(1, len(points[i]) - 1):
-                # Calculate partial derivative
-                x_deriv = (points[i][j + 1][2] - points[i][j - 1][2]) / (points[i][j + 1][0] - points[i][j - 1][0])
-                y_deriv = (points[i + 1][j][2] - points[i - 1][j][2]) / (points[i + 1][j][1] - points[i - 1][j][1])
-
-                # print(x_deriv, y_deriv)
-                print(f"z1 {points[i][j + 1][2]} z2 {points[i][j - 1][2]}\nx1 {points[i][j + 1][0]} x2 {points[i][j - 1][0]} xderiv {x_deriv}\ny1 {points[i + 1][j][1]} y2 {points[i - 1][j][1]} yderiv {y_deriv}")
-                print(numpy.cross((1, 0, x_deriv), (0, 1, y_deriv)))
-
-                # Get normal vector from x and y partial derivative
-                normal = numpy.cross((1, 0, x_deriv), (0, 1, y_deriv))
-
-                # get unit normal
-                normal = normal / numpy.linalg.norm(normal)
-
-                print(normal)
-                # add to gradients
-                gradients.append(normal)
+import pandas
 
 
 class NumpyGradient:
-    def __init__(self):
-        reader = PandasReader("data/ncsutest.h5")
-        self.spacing, self.values = reader.spacing, reader.values
+    def __init__(self, file):
+        self.points = pandas.read_hdf(file, "test").to_numpy()
+
+        # only works if data is square
+        s = self.points.shape[0] ** 0.5
+        assert s == int(s), "Data is not square"
+        self.points = numpy.reshape(self.points, (int(s), int(s), 3))
+
+        self.spacing = self.points[..., :2]
+        self.values = self.points[..., 2]
 
         # x and y partials
         self.gradient = numpy.gradient(self.values, self.spacing[0][..., 0], self.spacing[..., 1][:, 0])
 
-        # get magnitude gradient
+        # get magnitude of gradient
         self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
-        print(type(self.spacing[..., 1][:, 0]))
-        print(self.spacing[..., 1][:, 0])
-
-
-        # print(self.values, self.values.shape)
-        # print("\n\nx")
-        # print(self.spacing[0][..., 0], self.spacing[0][..., 0].shape)
-        # print("\n\ny")
-        # print(self.spacing[..., 1][:, 0], self.spacing[..., 1][:, 0].shape)
-        # print()
-
-        # print(self.gradient)
-        # print(self.gradient[0].shape)
 
 class InterpolatedGridGradient:
     scale = 1
@@ -73,14 +38,12 @@ class InterpolatedGridGradient:
         self.y_grid = numpy.linspace(y_min, y_max, int(y_length * self.scale))
 
         self.points = scipy.interpolate.griddata(self.spacing, self.values, (self.x_grid[None, :], self.y_grid[:, None]), method="linear")
-        
-        self.gradient = numpy.gradient(self.points, 1.00307, 1.0005)
+
+        self.gradient = numpy.gradient(self.points, self.x_grid[1] - self.x_grid[0], self.y_grid[1] - self.y_grid[0])
         self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
 
-
 if __name__ == "__main__":
-    # gradient = SlopeGradient()
     # gradient = NumpyGradient()
     # print(gradient.magnitude)
 

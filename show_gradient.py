@@ -38,7 +38,7 @@ def NCSUTest():
 
 def siteTest():
     # elevations
-    obj = InterpolatedGridGradient("data/cloud_simplified.h5")
+    obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
     X, Y = obj.x_grid, obj.y_grid
     Z = obj.points
 
@@ -68,4 +68,4 @@ def siteTest():
 
 if __name__ == "__main__":
     NCSUTest()
-    # siteTest()
+    siteTest()

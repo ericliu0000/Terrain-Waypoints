@@ -9,7 +9,7 @@ class NumpyGradient:
 
         # only works if data is square
         s = self.points.shape[0] ** 0.5
-        assert s == int(s), "Data is not square"
+        assert s == int(s), f"Data is not square: {self.points.shape}"
         self.points = numpy.reshape(self.points, (int(s), int(s), 3))
 
         self.spacing = self.points[..., :2]

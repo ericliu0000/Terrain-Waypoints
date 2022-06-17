@@ -48,11 +48,12 @@ class PandasReader:
 
 class ConvertHDF:
     def __init__(self, file, out):
-        self.points = pandas.read_csv(file, delimiter=" ")
+        # self.points = pandas.read_csv(file)
+        self.points = pandas.read_csv(file, delimiter=" ", header=None)
         self.points.to_hdf(out, "a")
 
 
 if __name__ == "__main__":
     # print("a")
-    ConvertHDF("data/cloud_simplified_2.txt", "data/cloud_simplified_2.h5")
+    ConvertHDF("data/ncsutest.xyz", "data/ncsutest.h5")
     # print(reader.spacing[0], "\n", reader.values[0])

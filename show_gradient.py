@@ -37,17 +37,20 @@ def ncsu_test():
 
 def site_test():
     # elevations
-    obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
+    obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
     z = obj.points
 
     z2 = z[~numpy.isnan(z)]
 
-    z_min = z2.min()
+    # z_min = z2.min()
+    z_min = 3375
     z_max = z2.max()
 
     plt.subplot(1, 2, 1)
-    plt.contourf(x, y, z, 50, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
+    plt.title("Elevation")
+
+    plt.contourf(x, y, z, 20, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     # gradient
@@ -59,6 +62,44 @@ def site_test():
     z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
+    plt.title("Slope")
+
+    plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.colorbar()
+
+    plt.show()
+
+
+def lasground_test():
+    # normal
+    obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
+    x, y = obj.x_grid, obj.y_grid
+    gradient = obj.magnitude
+
+    z_min = 0
+    z_max = 2
+
+    z = numpy.clip(gradient, z_min, z_max)
+
+    plt.subplot(1, 2, 1)
+    plt.title("Original data")
+
+    plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.colorbar()
+
+    # lasground
+    obj = InterpolatedGridGradient("data/cloud_lasground.h5")
+    x, y = obj.x_grid, obj.y_grid
+    gradient = obj.magnitude
+
+    z_min = 0
+    z_max = 2
+
+    z = numpy.clip(gradient, z_min, z_max)
+
+    plt.subplot(1, 2, 2)
+    plt.title("Surface objects removed")
+
     plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
@@ -66,7 +107,7 @@ def site_test():
 
 
 def site_slope_only():
-    obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
+    obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
 
@@ -84,5 +125,6 @@ def site_slope_only():
 
 if __name__ == "__main__":
     # ncsu_test()
-    # site_test()
-    site_slope_only()
+    site_test()
+    # lasground_test()
+    # site_slope_only()

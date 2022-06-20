@@ -56,5 +56,5 @@ class ConvertHDF:
 
 if __name__ == "__main__":
     # print("a")
-    ConvertHDF("data/ncsutest.xyz", "data/ncsutest.h5")
+    ConvertHDF("data/cloud_lasground.txt", "data/cloud_lasground.h5")
     # print(reader.spacing[0], "\n", reader.values[0])

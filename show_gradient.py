@@ -122,9 +122,59 @@ def site_slope_only():
     plt.show()
 
 
+def quadrant():
+    elevation_steps = 40
+    slope_steps = 40
+
+    # elevations
+    original = InterpolatedGridGradient("data/cloud_simplified_2.h5")
+    x1, y1 = original.x_grid, original.y_grid
+    z1 = original.points
+
+    ground = InterpolatedGridGradient("data/cloud_lasground.h5")
+    x2, y2 = ground.x_grid, ground.y_grid
+    z2 = ground.points
+
+    z_min = 3350
+    z_max = 3720
+
+    plt.subplot(2, 2, 1)
+    plt.title("Original elevation")
+
+    plt.contourf(x1, y1, z1, elevation_steps, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
+    plt.colorbar()
+
+    plt.subplot(2, 2, 3)
+    plt.title("LASground elevation")
+
+    plt.contourf(x2, y2, z2, elevation_steps, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
+    plt.colorbar()
+
+    # gradient
+    z_min = 0
+    z_max = 2
+
+    z1 = numpy.clip(original.magnitude, z_min, z_max)
+    z2 = numpy.clip(ground.magnitude, z_min, z_max)
+
+    plt.subplot(2, 2, 2)
+    plt.title("Original slope")
+
+    plt.contourf(x1, y1, z1, slope_steps, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.colorbar()
+
+    plt.subplot(2, 2, 4)
+    plt.title("LASground slope")
+
+    plt.contourf(x2, y2, z2, slope_steps, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.colorbar()
+
+    plt.show()
+
 
 if __name__ == "__main__":
     # ncsu_test()
-    site_test()
+    # site_test()
     # lasground_test()
     # site_slope_only()
+    quadrant()

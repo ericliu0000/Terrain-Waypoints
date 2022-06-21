@@ -2,21 +2,39 @@ from rectangular_gradient import *
 import numpy
 import matplotlib.pyplot as plt
 
-ground = InterpolatedGridGradient("data/cloud_lasground.h5")
-x, y = ground.x_grid, ground.y_grid
 
-z_min = 0.9
-z_max = 1.5
-inv_val = -9999
+def filter_slope(z_min, z_max):
+    ground = InterpolatedGridGradient("data/cloud_lasground.h5")
+    x, y = ground.x_grid, ground.y_grid
 
-gradient = ground.magnitude
+    gradient = ground.magnitude
 
-gradient[(gradient < z_min) | (gradient > z_max)] = numpy.nan
-print(gradient.min(), gradient.max())
+    gradient[(gradient < z_min) | (gradient > z_max)] = numpy.nan
 
-# gradient = numpy.clip(gradient, z_min, z_max)
+    plt.contourf(x, y, gradient, 50, cmap=plt.cm.Reds, vmin=0, vmax=2)
+    plt.colorbar()
 
-plt.contourf(x, y, gradient, 50, cmap=plt.cm.Reds, vmin=0, vmax=2)
-plt.colorbar()
+    plt.show()
 
-plt.show()
+
+def filter_layer(z_filter):
+    ground = InterpolatedGridGradient("data/cloud_lasground.h5")
+    x, y = ground.x_grid, ground.y_grid
+    print(x.min(), x.max(), y.min(), y.max())
+    tol = 1
+
+    z = ground.points
+
+    z[(z > z_filter + tol) | (z < z_filter - tol)] = numpy.nan
+
+    plt.contourf(x, y, z, 1, cmap=plt.cm.Reds, vmin=3310, vmax=3900)
+    plt.colorbar()
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    plt.imshow(plt.imread("data/site.png"), extent=[950132.25, 950764.18, 798442.81, 800597.99])
+
+    # plt.imread("data/site.png")
+    filter_layer(3600)

@@ -64,7 +64,7 @@ def site_test():
     plt.subplot(1, 2, 2)
     plt.title("Slope")
 
-    plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     plt.show()
@@ -77,14 +77,14 @@ def lasground_test():
     gradient = obj.magnitude
 
     z_min = 0
-    z_max = 2
+    z_max = 5
 
     z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 1)
     plt.title("Original data")
 
-    plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     # lasground
@@ -92,15 +92,13 @@ def lasground_test():
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
 
-    z_min = 0
-    z_max = 2
-
+    print(numpy.nan_to_num(gradient, nan=0).max())
     z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
     plt.title("Surface objects removed")
 
-    plt.contourf(x, y, z, 50, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+    plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
     plt.show()
@@ -177,6 +175,6 @@ def quadrant():
 if __name__ == "__main__":
     # ncsu_test()
     # site_test()
-    # lasground_test()
-    site_slope_only()
+    lasground_test()
+    # site_slope_only()
     # quadrant()

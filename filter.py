@@ -20,14 +20,13 @@ def filter_slope(z_min, z_max):
 def filter_layer(z_filter):
     ground = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = ground.x_grid, ground.y_grid
-    print(x.min(), x.max(), y.min(), y.max())
     tol = 1
 
     z = ground.points
 
     z[(z > z_filter + tol) | (z < z_filter - tol)] = numpy.nan
 
-    plt.contourf(x, y, z, 1, cmap=plt.cm.Reds, vmin=3310, vmax=3900)
+    plt.contourf(x, y, z, 1, cmap=plt.cm.Reds, vmin=3310, vmax=3707)
     plt.colorbar()
 
     plt.show()

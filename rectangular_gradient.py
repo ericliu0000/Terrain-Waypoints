@@ -25,7 +25,7 @@ class NumpyGradient:
 class InterpolatedGridGradient:
     scale = 1
 
-    def __init__(self, doc, method="linear"):
+    def __init__(self, doc, method="linear", gradient=True):
         self.data = pandas.read_hdf(doc, "a").to_numpy()
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]
 
@@ -39,8 +39,9 @@ class InterpolatedGridGradient:
 
         self.points = scipy.interpolate.griddata(self.spacing, self.values, (self.x_grid[None, :], self.y_grid[:, None]), method=method)
 
-        self.gradient = numpy.gradient(self.points, self.x_grid[1] - self.x_grid[0], self.y_grid[1] - self.y_grid[0])
-        self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
+        if gradient:
+            self.gradient = numpy.gradient(self.points, self.x_grid[1] - self.x_grid[0], self.y_grid[1] - self.y_grid[0])
+            self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
 
 if __name__ == "__main__":

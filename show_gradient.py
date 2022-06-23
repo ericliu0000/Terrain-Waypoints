@@ -92,7 +92,6 @@ def lasground_test():
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
 
-    print(numpy.nan_to_num(gradient, nan=0).max())
     z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
@@ -175,6 +174,6 @@ def quadrant():
 if __name__ == "__main__":
     # ncsu_test()
     # site_test()
-    lasground_test()
-    # site_slope_only()
+    # lasground_test()
+    site_slope_only()
     # quadrant()

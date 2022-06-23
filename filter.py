@@ -7,19 +7,23 @@ class ElevationFilter:
     tol = 0.5
     coords = {}
 
-    def __init__(self, doc, value):
+    def __init__(self, doc, values):
         data = pandas.read_hdf(doc, "a").to_numpy()
-        spacing, values = data[..., :2], data[..., 2]
+        xy, heights = data[..., :2], data[..., 2]
 
-        x_max, x_min = spacing[:, 0].max(), spacing[:, 0].min()
-        y_max, y_min = spacing[:, 1].max(), spacing[:, 1].min()
-
-        values[(values > value + self.tol) | (values < value - self.tol)] = numpy.nan
-        spacing = spacing[~numpy.isnan(values)]
+        for value in values:
+            temp_heights = numpy.copy(heights)
+            temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
+            self.coords[value] = xy[~numpy.isnan(temp_heights)]
 
         ### testing
+        x_max, x_min = xy[:, 0].max(), xy[:, 0].min()
+        y_max, y_min = xy[:, 1].max(), xy[:, 1].min()
+
         plt.axis([x_min, x_max, y_min, y_max])
-        plt.plot(spacing[:, 0], spacing[:, 1], "ro")
+
+        for value in self.coords.values():
+            plt.plot(value[:, 0], value[:, 1], "ro")
 
         obj = InterpolatedGridGradient("data/cloud_lasground.h5")
         x, y = obj.x_grid, obj.y_grid
@@ -37,4 +41,4 @@ class ElevationFilter:
 
 
 if __name__ == "__main__":
-    filter = ElevationFilter("data/cloud_lasground.h5", 3360)
+    filter = ElevationFilter("data/cloud_lasground.h5", [3360, 3400, 3460])

@@ -5,19 +5,17 @@ import matplotlib.pyplot as plt
 
 class ElevationFilter:
     tol = 0.5
+    coords = {}
 
     def __init__(self, doc, value):
         data = pandas.read_hdf(doc, "a").to_numpy()
-
         spacing, values = data[..., :2], data[..., 2]
 
         x_max, x_min = spacing[:, 0].max(), spacing[:, 0].min()
         y_max, y_min = spacing[:, 1].max(), spacing[:, 1].min()
-        x_length, y_length = x_max - x_min, y_max - y_min
 
         values[(values > value + self.tol) | (values < value - self.tol)] = numpy.nan
         spacing = spacing[~numpy.isnan(values)]
-        values = values[~numpy.isnan(values)]
 
         ### testing
         plt.axis([x_min, x_max, y_min, y_max])

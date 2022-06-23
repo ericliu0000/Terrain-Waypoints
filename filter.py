@@ -48,7 +48,5 @@ class ElevationFilter:
         plt.show()
 
 
-print((time.time_ns() - start) / 10 ** 9)
-
 if __name__ == "__main__":
     filter = ElevationFilter("data/cloud_lasground.h5", 3360)

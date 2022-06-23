@@ -2,23 +2,24 @@ from filter import SiteFilter
 import matplotlib.pyplot as plt
 import numpy
 
-site = SiteFilter("data/cloud_lasground.h5", [3500])
-points = list(site.coords.values())[0]
-points = numpy.array(sorted(points, key=lambda x: x[1]))
+site = SiteFilter("data/cloud_lasground.h5", [3500, 3400])
+values = list(site.coords.values())
 
-# Find the slope perpendicular to all the points
-slopes = []
+for point in values:
+    point = numpy.array(sorted(point, key=lambda x: x[1]))
 
-for i in range(1, len(points) - 1):
-    slopes.append(-(points[i][0] - points[i - 1][0]) / (points[i][1] - points[i - 1][1]))
-    plt.plot([points[i - 1][0], points[i][0]], [points[i - 1][1], points[i][1]], "go")
+    # Find the slope perpendicular to all the points
+    slopes = []
 
-# print(slopes)
-eq = numpy.polyfit(points[:, 1], points[:, 0], 2)
-x = numpy.linspace(799100, 799900, 100)
-y = eq[0] * x ** 2 + eq[1] * x + eq[2] 
+    for i in range(1, len(point) - 1):
+        slopes.append(-(point[i][0] - point[i - 1][0]) / (point[i][1] - point[i - 1][1]))
+        plt.plot([point[i - 1][0], point[i][0]], [point[i - 1][1], point[i][1]], "go")
 
-plt.plot(y, x, "b")
+    eq = numpy.polyfit(point[:, 1], point[:, 0], 2)
+    x = numpy.linspace(point[:, 1].min(), point[:, 1].max(), 100)
+    y = eq[0] * x ** 2 + eq[1] * x + eq[2] 
+
+    plt.plot(y, x, "b")
 
 from show_gradient import site_slope_only
 site_slope_only()

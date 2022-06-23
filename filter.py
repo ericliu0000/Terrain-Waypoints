@@ -2,17 +2,12 @@ from rectangular_gradient import InterpolatedGridGradient
 import numpy
 import pandas
 import matplotlib.pyplot as plt
-import time
 
 class ElevationFilter:
     tol = 0.5
 
     def __init__(self, doc, value):
-        start = time.time_ns()
-
         data = pandas.read_hdf(doc, "a").to_numpy()
-        
-        print((time.time_ns() - start) / 10 ** 9)
 
         spacing, values = data[..., :2], data[..., 2]
 

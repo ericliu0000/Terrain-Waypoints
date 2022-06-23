@@ -20,7 +20,7 @@ class SiteFilter:
             temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
             coordinates = xy[~numpy.isnan(temp_heights)]
             
-            self.coords[value] = numpy.array([[0, 0]])
+            self.coords[value] = numpy.array([]).reshape(0, 2)
 
             # only add those within boundaries
             for row in coordinates:

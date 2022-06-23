@@ -5,8 +5,9 @@ import pandas
 from rectangular_gradient import InterpolatedGridGradient
 
 
-class ElevationFilter:
+class SiteFilter:
     tol = 0.5
+    left = 950310
     coords = {}
 
     def __init__(self, doc, values, show=False):
@@ -14,9 +15,18 @@ class ElevationFilter:
         xy, heights = data[..., :2], data[..., 2]
 
         for value in values:
+            # copy and filter out height
             temp_heights = numpy.copy(heights)
             temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
-            self.coords[value] = xy[~numpy.isnan(temp_heights)]
+            coordinates = xy[~numpy.isnan(temp_heights)]
+            
+            self.coords[value] = numpy.array([[0, 0]])
+
+            # only add those within boundaries
+            for row in coordinates:
+                x = row[0]
+                if (x > self.left) and (self.lower(x) <= row[1] <= self.upper(x)):
+                    self.coords[value] = numpy.append(self.coords[value], numpy.array([[row[0], row[1]]]), axis=0)
 
         if show:
             # testing
@@ -42,6 +52,12 @@ class ElevationFilter:
 
             plt.show()
 
+    def upper(self, coord):
+        return min((6.7 * (coord - 950310) + 799640), 800310)
+
+    def lower(self, coord):
+        return max((-3.3077 * (coord - 950310) + 799400), 798970)
+
 
 if __name__ == "__main__":
-    test = ElevationFilter("data/cloud_lasground.h5", [3360, 3400, 3460])
+    test = SiteFilter("data/cloud_lasground.h5", [3360, 3400, 3460], True)

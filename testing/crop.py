@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy
 
-from filter import ElevationFilter
+from filter import SiteFilter
 from rectangular_gradient import InterpolatedGridGradient
 
 obj = InterpolatedGridGradient("data/cloud_lasground.h5")
@@ -28,7 +28,7 @@ plt.plot([950440, 950310], [798970, 799400], "r")
 # Lower limitation
 plt.plot([950440, 950550], [798970, 798970], "r")
 
-obj = ElevationFilter("data/cloud_lasground.h5", [3360, 3400, 3440, 3480])
+obj = SiteFilter("data/cloud_lasground.h5", [3360, 3400, 3440, 3480])
 
 
 # Actual cropping part

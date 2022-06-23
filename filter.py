@@ -8,6 +8,7 @@ from rectangular_gradient import InterpolatedGridGradient
 class SiteFilter:
     tol = 0.5
     left = 950310
+    right = 950600
     coords = {}
 
     def __init__(self, doc, values, show=False):
@@ -25,7 +26,7 @@ class SiteFilter:
             # only add those within boundaries
             for row in coordinates:
                 x = row[0]
-                if (x > self.left) and (self.lower(x) <= row[1] <= self.upper(x)):
+                if (self.right > x > self.left) and (self.lower(x) <= row[1] <= self.upper(x)):
                     self.coords[value] = numpy.append(self.coords[value], numpy.array([[row[0], row[1]]]), axis=0)
 
         if show:

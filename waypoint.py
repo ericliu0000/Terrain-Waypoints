@@ -2,7 +2,7 @@ from filter import SiteFilter
 import matplotlib.pyplot as plt
 import numpy
 
-site = SiteFilter("data/cloud_lasground.h5", [3500, 3400])
+site = SiteFilter("data/cloud_lasground.h5", [3560, 3500, 3440, 3380])
 values = list(site.coords.values())
 
 for point in values:

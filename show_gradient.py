@@ -1,4 +1,4 @@
-from rectangular_gradient import *
+from rectangular_gradient import InterpolatedGridGradient, NumpyGradient
 import numpy
 import matplotlib.pyplot as plt
 

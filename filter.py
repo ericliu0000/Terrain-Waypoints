@@ -20,11 +20,6 @@ class ElevationFilter:
         values = values[~numpy.isnan(values)]
 
         ### testing
-
-        # create grid
-        x_grid = numpy.linspace(x_min, x_max, int(x_length))
-        y_grid = numpy.linspace(y_min, y_max, int(y_length))
-
         plt.axis([x_min, x_max, y_min, y_max])
         plt.plot(spacing[:, 0], spacing[:, 1], "ro")
 

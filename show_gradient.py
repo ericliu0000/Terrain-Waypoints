@@ -176,9 +176,21 @@ def quadrant() -> None:
     plt.show()
 
 
+def test_3d() -> None:
+    obj = InterpolatedGridGradient("data/cloud_lasground.h5")
+    x, y = obj.x_grid, obj.y_grid
+    z = obj.points
+
+    a = plt.axes(projection="3d")
+    a.contour3D(x, y, z, 80, cmap=plt.cm.terrain)
+
+    plt.show()
+
+
 if __name__ == "__main__":
     # ncsu_test()
     # site_test()
     # lasground_test()
-    site_slope_only()
+    # site_slope_only()
     # quadrant()
+    test_3d()

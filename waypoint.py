@@ -1,3 +1,4 @@
+import pyproj
 from filter import SiteFilter
 import matplotlib.pyplot as plt
 import numpy
@@ -14,7 +15,7 @@ class WaypointGenerator:
     unit_normals: list
 
     # this is just a random point in the highway
-    highway = 950700
+    highway: int = 950700
 
     def __init__(self, doc: str, height: list) -> None:
         site = SiteFilter(doc, height)
@@ -48,6 +49,7 @@ class WaypointGenerator:
                 last = (x[i - 1], y[i - 1])
                 next = (x[i], y[i])
 
+                # get direction of normal vector
                 self.midpoints.append(((last[1] + next[1]) / 2, (last[0] + next[0]) / 2))
                 normal = -(next[1] - last[1]) / (next[0] - last[0])
                 self.unit_normals.append(((1, normal) / numpy.linalg.norm((1, normal))).tolist())
@@ -68,17 +70,27 @@ class WaypointGenerator:
             self.waypoints.append(self.new_points)
 
     def export(self) -> None:
-        """Export the waypoints to a file."""
+        """Export the waypoints to a file (EPSG 32119)."""
         with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
             file.write("Easting,Northing,Altitude\n")
             for (altitude, waypoints) in zip(self.altitudes, self.waypoints):
                 for waypoint in waypoints:
                     file.write(f"{waypoint[0]},{waypoint[1]},{altitude}\n")
 
+    def export_latlong(self) -> None:
+        """Export the waypoints to a file (EPSG 4326)."""
+        with open(f"output/{datetime.datetime.now()}_latlong.csv", "w") as file:
+            file.write("Latitude,Longitude,Altitude\n")
+            for (altitude, waypoints) in zip(self.altitudes, self.waypoints):
+                for waypoint in waypoints:
+                    transformer = pyproj.Transformer.from_proj('epsg:32119', 'epsg:4326')
+                    x, y = transformer.transform(waypoint[0], waypoint[1])
+                    file.write(f"{y},{x},{altitude}\n")
+
 
 if __name__ == "__main__":
     a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
-    a.export()
+    a.export_latlong()
     # from show_gradient import site_slope_only
 
     # site_slope_only()

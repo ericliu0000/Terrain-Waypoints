@@ -66,11 +66,18 @@ class WaypointGenerator:
 
             self.waypoints.append(self.new_points)
 
-    # def export(self):
+    def export(self) -> None:
+        """Export the waypoints to a file."""
+        with open("output/waypoints.csv", "w") as file:
+            file.write("Easting,Northing,Altitude\n")
+            for (altitude, waypoints) in zip(self.altitudes, self.waypoints):
+                for waypoint in waypoints:
+                    file.write(f"{waypoint[0]},{waypoint[1]},{altitude}\n")
 
 
 if __name__ == "__main__":
-    WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
-    from show_gradient import site_slope_only
+    a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
+    a.export()
+    # from show_gradient import site_slope_only
 
-    site_slope_only()
+    # site_slope_only()

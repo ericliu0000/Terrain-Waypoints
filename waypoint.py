@@ -1,6 +1,7 @@
 from filter import SiteFilter
 import matplotlib.pyplot as plt
 import numpy
+import datetime
 
 
 class WaypointGenerator:
@@ -68,7 +69,7 @@ class WaypointGenerator:
 
     def export(self) -> None:
         """Export the waypoints to a file."""
-        with open("output/waypoints.csv", "w") as file:
+        with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
             file.write("Easting,Northing,Altitude\n")
             for (altitude, waypoints) in zip(self.altitudes, self.waypoints):
                 for waypoint in waypoints:

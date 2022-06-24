@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def ncsu_test():
+    """Test with NC Floodplain Mapping Program dataset for NCSU campus tile."""
     # elevations
     obj = NumpyGradient("data/ncsutest.h5")
     elevations = obj.points
@@ -36,6 +37,7 @@ def ncsu_test():
 
 
 def site_test():
+    """Show elevation and slope of site data."""
     # elevations
     obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
@@ -70,7 +72,8 @@ def site_test():
     plt.show()
 
 
-def lasground_test():
+def lasground_test() -> None:
+    """Show difference between original and LASground processed elevation."""
     # normal
     obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
     x, y = obj.x_grid, obj.y_grid
@@ -103,7 +106,8 @@ def lasground_test():
     plt.show()
 
 
-def site_slope_only():
+def site_slope_only() -> None:
+    """Show slope of processed site data."""
     obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
@@ -121,7 +125,8 @@ def site_slope_only():
     plt.show()
 
 
-def quadrant():
+def quadrant() -> None:
+    """Display elevation and slope of processed and unprocessed elevation data."""
     elevation_steps = 40
     slope_steps = 40
 

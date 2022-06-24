@@ -2,7 +2,9 @@ from filter import SiteFilter
 import matplotlib.pyplot as plt
 import numpy
 
+
 class WaypointGenerator:
+    """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
     # TODO: make the length work
     length = 150
     new_points = []
@@ -35,7 +37,7 @@ class WaypointGenerator:
                 midpoint = ((last[1] + next[1]) / 2, (last[0] + next[0]) / 2)
                 normal = -(next[1] - last[1]) / (next[0] - last[0])
                 unit = (1, normal) / numpy.linalg.norm((1, normal))
-                
+
                 new_point = (midpoint[0] + unit[0] * self.length, midpoint[1] + unit[1] * self.length)
                 self.new_points.append(new_point)
 
@@ -45,5 +47,5 @@ class WaypointGenerator:
 if __name__ == "__main__":
     WaypointGenerator("data/cloud_lasground.h5", [3400])
     from show_gradient import site_slope_only
-    site_slope_only()
 
+    site_slope_only()

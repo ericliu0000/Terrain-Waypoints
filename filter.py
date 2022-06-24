@@ -5,13 +5,22 @@ import pandas
 from rectangular_gradient import InterpolatedGridGradient
 
 
+def upper(coord):
+    return min((6.7 * (coord - 950310) + 799640), 800310)
+
+
+def lower(coord):
+    return max((-3.3077 * (coord - 950310) + 799400), 798970)
+
+
 class SiteFilter:
+    """Extracts the coordinates of the site from a las file and constrains it to the site"""
     tol = 0.5
     left = 950310
     right = 950600
     coords = {}
 
-    def __init__(self, doc, values, show=False):
+    def __init__(self, doc: str, values: list, show=False) -> None:
         data = pandas.read_hdf(doc, "a").to_numpy()
         xy, heights = data[..., :2], data[..., 2]
 
@@ -26,11 +35,11 @@ class SiteFilter:
             # only add those within boundaries
             for row in coordinates:
                 x = row[0]
-                if (self.right > x > self.left) and (self.lower(x) <= row[1] <= self.upper(x)):
+                if (self.right > x > self.left) and (lower(x) <= row[1] <= upper(x)):
                     self.coords[value] = numpy.append(self.coords[value], numpy.array([[row[0], row[1]]]), axis=0)
 
+        # display the filtered coordinates
         if show:
-            # testing
             x_max, x_min = xy[:, 0].max(), xy[:, 0].min()
             y_max, y_min = xy[:, 1].max(), xy[:, 1].min()
 
@@ -52,12 +61,6 @@ class SiteFilter:
             plt.colorbar()
 
             plt.show()
-
-    def upper(self, coord):
-        return min((6.7 * (coord - 950310) + 799640), 800310)
-
-    def lower(self, coord):
-        return max((-3.3077 * (coord - 950310) + 799400), 798970)
 
 
 if __name__ == "__main__":

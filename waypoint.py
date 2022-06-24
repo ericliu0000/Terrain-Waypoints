@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy
 import datetime
 
+from rectangular_gradient import InterpolatedGridGradient
+
 
 class WaypointGenerator:
     """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
@@ -13,11 +15,12 @@ class WaypointGenerator:
     new_points: list
     midpoints: list
     unit_normals: list
+    inverse: bool = False
 
     # this is just a random point in the highway
     highway: int = 950700
 
-    def __init__(self, doc: str, height: list) -> None:
+    def __init__(self, doc: str, height: list, plot: bool = False) -> None:
         site = SiteFilter(doc, height)
         values = list(site.coords.values())
 
@@ -30,19 +33,14 @@ class WaypointGenerator:
             self.unit_normals = []
 
             point = numpy.array(sorted(point, key=lambda x: x[1]))
-            # plot points
-            plt.plot(point[:, 0], point[:, 1], "go")
 
             # polynomial fit
             eq = numpy.polyfit(point[:, 1], point[:, 0], 3)
             x = numpy.linspace(point[:, 1].min(), point[:, 1].max(), int((point[:, 1].max() - point[:, 1].min()) / 10))
 
-            # plot fit
             y = 0
             for degree, coefficient in enumerate(eq[::-1]):
                 y += coefficient * x ** degree
-
-            plt.plot(y, x, "b")
 
             # Slope perpendicular to the fit
             for i in range(1, len(x) - 1):
@@ -63,11 +61,22 @@ class WaypointGenerator:
                 new_point = (midpoint[0] + unit[0] * self.length, midpoint[1] + unit[1] * self.length)
                 self.new_points.append(new_point)
 
-            # graph the transformation for each points
-            for (midpoint, new) in zip(self.midpoints, self.new_points):
-                plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
+            # reverse trajectory so altitude can increase on same side
+            if self.inverse:
+                self.waypoints.append(self.new_points[::-1])
+            else: 
+                self.waypoints.append(self.new_points)
 
-            self.waypoints.append(self.new_points)
+            self.inverse = not self.inverse
+
+            if plot:
+                # plot original points and fit
+                plt.plot(point[:, 0], point[:, 1], "go")
+                plt.plot(y, x, "b")
+
+                # graph the transformation for each points
+                for (midpoint, new) in zip(self.midpoints, self.new_points):
+                    plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
 
     def export(self) -> None:
         """Export the waypoints to a file (EPSG 32119)."""
@@ -88,9 +97,34 @@ class WaypointGenerator:
                     file.write(f"{y},{x},{altitude}\n")
 
 
+class WaypointPlotter(WaypointGenerator):
+    def __init__(self, doc: str, height: list) -> None:
+        super().__init__(doc, height)
+        # Plot terrain
+        obj = InterpolatedGridGradient("data/cloud_lasground.h5")
+        x, y = obj.x_grid, obj.y_grid
+        z = obj.points
+
+        a = plt.axes(projection="3d")
+        a.set_xlabel("Easting")
+        a.set_ylabel("Northing")
+        a.set_zlabel("Altitude")
+
+        a.contour3D(x, y, z, 80, cmap=plt.cm.terrain)
+
+        # Plot waypoints
+        last = (self.waypoints[0][0][0], self.waypoints[0][0][1], height[0])
+        for (altitude, waypoints) in zip(self.altitudes, self.waypoints):
+            for point in waypoints:
+                plt.plot([point[0], last[0]], [point[1], last[1]], [altitude, last[2]], "r")
+                last = (point[0], point[1], altitude)
+
 if __name__ == "__main__":
-    a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
-    a.export_latlong()
+    # a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
+    # a.export_latlong()
     # from show_gradient import site_slope_only
 
     # site_slope_only()
+
+    a = WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))
+    plt.show()

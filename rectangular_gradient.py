@@ -5,7 +5,8 @@ import scipy.interpolate
 
 class NumpyGradient:
     """Pulls a grid of points from DEM data and converts the gradient to a grid of values"""
-    def __init__(self, doc):
+
+    def __init__(self, doc: str):
         self.points = pandas.read_hdf(doc, "a").to_numpy()
 
         # only works if data is square
@@ -27,7 +28,7 @@ class InterpolatedGridGradient:
     """Extracts las data and attempts to interpolate to create an elevation model and the corresponding gradient."""
     scale = 1
 
-    def __init__(self, doc: str, method="linear", calculate_gradient=True) -> None:
+    def __init__(self, doc: str, method: str = "linear", calculate_gradient: bool = True) -> None:
         # read in the las processed data
         self.data = pandas.read_hdf(doc, "a").to_numpy()
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]

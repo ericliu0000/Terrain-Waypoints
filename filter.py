@@ -15,12 +15,12 @@ def lower(coord):
 
 class SiteFilter:
     """Extracts the coordinates of the site from a las file and constrains it to the site"""
-    tol = 0.5
-    left = 950310
-    right = 950600
-    coords = {}
+    tol: float = 0.5
+    left: float = 950310
+    right: float = 950600
+    coords: dict = {}
 
-    def __init__(self, doc: str, values: list, show=False) -> None:
+    def __init__(self, doc: str, values: list, show: bool = False) -> None:
         data = pandas.read_hdf(doc, "a").to_numpy()
         xy, heights = data[..., :2], data[..., 2]
 
@@ -29,7 +29,7 @@ class SiteFilter:
             temp_heights = numpy.copy(heights)
             temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
             coordinates = xy[~numpy.isnan(temp_heights)]
-            
+
             self.coords[value] = numpy.array([]).reshape(0, 2)
 
             # only add those within boundaries

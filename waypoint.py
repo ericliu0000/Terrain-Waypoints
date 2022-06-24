@@ -5,14 +5,22 @@ import numpy
 
 class WaypointGenerator:
     """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
-    length = 150
+    length: int = 150
+    waypoints: list = []
+    altitudes: list = []
+    new_points: list
+    midpoints: list
+    unit_normals: list
 
     # this is just a random point in the highway
     highway = 950700
 
-    def __init__(self, doc, height):
+    def __init__(self, doc: str, height: list) -> None:
         site = SiteFilter(doc, height)
         values = list(site.coords.values())
+
+        # stash altitudes
+        self.altitudes = height
 
         for point in values:
             self.new_points = []
@@ -55,6 +63,10 @@ class WaypointGenerator:
             # graph the transformation for each points
             for (midpoint, new) in zip(self.midpoints, self.new_points):
                 plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
+
+            self.waypoints.append(self.new_points)
+
+    # def export(self):
 
 
 if __name__ == "__main__":

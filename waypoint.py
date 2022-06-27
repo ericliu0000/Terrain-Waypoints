@@ -10,6 +10,7 @@ from rectangular_gradient import InterpolatedGridGradient
 class WaypointGenerator:
     """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
     length: int = 150
+    overlap: int = 80
     waypoints: list = []
     altitudes: list = []
     new_points: list
@@ -36,11 +37,12 @@ class WaypointGenerator:
 
             # polynomial fit
             eq = numpy.polyfit(point[:, 1], point[:, 0], 3)
-            x = numpy.linspace(point[:, 1].min(), point[:, 1].max(), int((point[:, 1].max() - point[:, 1].min()) / 10))
+            x = numpy.linspace(point[:, 1].min() - self.overlap, point[:, 1].max() + self.overlap, int((point[:, 1].max() - point[:, 1].min() + self.overlap * 2) / 10))
 
             y = 0
             for degree, coefficient in enumerate(eq[::-1]):
                 y += coefficient * x ** degree
+                print(coefficient)
 
             # Slope perpendicular to the fit
             for i in range(1, len(x) - 1):
@@ -77,6 +79,10 @@ class WaypointGenerator:
                 # graph the transformation for each points
                 for (midpoint, new) in zip(self.midpoints, self.new_points):
                     plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
+
+        if plot:
+            from show_gradient import site_slope_only
+            site_slope_only()
 
     def export(self) -> None:
         """Export the waypoints to a file (EPSG 32119)."""
@@ -125,9 +131,8 @@ class WaypointPlotter(WaypointGenerator):
 if __name__ == "__main__":
     # a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
     # a.export_latlong()
-    # from show_gradient import site_slope_only
 
-    # site_slope_only()
+    WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550], plot=True)
 
-    a = WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))
+    # a = WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))
     plt.show()

@@ -32,7 +32,7 @@ class WaypointGenerator:
             self.midpoints = []
             self.unit_normals = []
 
-            point = numpy.array(sorted(point, key=lambda x: x[1]))
+            point = numpy.array(sorted(point, key=lambda pt: pt[1]))
 
             # polynomial fit
             eq = numpy.polyfit(point[:, 1], point[:, 0], 3)
@@ -44,16 +44,16 @@ class WaypointGenerator:
 
             # Slope perpendicular to the fit
             for i in range(1, len(x) - 1):
-                last = (x[i - 1], y[i - 1])
-                next = (x[i], y[i])
+                back = (x[i - 1], y[i - 1])
+                front = (x[i], y[i])
 
                 # get direction of normal vector
-                self.midpoints.append(((last[1] + next[1]) / 2, (last[0] + next[0]) / 2))
-                normal = -(next[1] - last[1]) / (next[0] - last[0])
+                self.midpoints.append(((back[1] + front[1]) / 2, (back[0] + front[0]) / 2))
+                normal = -(front[1] - back[1]) / (front[0] - back[0])
                 self.unit_normals.append(((1, normal) / numpy.linalg.norm((1, normal))).tolist())
 
             # find the index of the unit normal with the minimum Y value, and stretch it to highway points
-            min_index = self.unit_normals.index(min(self.unit_normals, key=lambda x: abs(x[1])))
+            min_index = self.unit_normals.index(min(self.unit_normals, key=lambda pt: abs(pt[1])))
             self.length = self.highway - self.midpoints[min_index][0]
 
             # get new points
@@ -64,7 +64,7 @@ class WaypointGenerator:
             # reverse trajectory so altitude can increase on same side
             if self.inverse:
                 self.waypoints.append(self.new_points[::-1])
-            else: 
+            else:
                 self.waypoints.append(self.new_points)
 
             self.inverse = not self.inverse
@@ -98,6 +98,8 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
+    """Generate and plot waypoints"""
+
     def __init__(self, doc: str, height: list) -> None:
         super().__init__(doc, height)
         # Plot terrain
@@ -105,12 +107,12 @@ class WaypointPlotter(WaypointGenerator):
         x, y = obj.x_grid, obj.y_grid
         z = obj.points
 
-        a = plt.axes(projection="3d")
-        a.set_xlabel("Easting")
-        a.set_ylabel("Northing")
-        a.set_zlabel("Altitude")
+        graph = plt.axes(projection="3d")
+        graph.set_xlabel("Easting")
+        graph.set_ylabel("Northing")
+        graph.set_zlabel("Altitude")
 
-        a.contour3D(x, y, z, 80, cmap=plt.cm.terrain)
+        graph.contour3D(x, y, z, 80, cmap=plt.cm.terrain)
 
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], height[0])
@@ -118,6 +120,7 @@ class WaypointPlotter(WaypointGenerator):
             for point in waypoints:
                 plt.plot([point[0], last[0]], [point[1], last[1]], [altitude, last[2]], "r")
                 last = (point[0], point[1], altitude)
+
 
 if __name__ == "__main__":
     # a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])

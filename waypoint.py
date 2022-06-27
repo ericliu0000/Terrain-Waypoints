@@ -42,7 +42,6 @@ class WaypointGenerator:
             y = 0
             for degree, coefficient in enumerate(eq[::-1]):
                 y += coefficient * x ** degree
-                print(coefficient)
 
             # Slope perpendicular to the fit
             for i in range(1, len(x) - 1):

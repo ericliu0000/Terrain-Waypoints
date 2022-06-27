@@ -127,12 +127,12 @@ class WaypointPlotter(WaypointGenerator):
                 plt.plot([point[0], last[0]], [point[1], last[1]], [altitude, last[2]], "r")
                 last = (point[0], point[1], altitude)
 
+        plt.show()
+
 
 if __name__ == "__main__":
     # a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
     # a.export_latlong()
 
-    WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550], plot=True)
-
-    # a = WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))
-    plt.show()
+    # WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550], plot=True)
+    WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))

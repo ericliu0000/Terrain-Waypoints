@@ -10,7 +10,7 @@ from rectangular_gradient import InterpolatedGridGradient
 class WaypointGenerator:
     """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
     length: int = 150
-    buf: int = 30.48
+    buf: int = 30.48 * 2
     clearance: int = 100
     waypoints: list = []
     altitudes: list = []
@@ -70,8 +70,8 @@ class WaypointGenerator:
                 plt.plot(y, x, "b")
 
                 # graph the transformation for each points
-                for (midpoint, new) in zip(self.midpoints, self.new_points):
-                    plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
+                # for (midpoint, new) in zip(self.midpoints, self.new_points):
+                #     plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
 
         if plot:
             from show_gradient import site_slope_only
@@ -126,8 +126,8 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
-    a.export()
+    # a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
+    # a.export()
 
-    # WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550], plot=True)
-    # WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))
+    WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550, 3600], plot=True)
+    # WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 6)))

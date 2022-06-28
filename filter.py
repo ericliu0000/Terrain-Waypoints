@@ -65,4 +65,4 @@ class SiteFilter:
 
 
 if __name__ == "__main__":
-    test = SiteFilter("data/cloud_lasground.h5", [3500], True)
+    test = SiteFilter("data/cloud_lasground.h5", [3500, 3600, 3700], True)

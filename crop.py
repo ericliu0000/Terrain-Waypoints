@@ -30,7 +30,7 @@ plt.plot([950396, 950550], [798926, 798926], "r")
 # Right side limitation
 plt.plot([950550, 950550], [798926, 800374], "r")
 
-obj = SiteFilter("data/cloud_lasground.h5", [3360, 3400, 3440, 3480])
+obj = SiteFilter("data/cloud_lasground.h5", [3400, 3440, 3480, 3550, 3600, 3650])
 
 
 # Derestrictive set of points (incl. 10 m buffer)
@@ -47,15 +47,14 @@ left = 950290
 x = numpy.linspace(950250, 950600)
 y = [upper(z) for z in x]
 
-plt.plot(x, y, "go")
+# plt.plot(x, y, "go")
 
 y = [lower(z) for z in x]
-plt.plot(x, y, "go")
+# plt.plot(x, y, "go")
 
 for value in obj.coords.values():
     for row in value:
         x = row[0]
-        # if (x >= left) and (lower(x) <= row[1] <= upper(x)):
         plt.plot(x, row[1], "ro")
 
 plt.show()

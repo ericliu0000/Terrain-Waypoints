@@ -32,6 +32,7 @@ class WaypointGenerator:
             self.unit_normals = []
 
             point = numpy.array(sorted(point, key=lambda pt: pt[1]))
+            print(len(point))
 
             # polynomial fit
             eq = numpy.polyfit(point[:, 1], point[:, 0], 3)

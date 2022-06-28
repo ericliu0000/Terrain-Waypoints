@@ -11,15 +11,13 @@ class WaypointGenerator:
     """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
     length: int = 150
     overlap: int = 80
+    clearance: int = 100
     waypoints: list = []
     altitudes: list = []
     new_points: list
     midpoints: list
     unit_normals: list
     inverse: bool = False
-
-    # this is just a random point in the highway
-    highway: int = 950700
 
     def __init__(self, doc: str, height: list, plot: bool = False) -> None:
         site = SiteFilter(doc, height)
@@ -53,13 +51,9 @@ class WaypointGenerator:
                 normal = -(front[1] - back[1]) / (front[0] - back[0])
                 self.unit_normals.append(((1, normal) / numpy.linalg.norm((1, normal))).tolist())
 
-            # find the index of the unit normal with the minimum Y value, and stretch it to highway points
-            min_index = self.unit_normals.index(min(self.unit_normals, key=lambda pt: abs(pt[1])))
-            self.length = self.highway - self.midpoints[min_index][0]
-
-            # get new points
+            # get new points, stretching them by clearance off terrain
             for (midpoint, unit) in zip(self.midpoints, self.unit_normals):
-                new_point = (midpoint[0] + unit[0] * self.length, midpoint[1] + unit[1] * self.length)
+                new_point = (midpoint[0] + unit[0] * self.clearance, midpoint[1] + unit[1] * self.clearance)
                 self.new_points.append(new_point)
 
             # reverse trajectory so altitude can increase on same side
@@ -132,8 +126,8 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    # a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
-    # a.export_latlong()
+    a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
+    a.export()
 
     # WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550], plot=True)
-    WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))
+    # WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 20)))

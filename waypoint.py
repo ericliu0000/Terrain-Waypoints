@@ -37,6 +37,8 @@ class WaypointGenerator:
             eq = numpy.polyfit(point[:, 1], point[:, 0], 3)
             x = numpy.linspace(point[:, 1].min() - self.buf, point[:, 1].max() + self.buf, int((point[:, 1].max() - point[:, 1].min() + self.buf * 2) / 10))
 
+            #TODO: Be able to add additional lines above the site to get additional coverage -- perhaps reuse a certain line (3600ft?) with a transformation
+
             y = 0
             for degree, coefficient in enumerate(eq[::-1]):
                 y += coefficient * x ** degree

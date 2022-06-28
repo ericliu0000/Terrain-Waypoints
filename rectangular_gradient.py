@@ -26,7 +26,7 @@ class NumpyGradient:
 
 class InterpolatedGridGradient:
     """Extracts las data and attempts to interpolate to create an elevation model and the corresponding gradient."""
-    scale = 1
+    scale = 2
 
     def __init__(self, doc: str, method: str = "linear", calculate_gradient: bool = True) -> None:
         # read in the las processed data

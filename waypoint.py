@@ -117,7 +117,9 @@ class WaypointPlotter(WaypointGenerator):
         graph.set_ylabel("Northing")
         graph.set_zlabel("Altitude")
 
-        graph.contour3D(x, y, z, 80, cmap=plt.cm.terrain)
+        x, y = numpy.meshgrid(x, y)
+
+        graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
 
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], height[0])

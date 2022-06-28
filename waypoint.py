@@ -38,7 +38,8 @@ class WaypointGenerator:
             # polynomial fit
             eq = numpy.polyfit(row[:, 1], row[:, 0], 3)
 
-            #TODO: Be able to add additional lines above the site to get additional coverage -- perhaps reuse a certain line (3600ft?) with a transformation
+            # TODO: Be able to add additional lines above the site to get additional coverage -- perhaps reuse a
+            #  certain line (3600ft?) with a transformation
 
             for i in range(1, row.shape[0] - 1):
                 point = ((row[i - 1][0] + row[i][0]) / 2, (row[i - 1][1] + row[i][1]) / 2)
@@ -51,7 +52,7 @@ class WaypointGenerator:
                     slope += degree * coefficient * y ** (degree - 1)
 
                 self.unit_normals.append(((-slope, 1) / numpy.linalg.norm((-slope, 1))).tolist())
-                
+
             # get new points, stretching them by clearance off terrain
             for (midpoint, normal) in zip(self.midpoints, self.unit_normals):
                 new_point = (midpoint[0] + normal[1] * self.clearance, midpoint[1] + normal[0] * self.clearance)
@@ -73,12 +74,9 @@ class WaypointGenerator:
                     x += coefficient * y ** degree
                 plt.plot(x, y, "r")
 
-
                 # graph the transformation for each points
                 for (midpoint, new) in zip(self.midpoints, self.new_points):
                     plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
-
-
 
         if plot:
             from show_gradient import site_slope_only

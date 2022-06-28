@@ -4,6 +4,7 @@ import pandas
 
 from rectangular_gradient import InterpolatedGridGradient
 
+
 # Only take restrictive set (rock face points only) for regression limits
 def upper(coord):
     return min((6.0268 * (coord - 950288) + 799669), 800344)
@@ -36,7 +37,7 @@ class SiteFilter:
             # only add those within boundaries
             for row in coordinates:
                 x = row[0]
-                if (lower(x) <= row[1] <= upper(x)):
+                if lower(x) <= row[1] <= upper(x):
                     self.coords[value] = numpy.append(self.coords[value], numpy.array([[row[0], row[1]]]), axis=0)
 
         # display the filtered coordinates

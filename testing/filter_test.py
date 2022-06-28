@@ -4,7 +4,7 @@ import scipy.interpolate
 import matplotlib.pyplot as plt
 
 
-def get_gradient():
+def get_data():
     # read in the las processed data
     data = pandas.read_hdf("data/cloud_lasground.h5", "a").to_numpy()
     spacing, values = data[..., :2], data[..., 2]
@@ -28,7 +28,7 @@ def get_gradient():
 
 
 def filter_slope(z_min, z_max):
-    x, y, gradient, points = get_gradient()
+    x, y, gradient, points = get_data()
 
     gradient[(gradient < z_min) | (gradient > z_max)] = numpy.nan
 
@@ -39,7 +39,7 @@ def filter_slope(z_min, z_max):
 
 
 def filter_layer(z_filter):
-    x, y, gradient, z = get_gradient()
+    x, y, gradient, z = get_data()
     tol = 1
 
     z[(z > z_filter + tol) | (z < z_filter - tol)] = numpy.nan

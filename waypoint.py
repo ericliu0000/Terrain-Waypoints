@@ -14,6 +14,7 @@ class WaypointGenerator:
     clearance: int = 100
     waypoints: list = []
     altitudes: list = []
+    fits: list = []
     new_points: list
     points: list
     unit_normals: list
@@ -66,10 +67,18 @@ class WaypointGenerator:
             if plot:
                 # plot original points and fit
                 plt.plot(row[:, 0], row[:, 1], "go")
+                y = numpy.linspace(row[:, 1].min(), row[:, 1].max())
+                x = 0
+                for degree, coefficient in enumerate(eq[::-1]):
+                    x += coefficient * y ** degree
+                plt.plot(x, y, "r")
+
 
                 # graph the transformation for each points
                 for (midpoint, new) in zip(self.midpoints, self.new_points):
                     plt.plot((midpoint[0], new[0]), (midpoint[1], new[1]), "b")
+
+
 
         if plot:
             from show_gradient import site_slope_only
@@ -127,6 +136,6 @@ if __name__ == "__main__":
     # a = WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550])
     # a.export()
 
-    # WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550, 3600], plot=True)
+    WaypointGenerator("data/cloud_lasground.h5", [3400, 3450, 3500, 3550, 3600], plot=True)
     # WaypointGenerator("data/cloud_lasground.h5", [3500], plot=True)
-    WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 6)))
+    # WaypointPlotter("data/cloud_lasground.h5", list(range(3400, 3600, 6)))

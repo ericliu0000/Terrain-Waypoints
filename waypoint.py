@@ -10,7 +10,7 @@ from rectangular_gradient import InterpolatedGridGradient
 class WaypointGenerator:
     """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
     length: int = 150
-    overlap: int = 80
+    buf: int = 30.48
     clearance: int = 100
     waypoints: list = []
     altitudes: list = []
@@ -35,7 +35,7 @@ class WaypointGenerator:
 
             # polynomial fit
             eq = numpy.polyfit(point[:, 1], point[:, 0], 3)
-            x = numpy.linspace(point[:, 1].min() - self.overlap, point[:, 1].max() + self.overlap, int((point[:, 1].max() - point[:, 1].min() + self.overlap * 2) / 10))
+            x = numpy.linspace(point[:, 1].min() - self.buf, point[:, 1].max() + self.buf, int((point[:, 1].max() - point[:, 1].min() + self.buf * 2) / 10))
 
             y = 0
             for degree, coefficient in enumerate(eq[::-1]):

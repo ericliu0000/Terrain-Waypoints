@@ -18,6 +18,7 @@ class SiteFilter:
     tol: float = 0.5
     left: float = 950310
     right: float = 950600
+    buf: float = 30.48
     coords: dict = {}
 
     def __init__(self, doc: str, values: list, show: bool = False) -> None:
@@ -35,7 +36,7 @@ class SiteFilter:
             # only add those within boundaries
             for row in coordinates:
                 x = row[0]
-                if (self.right > x > self.left) and (lower(x) <= row[1] <= upper(x)):
+                if (self.left - self.buf < x < self.right + self.buf) and (lower(x) - self.buf <= row[1] <= upper(x) + self.buf):
                     self.coords[value] = numpy.append(self.coords[value], numpy.array([[row[0], row[1]]]), axis=0)
 
         # display the filtered coordinates

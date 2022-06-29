@@ -52,8 +52,6 @@ class WaypointGenerator:
                 # find unit tangent at that point based on x value
                 y = point[1]
                 slope = sum([degree * coefficient * y ** (degree - 1) for (degree, coefficient) in enumerate(eq[::-1])])
-                # for degree, coefficient in enumerate(eq[::-1]):
-                #     slope += degree * coefficient * y ** (degree - 1)
 
                 self.unit_normals.append(((-slope, 1) / numpy.linalg.norm((-slope, 1))).tolist())
 

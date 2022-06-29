@@ -1,8 +1,6 @@
-import matplotlib.pyplot as plt
 import numpy
-import scipy.interpolate
 
-from rectangular_gradient import InterpolatedGridGradient
+from rectangular_gradient import WaypointGridGradient
 
 
 # Only take restrictive set (rock face points only) for regression limits
@@ -16,7 +14,7 @@ def lower(coord):
 
 def normal(x, y):
     # Return upward unit normal vector from dx, dy
-    return ([-x, -y, 1] / numpy.linalg.norm([-x, -y, 1]))
+    return [-x, -y, 1] / numpy.linalg.norm([-x, -y, 1])
 
 
 class SiteFilter:
@@ -25,58 +23,25 @@ class SiteFilter:
     left: float = 950310
     right: float = 950600
     buf: float = 30.48
-    coords: dict = {}
-    obj: InterpolatedGridGradient = InterpolatedGridGradient("data/cloud_lasground.h5")
+    filtered: list = [[]]
 
-    def __init__(self, doc: str, values: list, show: bool = False) -> None:
-        xy, heights = self.obj.spacing, self.obj.values
+    def __init__(self, doc: str) -> None:
+        self.obj = WaypointGridGradient(doc)
+        a, b = numpy.meshgrid(self.obj.x_grid, self.obj.y_grid)
+
+        # make a grid of filled xy values based on axis labels xgrid and ygrid
+        coordinates = numpy.dstack((a, b, self.obj.height))
         gradient = self.obj.gradient
 
-        # get interpolated generators of partial derivatives
-        # since gradient returns y, x, take the transform of each axis
-        dx = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[0].T)
-        dy = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[1].T)
-
-        for value in values:
-            # copy and filter out height
-            temp_heights = numpy.copy(heights)
-            temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
-            coordinates = numpy.hstack((xy[~numpy.isnan(temp_heights)], heights[~numpy.isnan(temp_heights), numpy.newaxis]))
-
-            # x, y, z, unit
-            self.coords[value] = numpy.array([]).reshape(0, 6)
-
-            # only add those within boundaries
-            for row in coordinates:
-                x, y = row[0], row[1]
-                if lower(x) <= y <= upper(x):
-                    norm = normal(dx(x, y)[0][0], dy(x, y)[0][0])
-                    self.coords[value] = numpy.append(self.coords[value], numpy.atleast_2d(numpy.append(row, norm)), axis=0)
-
-        # display the filtered coordinates
-        if show:
-            x_max, x_min = xy[:, 0].max(), xy[:, 0].min()
-            y_max, y_min = xy[:, 1].max(), xy[:, 1].min()
-
-            plt.axis([x_min, x_max, y_min, y_max])
-
-            for value in self.coords.values():
-                plt.plot(value[:, 0], value[:, 1], "ro")
-
-            obj = InterpolatedGridGradient("data/cloud_lasground.h5")
-            x, y = obj.x_grid, obj.y_grid
-            z = obj.points
-
-            z2 = z[~numpy.isnan(z)]
-
-            z_min = z2.min()
-            z_max = z2.max()
-
-            plt.contourf(x, y, z, 20, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
-            plt.colorbar()
-
-            plt.show()
+        # For each point, place in filtered (x, y, z, [unit normal])
+        for i in range(len(coordinates)):
+            row = []
+            for j in range(len(coordinates[i])):
+                point = coordinates[i][j]
+                if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]):
+                    row.append([*point, *normal(gradient[0][i][j], gradient[1][i][j])])
+            self.filtered.append(row)
 
 
 if __name__ == "__main__":
-    test = SiteFilter("data/cloud_lasground.h5", [3500, 3600, 3700], False)
+    test = SiteFilter("data/cloud_lasground.h5")

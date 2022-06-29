@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy
-import pandas
+import scipy.interpolate
 
 from rectangular_gradient import InterpolatedGridGradient
 
@@ -14,6 +14,11 @@ def lower(coord):
     return max((-16.8125 * (coord - 950304) + 799400), (-3.6393 * (coord - 950304) + 799400), 798956)
 
 
+def normal(x, y):
+    # Return upward unit normal vector from dx, dy
+    return ([-x, -y, 1] / numpy.linalg.norm([-x, -y, 1]))
+
+
 class SiteFilter:
     """Extracts the coordinates of the site from a las file and constrains it to the site"""
     tol: float = 0.5
@@ -21,24 +26,32 @@ class SiteFilter:
     right: float = 950600
     buf: float = 30.48
     coords: dict = {}
+    obj: InterpolatedGridGradient = InterpolatedGridGradient("data/cloud_lasground.h5")
 
     def __init__(self, doc: str, values: list, show: bool = False) -> None:
-        data = pandas.read_hdf(doc, "a").to_numpy()
-        xy, heights = data[..., :2], data[..., 2]
+        xy, heights = self.obj.spacing, self.obj.values
+        gradient = self.obj.gradient
+
+        # get interpolated generators of partial derivatives
+        # since gradient returns y, x, take the transform of each axis
+        dx = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[0].T)
+        dy = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[1].T)
 
         for value in values:
             # copy and filter out height
             temp_heights = numpy.copy(heights)
             temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
-            coordinates = xy[~numpy.isnan(temp_heights)]
+            coordinates = numpy.hstack((xy[~numpy.isnan(temp_heights)], heights[~numpy.isnan(temp_heights), numpy.newaxis]))
 
-            self.coords[value] = numpy.array([]).reshape(0, 2)
+            # x, y, z, unit
+            self.coords[value] = numpy.array([]).reshape(0, 6)
 
             # only add those within boundaries
             for row in coordinates:
-                x = row[0]
-                if lower(x) <= row[1] <= upper(x):
-                    self.coords[value] = numpy.append(self.coords[value], numpy.array([[row[0], row[1]]]), axis=0)
+                x, y = row[0], row[1]
+                if lower(x) <= y <= upper(x):
+                    norm = normal(dx(x, y)[0][0], dy(x, y)[0][0])
+                    self.coords[value] = numpy.append(self.coords[value], numpy.atleast_2d(numpy.append(row, norm)), axis=0)
 
         # display the filtered coordinates
         if show:
@@ -66,4 +79,4 @@ class SiteFilter:
 
 
 if __name__ == "__main__":
-    test = SiteFilter("data/cloud_lasground.h5", [3500, 3600, 3700], True)
+    test = SiteFilter("data/cloud_lasground.h5", [3500, 3600, 3700], False)

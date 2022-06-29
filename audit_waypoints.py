@@ -17,6 +17,7 @@ for i in range(1, len(lines) - 1):
     # Find the closest point in long to each point in short and get distance between two points
     for j in range(len(short)):
         closest = min(long, key=lambda x: abs(x[1] - short[j][1]))
+        plt.plot([short[j][0], closest[0]], [short[j][1], closest[1]], "r")
         average += ((short[j][0] - closest[0]) ** 2 + (short[j][1] - closest[1]) ** 2) ** 0.5
 
     print(average / len(short))

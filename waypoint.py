@@ -1,22 +1,21 @@
-import pyproj
-from filter import SiteFilter
-import matplotlib.pyplot as plt
-import numpy
 import datetime
 
+import matplotlib.pyplot as plt
+import numpy
+import pyproj
+
+from filter import SiteFilter
 from rectangular_gradient import InterpolatedGridGradient
 
 
 class WaypointGenerator:
     """Generate points fitted to a polynomial curve defined by points at a certain elevation, and offset it."""
-    length: int = 150
     buf: int = 30.48 * 2
     clearance: int = 100
     waypoints: list = []
     altitudes: list = []
     fits: list = []
     new_points: list
-    points: list
     unit_normals: list
     inverse: bool = False
 
@@ -29,7 +28,6 @@ class WaypointGenerator:
 
         for row in values:
             self.new_points = []
-            self.points = []
             self.midpoints = []
             self.unit_normals = []
 
@@ -37,6 +35,12 @@ class WaypointGenerator:
 
             # polynomial fit
             eq = numpy.polyfit(row[:, 1], row[:, 0], 3)
+            self.fits.append(eq)
+
+            # Add start waypoint buf feet south of the first point based on the fit
+            y = row[0][1]
+            x = sum([coefficient * y ** degree for (degree, coefficient) in enumerate(eq[::-1])])
+
 
             # TODO: Be able to add additional lines above the site to get additional coverage -- perhaps reuse a
             #  certain line (3600ft?) with a transformation
@@ -47,9 +51,9 @@ class WaypointGenerator:
 
                 # find unit tangent at that point based on x value
                 y = point[1]
-                slope = 0
-                for degree, coefficient in enumerate(eq[::-1]):
-                    slope += degree * coefficient * y ** (degree - 1)
+                slope = sum([degree * coefficient * y ** (degree - 1) for (degree, coefficient) in enumerate(eq[::-1])])
+                # for degree, coefficient in enumerate(eq[::-1]):
+                #     slope += degree * coefficient * y ** (degree - 1)
 
                 self.unit_normals.append(((-slope, 1) / numpy.linalg.norm((-slope, 1))).tolist())
 
@@ -82,6 +86,7 @@ class WaypointGenerator:
             from show_gradient import site_slope_only
             site_slope_only()
 
+    # TODO: fix these two methods because the coordinates might be in the wrong order
     def export(self) -> None:
         """Export the waypoints to a file (EPSG 32119)."""
         with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
@@ -92,6 +97,7 @@ class WaypointGenerator:
 
     def export_latlong(self) -> None:
         """Export the waypoints to a file (EPSG 4326)."""
+
         with open(f"output/{datetime.datetime.now()}_latlong.csv", "w") as file:
             file.write("Latitude,Longitude,Altitude\n")
             for (altitude, waypoints) in zip(self.altitudes, self.waypoints):

@@ -35,10 +35,8 @@ class SiteFilter:
         dx = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[0].T)
         dy = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[1].T)
 
-        # root mean square of dx and dy at 1000, 1000
-        print(dx.ev(1000, 1000))
-        print(dy.ev(1000, 1000))
-        print(numpy.sqrt(dx.ev(1000, 1000) ** 2 + dy.ev(1000, 1000) ** 2))
+        # root mean square of dx and dy at 
+        print(numpy.sqrt(dx.ev(self.obj.x_grid[1000], self.obj.y_grid[1000]) ** 2 + dy.ev(self.obj.x_grid[1000], self.obj.y_grid[1000]) ** 2))
 
         for value in values:
             # copy and filter out height
@@ -80,4 +78,4 @@ class SiteFilter:
 
 
 if __name__ == "__main__":
-    test = SiteFilter("data/cloud_lasground.h5", [3500, 3600, 3700], True)
+    test = SiteFilter("data/cloud_lasground.h5", [3500, 3600, 3700], False)

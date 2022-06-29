@@ -21,8 +21,10 @@ class SiteFilter:
     right: float = 950600
     buf: float = 30.48
     coords: dict = {}
+    grad: InterpolatedGridGradient = InterpolatedGridGradient("data/cloud_lasground.h5")
 
     def __init__(self, doc: str, values: list, show: bool = False) -> None:
+        # data = self.grad.points
         data = pandas.read_hdf(doc, "a").to_numpy()
         xy, heights = data[..., :2], data[..., 2]
 
@@ -30,7 +32,8 @@ class SiteFilter:
             # copy and filter out height
             temp_heights = numpy.copy(heights)
             temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
-            coordinates = xy[~numpy.isnan(temp_heights)]
+            temp = heights[~numpy.isnan(temp_heights), numpy.newaxis]
+            coordinates = numpy.hstack((xy[~numpy.isnan(temp_heights)], temp))
 
             self.coords[value] = numpy.array([]).reshape(0, 2)
 

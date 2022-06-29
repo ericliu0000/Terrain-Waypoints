@@ -19,11 +19,10 @@ def normal(x, y):
 
 class SiteFilter:
     """Extracts the coordinates of the site from a las file and constrains it to the site"""
-    tol: float = 0.5
     left: float = 950310
     right: float = 950600
-    buf: float = 30.48
-    filtered: list = [[]]
+    filtered: list = []
+    
 
     def __init__(self, doc: str) -> None:
         self.obj = WaypointGridGradient(doc)
@@ -35,12 +34,10 @@ class SiteFilter:
 
         # For each point, place in filtered (x, y, z, [unit normal])
         for i in range(len(coordinates)):
-            row = []
             for j in range(len(coordinates[i])):
                 point = coordinates[i][j]
                 if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]):
-                    row.append([*point, *normal(gradient[0][i][j], gradient[1][i][j])])
-            self.filtered.append(row)
+                    self.filtered.append([*point, *normal(gradient[0][i][j], gradient[1][i][j])])
 
 
 if __name__ == "__main__":

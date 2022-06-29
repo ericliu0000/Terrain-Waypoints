@@ -50,7 +50,6 @@ class SiteFilter:
             for row in coordinates:
                 x, y = row[0], row[1]
                 if lower(x) <= y <= upper(x):
-                    a, b = dx(x, y), dy(x, y)
                     norm = normal(dx(x, y)[0][0], dy(x, y)[0][0])
                     self.coords[value] = numpy.append(self.coords[value], numpy.atleast_2d(numpy.append(row, norm)), axis=0)
 

@@ -36,7 +36,7 @@ class SiteFilter:
         for i in range(len(coordinates)):
             for j in range(len(coordinates[i])):
                 point = coordinates[i][j]
-                if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]):
+                if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]) and point[2] > 3420:
                     self.filtered.append([*point, *normal(gradient[0][i][j], gradient[1][i][j])])
 
 

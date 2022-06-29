@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy
-import pandas
+import scipy.interpolate
 
 from rectangular_gradient import InterpolatedGridGradient
 
@@ -21,27 +21,38 @@ class SiteFilter:
     right: float = 950600
     buf: float = 30.48
     coords: dict = {}
-    grad: InterpolatedGridGradient = InterpolatedGridGradient("data/cloud_lasground.h5")
+    obj: InterpolatedGridGradient = InterpolatedGridGradient("data/cloud_lasground.h5")
 
     def __init__(self, doc: str, values: list, show: bool = False) -> None:
         # data = self.grad.points
-        data = pandas.read_hdf(doc, "a").to_numpy()
-        xy, heights = data[..., :2], data[..., 2]
+        xy, heights = self.obj.spacing, self.obj.values
+        gradient = numpy.nan_to_num(self.obj.gradient)
+        print(self.obj.magnitude[1000][1000])
+        print(self.obj.x_grid[1000], self.obj.y_grid[1000])
+
+        # Get interpolated generators of partial derivatives
+        # Since gradient returns y, x, take the transform of each axis
+        dx = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[0].T)
+        dy = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[1].T)
+
+        # root mean square of dx and dy at 1000, 1000
+        print(dx.ev(1000, 1000))
+        print(dy.ev(1000, 1000))
+        print(numpy.sqrt(dx.ev(1000, 1000) ** 2 + dy.ev(1000, 1000) ** 2))
 
         for value in values:
             # copy and filter out height
             temp_heights = numpy.copy(heights)
             temp_heights[(temp_heights > value + self.tol) | (temp_heights < value - self.tol)] = numpy.nan
-            temp = heights[~numpy.isnan(temp_heights), numpy.newaxis]
-            coordinates = numpy.hstack((xy[~numpy.isnan(temp_heights)], temp))
+            coordinates = numpy.hstack((xy[~numpy.isnan(temp_heights)], heights[~numpy.isnan(temp_heights), numpy.newaxis]))
 
-            self.coords[value] = numpy.array([]).reshape(0, 2)
+            self.coords[value] = numpy.array([]).reshape(0, 3)
 
             # only add those within boundaries
             for row in coordinates:
                 x = row[0]
                 if lower(x) <= row[1] <= upper(x):
-                    self.coords[value] = numpy.append(self.coords[value], numpy.array([[row[0], row[1]]]), axis=0)
+                    self.coords[value] = numpy.append(self.coords[value], numpy.atleast_2d(row), axis=0)
 
         # display the filtered coordinates
         if show:

@@ -5,11 +5,11 @@ import numpy
 import pyproj
 
 from filter import SiteFilter
-from rectangular_gradient import InterpolatedGridGradient, WaypointGridGradient
+from rectangular_gradient import WaypointGridGradient
 
 
 class WaypointGenerator:
-    clearance: int = 100
+    clearance: int = 00
     waypoints: list = []
 
     def __init__(self, doc: str) -> None:
@@ -64,9 +64,8 @@ class WaypointPlotter(WaypointGenerator):
         graph.set_ylabel("Northing")
         graph.set_zlabel("Altitude")
 
-        x, y = numpy.meshgrid(x, y)
-
-        graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
+        # x, y = numpy.meshgrid(x, y)
+        # graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
 
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], self.waypoints[0][0][2])
@@ -74,6 +73,7 @@ class WaypointPlotter(WaypointGenerator):
             for point in row:
                 plt.plot([point[0], last[0]], [point[1], last[1]], [point[2], last[2]], "r")
                 last = (point[0], point[1], point[2])
+                plt.plot(point[0], point[1], point[2], "bo")
 
         plt.show()
 

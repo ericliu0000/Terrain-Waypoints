@@ -62,8 +62,8 @@ class WaypointGridGradient:
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]
 
         # create grid
-        self.x_grid = numpy.arange(self.spacing[:, 0].min(), self.spacing[:, 0].max(), self.hdev)
-        self.y_grid = numpy.arange(self.spacing[:, 1].min(), self.spacing[:, 1].max(), self.vdev)
+        self.x_grid = numpy.arange(self.spacing[:, 0].min(), self.spacing[:, 0].max(), self.vdev, dtype=numpy.float64)
+        self.y_grid = numpy.arange(self.spacing[:, 1].min(), self.spacing[:, 1].max(), self.hdev, dtype=numpy.float64)
 
         # interpolate and get gradient
         self.height = scipy.interpolate.griddata(self.spacing, self.values,

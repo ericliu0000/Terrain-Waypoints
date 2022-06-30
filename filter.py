@@ -1,4 +1,5 @@
 import numpy
+import scipy.interpolate
 
 from rectangular_gradient import WaypointGridGradient
 
@@ -22,7 +23,6 @@ class SiteFilter:
     left: float = 950310
     right: float = 950600
     filtered: list = []
-    
 
     def __init__(self, doc: str) -> None:
         self.obj = WaypointGridGradient(doc)
@@ -30,14 +30,21 @@ class SiteFilter:
 
         # make a grid of filled xy values based on axis labels xgrid and ygrid
         coordinates = numpy.dstack((a, b, self.obj.height))
-        gradient = self.obj.gradient
+        gradient = numpy.nan_to_num(self.obj.gradient)
+
+        # Smooth values
+        dx = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[0].T, s=100)
+        dy = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[1].T, s=100)
 
         # For each point, place in filtered (x, y, z, [unit normal])
-        for i in range(len(coordinates)):
-            for j in range(len(coordinates[i])):
-                point = coordinates[i][j]
+        for i in range(len(coordinates[0])):
+            row = []
+            for j in range(len(coordinates)):
+                point = coordinates[j][i]
                 if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]) and point[2] > 3420:
-                    self.filtered.append([*point, *normal(gradient[0][i][j], gradient[1][i][j])])
+                    row.append([*point, *normal(dx.ev(point[0], point[1]), dy.ev(point[0], point[1]))])
+            if row != []:
+                self.filtered.append(row)
 
 
 if __name__ == "__main__":

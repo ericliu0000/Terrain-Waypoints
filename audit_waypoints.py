@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 obj = WaypointGenerator("data/cloud_lasground.h5")
 lines = obj.waypoints
 
-for i in range(1, len(lines) - 1):
+for i in range(1, len(lines)):
     v_average = 0
     h_average = 0
 
@@ -29,7 +29,7 @@ for i in range(1, len(lines) - 1):
     for j in range(1, len(cur)):
         h_average += ((cur[j][0] - cur[j - 1][0]) ** 2 + (cur[j][1] - cur[j - 1][1]) ** 2) ** 0.5
         # h_average += ((cur[j][0] - cur[j - 1][0]) ** 2 + (cur[j][1] - cur[j - 1][1]) ** 2 + (cur[j][2] - cur[j - 1][2]) ** 2) ** 0.5
-        
+
         plt.plot(cur[j][0], cur[j][1], "b.")
 
     print(h_average / len(cur))

@@ -51,12 +51,12 @@ class InterpolatedGridGradient:
                                            self.y_grid[1] - self.y_grid[0])
             self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
 
+
 class WaypointGridGradient:
     """Extracts las data, interpolates to grid, and returns gradient. Specifically intended for waypoint generation"""
     scale: float = 2
     hdev: float = 3.0 * 3.048 * scale
     vdev: float = 2.3 * 3.048 * scale
-
 
     def __init__(self, doc: str, method: str = "linear") -> None:
         # read in the las processed data
@@ -71,7 +71,6 @@ class WaypointGridGradient:
         self.height = scipy.interpolate.griddata(self.spacing, self.values,
                                                  (self.x_grid[None, :], self.y_grid[:, None]), method="linear")
         self.gradient = numpy.gradient(self.height, self.x_grid[1] - self.x_grid[0], self.y_grid[1] - self.y_grid[0])
-
 
 
 if __name__ == "__main__":

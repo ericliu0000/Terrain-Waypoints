@@ -22,8 +22,10 @@ class WaypointGenerator:
             for point in row:
                 # move every point normal by buf
                 line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance, point[2] + point[5] * self.clearance])
-            if inverted: self.waypoints.append(line[::-1])
-            else: self.waypoints.append(line)
+            if inverted:
+                self.waypoints.append(line[::-1])
+            else:
+                self.waypoints.append(line)
             inverted = not inverted
 
         # Perhaps do a similar thing with filtering and gather waypoints in batches and go around the mountain

@@ -44,6 +44,7 @@ def lower(coord):
 
 left = 950290
 
+# Plot trajectory of lines
 x = numpy.linspace(950250, 950600)
 y = [upper(z) for z in x]
 plt.plot(x, y, "go")
@@ -51,6 +52,7 @@ plt.plot(x, y, "go")
 y = [lower(z) for z in x]
 plt.plot(x, y, "go")
 
+# Plot points
 for value in obj.coords.values():
     for row in value:
         x = row[0]

@@ -189,8 +189,8 @@ def test_3d() -> None:
 
 if __name__ == "__main__":
     # ncsu_test()
-    # site_test()
+    site_test()
     # lasground_test()
     # site_slope_only()
     # quadrant()
-    test_3d()
+    # test_3d()

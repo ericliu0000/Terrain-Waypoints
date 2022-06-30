@@ -31,10 +31,9 @@ class WaypointGenerator:
                 self.waypoints.append(line)
             inverted = not inverted
 
-    # TODO: fix these two methods because the coordinates might be in the wrong order
-
     def export(self) -> None:
         """Export the waypoints to a file (EPSG 32119)."""
+
         with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
             file.write("Easting,Northing,Altitude\n")
             for row in self.waypoints:
@@ -46,11 +45,11 @@ class WaypointGenerator:
 
         with open(f"output/{datetime.datetime.now()}_latlong.csv", "w") as file:
             file.write("Latitude,Longitude,Altitude\n")
-            for (altitude, waypoints) in zip(self.altitudes, self.waypoints):
-                for waypoint in waypoints:
+            for row in self.waypoints:
+                for point in row:
                     transformer = pyproj.Transformer.from_proj('epsg:32119', 'epsg:4326')
-                    x, y = transformer.transform(waypoint[0], waypoint[1])
-                    file.write(f"{y},{x},{altitude}\n")
+                    x, y = transformer.transform(point[0], point[1])
+                    file.write(f"{y},{x},{point[2]}\n")
 
 
 class WaypointPlotter(WaypointGenerator):
@@ -84,6 +83,6 @@ class WaypointPlotter(WaypointGenerator):
 
 if __name__ == "__main__":
     a = WaypointGenerator("data/cloud_lasground.h5")
-    a.export()
+    a.export_latlong()
 
     # WaypointPlotter("data/cloud_lasground.h5")

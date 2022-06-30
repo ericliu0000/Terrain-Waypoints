@@ -62,7 +62,7 @@ class Reader:
         
         # plot points
         for line in lines[1:]:
-            x, y, z = line.split(",")
+            x, y, z = [point[:9] for point in line.split(",")]
             graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "r")
             last = [float(x), float(y), float(z)]
 

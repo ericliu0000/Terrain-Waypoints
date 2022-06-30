@@ -37,7 +37,7 @@ class SiteFilter:
         dy = scipy.interpolate.RectBivariateSpline(self.obj.x_grid, self.obj.y_grid, gradient[1].T, s=100)
 
         # For each point, place in filtered (x, y, z, [unit normal])
-        for i in range(len(coordinates[0])):
+        for i in range(len(coordinates[0]) - 1, -1, -1):
             row = []
             for j in range(len(coordinates)):
                 point = coordinates[j][i]

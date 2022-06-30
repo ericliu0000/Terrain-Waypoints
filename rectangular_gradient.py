@@ -53,8 +53,10 @@ class InterpolatedGridGradient:
 
 class WaypointGridGradient:
     """Extracts las data, interpolates to grid, and returns gradient. Specifically intended for waypoint generation"""
-    hdev: float = 3.0 * 3.048
-    vdev: float = 2.3 * 3.048
+    scale: float = 2
+    hdev: float = 3.0 * 3.048 * scale
+    vdev: float = 2.3 * 3.048 * scale
+
 
     def __init__(self, doc: str, method: str = "linear") -> None:
         # read in the las processed data

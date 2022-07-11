@@ -5,22 +5,21 @@ import matplotlib.pyplot as plt
 
 
 def get_data():
-    # read in the las processed data
+    # Read data from h5 file
     data = pandas.read_hdf("data/cloud_lasground.h5", "a").to_numpy()
     spacing, values = data[..., :2], data[..., 2]
 
-    # get the x and y bounds and length
+    # Get bounds and length for x and y axes
     x_max, x_min = spacing[:, 0].max(), spacing[:, 0].min()
     y_max, y_min = spacing[:, 1].max(), spacing[:, 1].min()
     x_length, y_length = x_max - x_min, y_max - y_min
 
-    # create grid
+    # Make grid and interpolate values
     x_grid = numpy.linspace(x_min, x_max, int(x_length * 2))
     y_grid = numpy.linspace(y_min, y_max, int(y_length * 2))
-
-    # interpolate
     points = scipy.interpolate.griddata(spacing, values, (x_grid[None, :], y_grid[:, None]), method="linear")
 
+    # Calculate the gradient and magnitude of gradient
     gradient = numpy.gradient(points, x_grid[1] - x_grid[0], y_grid[1] - y_grid[0])
     magnitude = ((gradient[0] ** 2) + (gradient[1] ** 2)) ** 0.5
 

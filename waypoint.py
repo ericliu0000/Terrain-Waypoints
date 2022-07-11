@@ -14,17 +14,17 @@ class WaypointGenerator:
 
     def __init__(self, doc: str) -> None:
         site = SiteFilter(doc)
-        values = site.filtered
+        self.values = site.filtered
         inverted = False
 
-        for row in values:
+        for row in self.values:
             line = []
 
-            # move every point normal by buf
+            # Translate each point normal to the surface by clearance distance
             for point in row:
                 line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance, point[2] + point[5] * self.clearance])
 
-            # reverse every other line
+            # Reverse the order of every other line
             if inverted:
                 self.waypoints.append(line[::-1])
             else:
@@ -48,7 +48,7 @@ class WaypointGenerator:
             file.write("Latitude,Longitude,Altitude\n")
             for row in self.waypoints:
                 for point in row:
-                    x, y = p(point[0], point[1], inverse=True)    
+                    x, y = p(point[0], point[1], inverse=True)
                     file.write(f"{x},{y},{point[2]}\n")
 
 
@@ -63,9 +63,9 @@ class WaypointPlotter(WaypointGenerator):
         z = obj.height
 
         graph = plt.axes(projection="3d")
-        graph.set_xlabel("Easting")
-        graph.set_ylabel("Northing")
-        graph.set_zlabel("Altitude")
+        graph.set_xlabel("Easting (x)")
+        graph.set_ylabel("Northing (y)")
+        graph.set_zlabel("Altitude (z)")
 
         x, y = numpy.meshgrid(x, y)
         graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)

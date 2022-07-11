@@ -1,51 +1,16 @@
-from rectangular_gradient import InterpolatedGridGradient, NumpyGradient
+from rectangular_gradient import InterpolatedGridGradient
 import numpy
 import matplotlib.pyplot as plt
 
 
-def ncsu_test():
-    """Test with NC Floodplain Mapping Program dataset for NCSU campus tile."""
-    # elevations
-    obj = NumpyGradient("data/ncsutest.h5")
-    elevations = obj.points
-    x, y = elevations[..., 0].flatten(), elevations[..., 1].flatten()
-    z = elevations[..., 2]
-
-    x_i = numpy.linspace(x.min(), x.max(), 1600)
-    y_i = numpy.linspace(y.min(), y.max(), 1600)
-
-    z_min = z.min()
-    z_max = z.max()
-
-    plt.subplot(1, 2, 1)
-    plt.contourf(x_i, y_i, z, 160, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
-    plt.colorbar()
-
-    # gradient
-    gradient = obj.magnitude
-
-    z_min = -1
-    z_max = 1
-
-    z = numpy.clip(gradient, z_min, z_max)
-
-    plt.subplot(1, 2, 2)
-    plt.contourf(x_i, y_i, z, 80, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
-    plt.colorbar()
-
-    plt.show()
-
-
-def site_test():
+def site_test() -> None:
     """Show elevation and slope of site data."""
-    # elevations
     obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
     z = obj.points
 
     z2 = z[~numpy.isnan(z)]
 
-    # z_min = z2.min()
     z_min = 3375
     z_max = z2.max()
 
@@ -55,7 +20,6 @@ def site_test():
     plt.contourf(x, y, z, 20, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
-    # gradient
     gradient = obj.magnitude
 
     z_min = 0
@@ -74,7 +38,6 @@ def site_test():
 
 def lasground_test() -> None:
     """Show difference between original and LASground processed elevation."""
-    # normal
     obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
@@ -90,7 +53,6 @@ def lasground_test() -> None:
     plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
-    # lasground
     obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
@@ -130,7 +92,6 @@ def quadrant() -> None:
     elevation_steps = 40
     slope_steps = 40
 
-    # elevations
     original = InterpolatedGridGradient("data/cloud_simplified_2.h5")
     x1, y1 = original.x_grid, original.y_grid
     z1 = original.points
@@ -154,7 +115,6 @@ def quadrant() -> None:
     plt.contourf(x2, y2, z2, elevation_steps, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
-    # gradient
     z_min = 0
     z_max = 2
 
@@ -188,7 +148,6 @@ def test_3d() -> None:
 
 
 if __name__ == "__main__":
-    # ncsu_test()
     # site_test()
     lasground_test()
     # site_slope_only()

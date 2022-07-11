@@ -22,7 +22,7 @@ class WaypointGenerator:
 
             # move every point normal by buf
             for point in row:
-                line.append([point[0] + point[4] * self.clearance, point[1] + point[3] * self.clearance, point[2] + point[5] * self.clearance])
+                line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance, point[2] + point[5] * self.clearance])
 
             # reverse every other line
             if inverted:
@@ -67,8 +67,8 @@ class WaypointPlotter(WaypointGenerator):
         graph.set_ylabel("Northing (y)")
         graph.set_zlabel("Altitude (z)")
 
-        # x, y = numpy.meshgrid(x, y)
-        # graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
+        x, y = numpy.meshgrid(x, y)
+        graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
 
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], self.waypoints[0][0][2])
@@ -78,7 +78,8 @@ class WaypointPlotter(WaypointGenerator):
                 last = (point[0], point[1], point[2])
                 plt.plot(*last, "bo")
 
-        # opt 2: plot waypoints with line from original point to waypoint. note: remove inversion feature
+        # opt 2: plot waypoints with line from original point to waypoint. note: remove inversion feature. 
+        # TODO: move this to audit waypoints
         # x_min = 950300
         # y_min = 798900
         # graph.set_xlim(x_min, x_min + 500)

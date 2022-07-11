@@ -78,17 +78,6 @@ class WaypointPlotter(WaypointGenerator):
                 last = (point[0], point[1], point[2])
                 plt.plot(*last, "bo")
 
-        # opt 2: plot waypoints with line from original point to waypoint. note: remove inversion feature. 
-        # TODO: move this to audit waypoints
-        # x_min = 950300
-        # y_min = 798900
-        # graph.set_xlim(x_min, x_min + 500)
-        # graph.set_ylim(y_min, y_min + 500)
-        # graph.set_zlim(3450, 3950)
-        # for r1, r2 in zip(self.values, self.waypoints):
-        #     for p1, p2 in zip(r1, r2):
-        #         plt.plot([p1[0], p2[0]], [p1[1], p2[1]], [p1[2], p2[2]], "r")
-
         plt.show()
 
 

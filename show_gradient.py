@@ -1,42 +1,9 @@
-from rectangular_gradient import InterpolatedGridGradient, NumpyGradient
+from rectangular_gradient import InterpolatedGridGradient
 import numpy
 import matplotlib.pyplot as plt
 
 
-def ncsu_test():
-    """Test with NC Floodplain Mapping Program dataset for NCSU campus tile."""
-    # elevations
-    obj = NumpyGradient("data/ncsutest.h5")
-    elevations = obj.points
-    x, y = elevations[..., 0].flatten(), elevations[..., 1].flatten()
-    z = elevations[..., 2]
-
-    x_i = numpy.linspace(x.min(), x.max(), 1600)
-    y_i = numpy.linspace(y.min(), y.max(), 1600)
-
-    z_min = z.min()
-    z_max = z.max()
-
-    plt.subplot(1, 2, 1)
-    plt.contourf(x_i, y_i, z, 160, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
-    plt.colorbar()
-
-    # gradient
-    gradient = obj.magnitude
-
-    z_min = -1
-    z_max = 1
-
-    z = numpy.clip(gradient, z_min, z_max)
-
-    plt.subplot(1, 2, 2)
-    plt.contourf(x_i, y_i, z, 80, cmap=plt.cm.coolwarm, vmin=z_min, vmax=z_max)
-    plt.colorbar()
-
-    plt.show()
-
-
-def site_test():
+def site_test() -> None:
     """Show elevation and slope of site data."""
     # elevations
     obj = InterpolatedGridGradient("data/cloud_lasground.h5")
@@ -188,7 +155,6 @@ def test_3d() -> None:
 
 
 if __name__ == "__main__":
-    # ncsu_test()
     # site_test()
     lasground_test()
     # site_slope_only()

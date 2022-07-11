@@ -3,27 +3,6 @@ import pandas
 import scipy.interpolate
 
 
-class NumpyGradient:
-    """Pulls a grid of points from DEM data and converts the gradient to a grid of values"""
-
-    def __init__(self, doc: str):
-        self.points = pandas.read_hdf(doc, "a").to_numpy()
-
-        # only works if data is square
-        s = self.points.shape[0] ** 0.5
-        assert s == int(s), f"Data is not square: {self.points.shape}"
-        self.points = numpy.reshape(self.points, (int(s), int(s), 3))
-
-        self.spacing = self.points[..., :2]
-        self.values = self.points[..., 2]
-
-        # x and y partials
-        self.gradient = numpy.gradient(self.values, self.spacing[0][..., 0], self.spacing[..., 1][:, 0])
-
-        # get magnitude of gradient
-        self.magnitude = ((self.gradient[0] ** 2) + (self.gradient[1] ** 2)) ** 0.5
-
-
 class InterpolatedGridGradient:
     """Extracts las data and attempts to interpolate to create an elevation model and the corresponding gradient."""
     scale = 2
@@ -74,7 +53,4 @@ class WaypointGridGradient:
 
 
 if __name__ == "__main__":
-    # gradient = NumpyGradient()
-    # print(gradient.magnitude)
-
     gradient = InterpolatedGridGradient("data/cloud_simplified_2.h5")

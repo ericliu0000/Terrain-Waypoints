@@ -106,5 +106,5 @@ class Reader:
 
 if __name__ == "__main__":
     # Grid()
-    Grid3()
-    # Reader()
+    # Grid3()
+    Reader()

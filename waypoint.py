@@ -82,7 +82,7 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    a = WaypointGenerator("data/cloud_lasground.h5")
-    a.export_latlong()
+    # a = WaypointGenerator("data/cloud_lasground.h5")
+    # a.export_latlong()
 
-    # WaypointPlotter("data/cloud_lasground.h5")
+    WaypointPlotter("data/cloud_lasground.h5")

@@ -54,7 +54,7 @@ class InterpolatedGridGradient:
 
 class WaypointGridGradient:
     """Extracts las data, interpolates to grid, and returns gradient. Specifically intended for waypoint generation"""
-    scale: float = 1
+    scale: float = 3
     hdev: float = 3.0 * 3.048 * scale
     vdev: float = 2.3 * 3.048 * scale
 

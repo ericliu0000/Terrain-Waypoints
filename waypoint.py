@@ -20,11 +20,11 @@ class WaypointGenerator:
         for row in self.values:
             line = []
 
-            # move every point normal by buf
+            # Translate each point normal to the surface by clearance distance
             for point in row:
                 line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance, point[2] + point[5] * self.clearance])
 
-            # reverse every other line
+            # Reverse the order of every other line
             if inverted:
                 self.waypoints.append(line[::-1])
             else:

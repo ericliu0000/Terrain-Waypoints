@@ -22,13 +22,10 @@ for i in range(len(X_dat)):
 
 print("done 2")
 
-# create x-y points to be used in heatmap
-# noinspection PyArgumentList
+# Create x-y points to be used in heatmap
 xi = np.linspace(X.min(), X.max(), 1000)
-# noinspection PyArgumentList
 yi = np.linspace(Y.min(), Y.max(), 1000)
 
-# noinspection PyArgumentList
 print(Z.min(), Z.max())
 
 print("done 3")

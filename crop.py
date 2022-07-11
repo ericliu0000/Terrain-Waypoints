@@ -5,7 +5,6 @@ from filter import SiteFilter
 from rectangular_gradient import InterpolatedGridGradient
 
 obj = InterpolatedGridGradient("data/cloud_lasground.h5")
-# gradient
 x_val, y_val = obj.x_grid, obj.y_grid
 gradient = obj.magnitude
 

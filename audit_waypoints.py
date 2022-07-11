@@ -1,6 +1,5 @@
 from waypoint import WaypointGenerator
 import matplotlib.pyplot as plt
-import glob
 import os
 
 
@@ -15,7 +14,7 @@ class Grid:
 
             last, cur = lines[i - 1], lines[i]
 
-            # Make two vairables with the shorter and longer line
+            # Split up longer and shorter line
             if len(last) < len(cur):
                 short, long = last, cur
             else:
@@ -49,25 +48,24 @@ class Reader:
     def __init__(self) -> None:
         graph = plt.axes(projection="3d")
 
-        # open most recent file from output/
+        # Open most recent file from output/ and remove header
         list_of_files = {"output/" + file for file in os.listdir("output/")}
         latest_file = max(list_of_files, key=os.path.getctime)
         with open(latest_file) as f:
             lines = f.readlines()[1:]
 
-        # get first line
+        # Pull out first point
         first_line = lines[0].split(",")
         last = [float(first_line[0]), float(first_line[1]), float(first_line[2])]
         graph.plot(*last, "gH")
         
-        # plot points
+        # Plot the points
         for line in lines[1:]:
             x, y, z = [point[:9] for point in line.split(",")]
             graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "r")
             last = [float(x), float(y), float(z)]
 
         graph.plot(*last, "m^")
-
         plt.show()
 
 

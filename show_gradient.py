@@ -5,14 +5,12 @@ import matplotlib.pyplot as plt
 
 def site_test() -> None:
     """Show elevation and slope of site data."""
-    # elevations
     obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
     z = obj.points
 
     z2 = z[~numpy.isnan(z)]
 
-    # z_min = z2.min()
     z_min = 3375
     z_max = z2.max()
 
@@ -22,7 +20,6 @@ def site_test() -> None:
     plt.contourf(x, y, z, 20, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
-    # gradient
     gradient = obj.magnitude
 
     z_min = 0
@@ -41,7 +38,6 @@ def site_test() -> None:
 
 def lasground_test() -> None:
     """Show difference between original and LASground processed elevation."""
-    # normal
     obj = InterpolatedGridGradient("data/cloud_simplified_2.h5")
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
@@ -57,7 +53,6 @@ def lasground_test() -> None:
     plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
-    # lasground
     obj = InterpolatedGridGradient("data/cloud_lasground.h5")
     x, y = obj.x_grid, obj.y_grid
     gradient = obj.magnitude
@@ -97,7 +92,6 @@ def quadrant() -> None:
     elevation_steps = 40
     slope_steps = 40
 
-    # elevations
     original = InterpolatedGridGradient("data/cloud_simplified_2.h5")
     x1, y1 = original.x_grid, original.y_grid
     z1 = original.points
@@ -121,7 +115,6 @@ def quadrant() -> None:
     plt.contourf(x2, y2, z2, elevation_steps, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
-    # gradient
     z_min = 0
     z_max = 2
 

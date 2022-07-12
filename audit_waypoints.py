@@ -91,12 +91,12 @@ class Reader:
 
         # Pull out first point
         first_line = lines[0].split(",")
-        last = [float(first_line[0]), float(first_line[1]), float(first_line[2])]
+        last = [float(first_line[1]), float(first_line[2]), float(first_line[3])]
         graph.plot(*last, "gH")
 
         # Plot the points
         for line in lines[1:]:
-            x, y, z = [point[:9] for point in line.split(",")]
+            _, x, y, z = [point[:9] for point in line.split(",")]
             graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "r")
             last = [float(x), float(y), float(z)]
 

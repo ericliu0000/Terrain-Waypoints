@@ -35,21 +35,32 @@ class WaypointGenerator:
         """Export the waypoints to a file (EPSG 32119)."""
 
         with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
-            file.write("Easting,Northing,Altitude\n")
+            file.write("Index,Easting,Northing,Altitude\n")
+            count = 0
+
             for row in self.waypoints:
                 for point in row:
-                    file.write(f"{point[0]},{point[1]},{point[2]}\n")
+                    count += 1
+                    file.write(f"{count},{point[0]},{point[1]},{point[2]}\n")
+
+            print(f"Exported {count} waypoints to {file.name}")
 
     def export_latlong(self) -> None:
         """Export the waypoints to a file (EPSG 4326)."""
 
         p = pyproj.Proj("+proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 +datum=NAD83 +units=m no_defs +ellps=GRS80 +towgs84=0,0,0")
         with open(f"output/{datetime.datetime.now()}_latlong.csv", "w") as file:
-            file.write("Latitude,Longitude,Altitude\n")
+            file.write("Index,Latitude,Longitude,Altitude\n")
+            count = 0
+
             for row in self.waypoints:
                 for point in row:
+                    count += 1
                     x, y = p(point[0], point[1], inverse=True)
-                    file.write(f"{x},{y},{point[2]}\n")
+                    file.write(f"{count},{x},{y},{point[2]}\n")
+            
+            print(f"Exported {count} waypoints to {file.name}")
+
 
 
 class WaypointPlotter(WaypointGenerator):
@@ -82,7 +93,8 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    # a = WaypointGenerator("data/cloud_lasground.h5")
-    # a.export_latlong()
+    a = WaypointGenerator("data/cloud_lasground.h5")
+    a.export()
+    a.export_latlong()
 
-    WaypointPlotter("data/cloud_lasground.h5")
+    # WaypointPlotter("data/cloud_lasground.h5")

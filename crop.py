@@ -29,7 +29,7 @@ plt.plot([950396, 950550], [798926, 798926], "r")
 # Right side limitation
 plt.plot([950550, 950550], [798926, 800374], "r")
 
-obj = SiteFilter("data/cloud_lasground.h5", [3400, 3440, 3480, 3550, 3600, 3650])
+obj = SiteFilter("data/cloud_lasground.h5")
 
 
 # Derestrictive set of points (incl. 10 m buffer)
@@ -52,7 +52,7 @@ y = [lower(z) for z in x]
 plt.plot(x, y, "go")
 
 # Plot points
-for value in obj.coords.values():
+for value in obj.filtered:
     for row in value:
         x = row[0]
         plt.plot(x, row[1], "ro")

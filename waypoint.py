@@ -22,7 +22,8 @@ class WaypointGenerator:
 
             # Translate each point normal to the surface by clearance distance
             for point in row:
-                line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance, point[2] + point[5] * self.clearance])
+                line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance,
+                             point[2] + point[5] * self.clearance])
 
             # Reverse the order of every other line
             if inverted:
@@ -48,7 +49,9 @@ class WaypointGenerator:
     def export_latlong(self) -> None:
         """Export the waypoints to a file (EPSG 4326)."""
 
-        p = pyproj.Proj("+proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 +datum=NAD83 +units=m no_defs +ellps=GRS80 +towgs84=0,0,0")
+        p = pyproj.Proj(
+            "+proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 "
+            "+datum=NAD83 +units=m no_defs +ellps=GRS80 +towgs84=0,0,0")
         with open(f"output/{datetime.datetime.now()}_latlong.csv", "w") as file:
             file.write("Index,Latitude,Longitude,Altitude\n")
             count = 0
@@ -58,9 +61,8 @@ class WaypointGenerator:
                     count += 1
                     x, y = p(point[0], point[1], inverse=True)
                     file.write(f"{count},{x},{y},{point[2]}\n")
-            
-            print(f"Exported {count} waypoints to {file.name}")
 
+            print(f"Exported {count} waypoints to {file.name}")
 
 
 class WaypointPlotter(WaypointGenerator):

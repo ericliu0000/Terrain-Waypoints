@@ -35,7 +35,7 @@ class WaypointGridGradient:
     hdev: float = 3.0 * 3.048 * scale
     vdev: float = 2.3 * 3.048 * scale
 
-    def __init__(self, doc: str, method: str = "linear") -> None:
+    def __init__(self, doc: str) -> None:
         # Read data from h5 file
         self.data = pandas.read_hdf(doc, "a").to_numpy()
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]

@@ -43,9 +43,10 @@ class SiteFilter:
             for j in range(len(coordinates)):
                 # Filter bounds and remove points below 3420 feet
                 point = coordinates[j][i]
-                if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]) and point[2] > self.min_elev:
+                if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]) and \
+                        point[2] > self.min_elev:
                     row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
-            if row != []:
+            if row:
                 self.filtered.append(row)
 
 

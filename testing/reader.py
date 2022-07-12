@@ -1,7 +1,6 @@
 """
 Read data to latitude, longitude, and elevation
 """
-import numpy
 import pandas
 import pyproj
 

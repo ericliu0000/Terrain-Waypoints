@@ -87,7 +87,18 @@ class Reader:
         list_of_files = {"output/" + file for file in os.listdir("output/")}
         latest_file = max(list_of_files, key=os.path.getctime)
         with open(latest_file) as f:
-            lines = f.readlines()[1:]
+            lines = f.readlines()
+
+        header = lines.pop(0)
+
+        if "Latitude" in header:
+            graph.set_xlabel("Latitude")
+            graph.set_ylabel("Longitude")
+        elif "Easting" in header:
+            graph.set_xlabel("Easting (ft)")
+            graph.set_ylabel("Northing (ft)")
+        
+        graph.set_zlabel("Altitude (ft)")
 
         # Pull out first point
         first_line = lines[0].split(",")

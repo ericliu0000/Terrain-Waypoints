@@ -85,6 +85,7 @@ class WaypointPlotter(WaypointGenerator):
 
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], self.waypoints[0][0][2])
+
         for row in self.waypoints:
             for point in row:
                 plt.plot([point[0], last[0]], [point[1], last[1]], [point[2], last[2]], "r")
@@ -97,6 +98,6 @@ class WaypointPlotter(WaypointGenerator):
 if __name__ == "__main__":
     a = WaypointGenerator("data/cloud_lasground.h5")
     a.export()
-    a.export_latlong()
+    # a.export_latlong()
 
     # WaypointPlotter("data/cloud_lasground.h5")

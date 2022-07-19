@@ -17,17 +17,17 @@ plt.contourf(x_val, y_val, z, 20, cmap=plt.cm.terrain, vmin=z_min, vmax=z_max)
 # Reference lines and background image
 plt.imshow(plt.imread("data/site.png"), extent=[950132.25, 950764.18, 798442.81, 800597.99])
 # Upper limitation
-plt.plot([950370, 950550], [800374, 800374], "r", linewidth=2)
+plt.plot([950370, 950550], [800374, 800374], "r", linewidth=3)
 # Upper segment
-plt.plot([950258, 950370], [799699, 800374], "r", linewidth=2)
+plt.plot([950258, 950370], [799699, 800374], "r", linewidth=3)
 # Left segment
-plt.plot([950274, 950258], [799400, 799699], "r", linewidth=2)
+plt.plot([950274, 950258], [799400, 799699], "r", linewidth=3)
 # Lower segment
-plt.plot([950396, 950274], [798926, 799400], "r", linewidth=2)
+plt.plot([950396, 950274], [798926, 799400], "r", linewidth=3)
 # Lower limitation
-plt.plot([950396, 950550], [798926, 798926], "r", linewidth=2)
+plt.plot([950396, 950550], [798926, 798926], "r", linewidth=3)
 # Right side limitation
-plt.plot([950550, 950550], [798926, 800374], "r", linewidth=2)
+plt.plot([950550, 950550], [798926, 800374], "r", linewidth=3)
 
 obj = SiteFilter("data/cloud_lasground.h5")
 

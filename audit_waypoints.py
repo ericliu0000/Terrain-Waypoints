@@ -103,7 +103,7 @@ class Reader:
         # Pull out first point
         first_line = lines[0].split(",")
         last = [float(first_line[1]), float(first_line[2]), float(first_line[3])]
-        graph.plot(*last, "gH")
+        graph.plot(*last, "gH", ms=10)
 
         # Plot the points
         for line in lines[1:]:
@@ -111,7 +111,7 @@ class Reader:
             graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "r")
             last = [float(x), float(y), float(z)]
 
-        graph.plot(*last, "m^")
+        graph.plot(*last, "m^", ms=10)
         plt.show()
 
 

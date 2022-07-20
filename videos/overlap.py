@@ -33,7 +33,7 @@ class Overlap(Scene):
         # clear out site, drone, and frames 
         self.play(AnimationGroup(*[Uncreate(rectangle, run_time=0.1) for rectangle in frames], lag_ratio=0.4))
         self.play(drone.animate.shift(RIGHT * 10), Uncreate(site))
-        self.wait(2)
+        self.wait(1)
 
         # make image demo objects
         frame_a.move_to((-1, 0, 0)).scale(3)
@@ -45,25 +45,22 @@ class Overlap(Scene):
         # create two frames
         self.play(Create(frame_a))
         self.play(Create(frame_b))
-        self.wait(1)
 
-        # change overlaop
+        # change overlap
         self.play(frame_b.animate.shift(LEFT * 1.5))
         self.wait(0.2)
 
         self.play(frame_b.animate.shift(3 * RIGHT))
-        self.wait(1)
+        self.wait(0.2)
 
         # change area
         self.play(Uncreate(frame_a), frame_b.animate.move_to((0, 0, 0)))
         self.play(frame_b.animate.scale(2))
-        self.wait(0.5)
-
         self.play(frame_b.animate.scale(0.25))
         self.wait(0.5)
 
         self.play(frame_b.animate.scale(2))
-        self.wait(2)
+        self.wait(1)
 
         # end scene
         self.play(Uncreate(frame_b))

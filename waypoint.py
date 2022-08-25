@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy
 import pyproj
 
-from calculate_gradient import WaypointGradient
 from filter import SiteFilter
 
 
@@ -13,8 +12,8 @@ class WaypointGenerator:
     waypoints: list = []
 
     def __init__(self, doc: str) -> None:
-        site = SiteFilter(doc)
-        self.values = site.filtered
+        self.site = SiteFilter(doc)
+        self.values = self.site.filtered
         inverted = False
 
         for row in self.values:
@@ -71,9 +70,8 @@ class WaypointPlotter(WaypointGenerator):
     def __init__(self, doc: str) -> None:
         super().__init__(doc)
         # Plot terrain
-        obj = WaypointGradient("data/cloud_lasground.h5")
-        x, y = obj.x_grid, obj.y_grid
-        z = obj.height
+        x, y = self.site.obj.x_grid, self.site.obj.y_grid
+        z = self.site.obj.height
 
         graph = plt.axes(projection="3d")
         graph.set_xlabel("Easting (x)")

@@ -1,4 +1,4 @@
-from rectangular_gradient import WaypointGridGradient
+from calculate_gradient import WaypointGradient
 from waypoint import WaypointGenerator
 import matplotlib.pyplot as plt
 import os
@@ -50,7 +50,7 @@ class Grid3:
     def __init__(self) -> None:
         # Read and rasterize the site data
         points = WaypointGenerator("data/cloud_lasground.h5")
-        obj = WaypointGridGradient("data/cloud_lasground.h5")
+        obj = WaypointGradient("data/cloud_lasground.h5")
         x, y = obj.x_grid, obj.y_grid
         z = obj.height
         x, y = numpy.meshgrid(x, y)

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy
 
 from filter import SiteFilter
-from rectangular_gradient import InterpolatedGridGradient
+from testing.gradient import InterpolatedGridGradient
 
 obj = InterpolatedGridGradient("data/cloud_lasground.h5")
 x_val, y_val = obj.x_grid, obj.y_grid

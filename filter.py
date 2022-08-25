@@ -1,7 +1,7 @@
 import numpy
 import scipy.interpolate
 
-from rectangular_gradient import WaypointGridGradient
+from calculate_gradient import WaypointGradient
 
 
 # Only take restrictive set (rock face points only) for regression limits
@@ -22,11 +22,10 @@ class SiteFilter:
     """Extracts the coordinates of the site from a las file and constrains it to the site"""
     left: float = 950310
     right: float = 950600
-    min_elev: float = 3420
     filtered: list = []
 
     def __init__(self, doc: str) -> None:
-        self.obj = WaypointGridGradient(doc)
+        self.obj = WaypointGradient(doc)
         a, b = numpy.meshgrid(self.obj.x_grid, self.obj.y_grid)
 
         # Create a grid of coordinates with corresponding gradient values
@@ -44,7 +43,7 @@ class SiteFilter:
                 # Filter bounds and remove points below 3420 feet
                 point = coordinates[j][i]
                 if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]) and \
-                        point[2] > self.min_elev:
+                        point[2] > 3420:
                     row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
             if row:
                 self.filtered.append(row)

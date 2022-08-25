@@ -5,7 +5,7 @@ import numpy
 import pyproj
 
 from filter import SiteFilter
-from rectangular_gradient import WaypointGridGradient
+from calculate_gradient import WaypointGradient
 
 
 class WaypointGenerator:
@@ -71,7 +71,7 @@ class WaypointPlotter(WaypointGenerator):
     def __init__(self, doc: str) -> None:
         super().__init__(doc)
         # Plot terrain
-        obj = WaypointGridGradient("data/cloud_lasground.h5")
+        obj = WaypointGradient("data/cloud_lasground.h5")
         x, y = obj.x_grid, obj.y_grid
         z = obj.height
 
@@ -96,8 +96,8 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    a = WaypointGenerator("data/cloud_lasground.h5")
-    a.export()
+    # a = WaypointGenerator("data/cloud_lasground.h5")
+    # a.export()
     # a.export_latlong()
 
-    # WaypointPlotter("data/cloud_lasground.h5")
+    WaypointPlotter("data/cloud_lasground.h5")

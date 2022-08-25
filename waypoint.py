@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import numpy
 import pyproj
 
+import constants
 from filter import SiteFilter
 
 
 class WaypointGenerator:
-    clearance: int = 100
     waypoints: list = []
 
     def __init__(self, doc: str) -> None:
@@ -21,8 +21,8 @@ class WaypointGenerator:
 
             # Translate each point normal to the surface by clearance distance
             for point in row:
-                line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance,
-                             point[2] + point[5] * self.clearance])
+                line.append([point[0] + point[3] * constants.CLEARANCE, point[1] + point[4] * constants.CLEARANCE,
+                             point[2] + point[5] * constants.CLEARANCE])
 
             # Reverse the order of every other line
             if inverted:
@@ -35,7 +35,7 @@ class WaypointGenerator:
         """Export the waypoints to a file (EPSG 32119)."""
 
         with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
-            file.write("Index,Easting,Northing,Altitude\n")
+            file.write(constants.OUTPUT_HEADER)
             count = 0
 
             for row in self.waypoints:
@@ -48,11 +48,9 @@ class WaypointGenerator:
     def export_latlong(self) -> None:
         """Export the waypoints to a file (EPSG 4326)."""
 
-        p = pyproj.Proj(
-            "+proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 "
-            "+datum=NAD83 +units=m no_defs +ellps=GRS80 +towgs84=0,0,0")
+        p = pyproj.Proj(constants.PROJECTION)
         with open(f"output/{datetime.datetime.now()}_latlong.csv", "w") as file:
-            file.write("Index,Latitude,Longitude,Altitude\n")
+            file.write(constants.OUTPUT_HEADER)
             count = 0
 
             for row in self.waypoints:
@@ -94,8 +92,8 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    # a = WaypointGenerator("data/cloud_lasground.h5")
+    # a = WaypointGenerator(constants.FILE)
     # a.export()
     # a.export_latlong()
 
-    WaypointPlotter("data/cloud_lasground.h5")
+    WaypointPlotter(constants.FILE)

@@ -1,13 +1,16 @@
+import os
+
+import matplotlib.pyplot as plt
+import numpy
+
+import constants
 from calculate_gradient import WaypointGradient
 from waypoint import WaypointGenerator
-import matplotlib.pyplot as plt
-import os
-import numpy
 
 
 class Grid:
     def __init__(self) -> None:
-        obj = WaypointGenerator("data/cloud_lasground.h5")
+        obj = WaypointGenerator(constants.FILE)
         lines = obj.waypoints
 
         for i in range(1, len(lines)):
@@ -46,15 +49,15 @@ class Grid3:
 
     def __init__(self) -> None:
         # Read and rasterize the site data
-        points = WaypointGenerator("data/cloud_lasground.h5")
-        obj = WaypointGradient("data/cloud_lasground.h5")
+        points = WaypointGenerator(constants.FILE)
+        obj = WaypointGradient(constants.FILE)
         x, y = obj.x_grid, obj.y_grid
         z = obj.height
         x, y = numpy.meshgrid(x, y)
 
-        x_min = 950300
+        x_min = constants.LEFT_BOUND
         y_min = 798900
-        z_min = 3450
+        z_min = constants.Z_FILTER
 
         graph = plt.axes(projection="3d")
         graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
@@ -94,7 +97,7 @@ class Reader:
         elif "Easting" in header:
             graph.set_xlabel("Easting (ft)")
             graph.set_ylabel("Northing (ft)")
-        
+
         graph.set_zlabel("Altitude (ft)")
 
         # Pull out first point

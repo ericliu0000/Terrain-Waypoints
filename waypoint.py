@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy
 import pyproj
 
-from filter import SiteFilter
 from calculate_gradient import WaypointGradient
+from filter import SiteFilter
 
 
 class WaypointGenerator:

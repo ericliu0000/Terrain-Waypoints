@@ -2,8 +2,6 @@ import numpy
 import pandas
 import scipy.interpolate
 
-from testing.gradient import InterpolatedGridGradient
-
 
 class WaypointGradient:
     """Extracts las data, interpolates to grid, and returns gradient. Specifically intended for waypoint generation"""

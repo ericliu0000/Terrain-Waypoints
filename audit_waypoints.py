@@ -25,15 +25,12 @@ class Grid:
             # Find the closest point in long to each point in short and get distance between two points
             for j in range(len(short)):
                 closest = min(long, key=lambda x: abs(x[1] - short[j][1]))
-
                 v_average += ((short[j][0] - closest[0]) ** 2 + (short[j][1] - closest[1]) ** 2) ** 0.5
-
                 plt.plot([short[j][0], closest[0]], [short[j][1], closest[1]], "r")
 
             # Go through all points and find horizontal deviation
             for j in range(1, len(cur)):
                 h_average += ((cur[j][0] - cur[j - 1][0]) ** 2 + (cur[j][1] - cur[j - 1][1]) ** 2) ** 0.5
-
                 plt.plot(cur[j][0], cur[j][1], "b.")
 
             print(h_average / len(cur))

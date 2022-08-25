@@ -14,7 +14,9 @@ z_max = 2
 z = numpy.clip(gradient, z_min, z_max)
 plt.contourf(x_val, y_val, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
 
-plt.colorbar()
+
+bar = plt.colorbar(shrink=0.95, ticks=numpy.arange(8, step=0.25))
+bar.ax.tick_params(labelsize=14)
 
 # Reference lines and background image
 plt.imshow(plt.imread("data/site.png"), extent=[950132.25, 950764.18, 798442.81, 800597.99])

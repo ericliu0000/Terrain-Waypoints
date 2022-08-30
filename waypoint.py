@@ -11,18 +11,19 @@ from filter import SiteFilter
 class WaypointGenerator:
     waypoints: list = []
 
-    def __init__(self, doc: str) -> None:
+    def __init__(self, doc: str, clearance=constants.CLEARANCE) -> None:
         self.site = SiteFilter(doc)
         self.values = self.site.filtered
         inverted = False
+        self.clearance = clearance
 
         for row in self.values:
             line = []
 
             # Translate each point normal to the surface by clearance distance
             for point in row:
-                line.append([point[0] + point[3] * constants.CLEARANCE, point[1] + point[4] * constants.CLEARANCE,
-                             point[2] + point[5] * constants.CLEARANCE])
+                line.append([point[0] + point[3] * self.clearance, point[1] + point[4] * self.clearance,
+                             point[2] + point[5] * self.clearance])
 
             # Reverse the order of every other line
             if inverted:

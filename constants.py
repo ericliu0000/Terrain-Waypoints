@@ -5,9 +5,9 @@ OUTPUT_HEADER: str = "Index,Latitude,Longitude,Altitude\n"
 CLEARANCE: float = 100.0
 LEFT_BOUND: float = 950310.0
 RIGHT_BOUND: float = 950600.0
-Z_FILTER: float = 3420.0
+Z_FILTER: float = 3390.0
 
-GLOBAL_SCALE: float = 1.0
+GLOBAL_SCALE: float = 3.0
 METERS_TO_FEET: float = 3.048
 CAMERA_H: float = 3.0 * METERS_TO_FEET * GLOBAL_SCALE
 CAMERA_V: float = 2.3 * METERS_TO_FEET * GLOBAL_SCALE

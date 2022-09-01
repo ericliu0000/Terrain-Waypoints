@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy
 
 from filter import SiteFilter
-from rectangular_gradient import InterpolatedGridGradient
+from gradient import InterpolatedGridGradient
 
 obj = InterpolatedGridGradient("data/cloud_lasground.h5")
 x_val, y_val = obj.x_grid, obj.y_grid
@@ -11,8 +11,10 @@ gradient = obj.magnitude
 z_min = 0
 z_max = 2
 
-z = numpy.clip(gradient, z_min, z_max)
-plt.contourf(x_val, y_val, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+# z = numpy.clip(gradient, z_min, z_max)
+z = obj.values
+# plt.contourf(x_val, y_val, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
+plt.contourf(x_val, y_val, z, 20, cmap=plt.cm.Reds)
 
 
 bar = plt.colorbar(shrink=0.95, ticks=numpy.arange(8, step=0.25))
@@ -47,18 +49,18 @@ def lower(coord):
 
 left = 950290
 
-# Plot trajectory of lines
-x = numpy.linspace(950250, 950600)
-y = [upper(z) for z in x]
+# # Plot trajectory of lines
+# x = numpy.linspace(950250, 950600)
+# y = [upper(z) for z in x]
 # plt.plot(x, y, "go")
 
-y = [lower(z) for z in x]
+# y = [lower(z) for z in x]
 # plt.plot(x, y, "go")
 
 # Plot points
 for value in obj.filtered:
     for row in value:
         x = row[0]
-        # plt.plot(x, row[1], "ro")
+        plt.plot(x, row[1], "ro")
 
 plt.show()

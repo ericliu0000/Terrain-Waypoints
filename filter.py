@@ -1,16 +1,8 @@
 import numpy
 import scipy.interpolate
 
-from rectangular_gradient import WaypointGridGradient
-
-
-# Only take restrictive set (rock face points only) for regression limits
-def upper(coord):
-    return min((6.0268 * (coord - 950288) + 799669), 800344)
-
-
-def lower(coord):
-    return max((-16.8125 * (coord - 950304) + 799400), (-3.6393 * (coord - 950304) + 799400), 798956)
+import constants
+from calculate_gradient import WaypointGradient
 
 
 def normal(x, y):
@@ -20,13 +12,10 @@ def normal(x, y):
 
 class SiteFilter:
     """Extracts the coordinates of the site from a las file and constrains it to the site"""
-    left: float = 950310
-    right: float = 950600
-    min_elev: float = 3420
     filtered: list = []
 
     def __init__(self, doc: str) -> None:
-        self.obj = WaypointGridGradient(doc)
+        self.obj = WaypointGradient(doc)
         a, b = numpy.meshgrid(self.obj.x_grid, self.obj.y_grid)
 
         # Create a grid of coordinates with corresponding gradient values
@@ -43,12 +32,12 @@ class SiteFilter:
             for j in range(len(coordinates)):
                 # Filter bounds and remove points below 3420 feet
                 point = coordinates[j][i]
-                if self.left < point[0] < self.right and lower(point[0]) < point[1] < upper(point[0]) and \
-                        point[2] > self.min_elev:
+                if constants.LEFT_BOUND < point[0] < constants.RIGHT_BOUND and constants.lower(point[0]) < point[
+                        1] < constants.upper(point[0]) and point[2] > constants.Z_FILTER:
                     row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
             if row:
                 self.filtered.append(row)
 
 
 if __name__ == "__main__":
-    test = SiteFilter("data/cloud_lasground.h5")
+    test = SiteFilter(constants.FILE)

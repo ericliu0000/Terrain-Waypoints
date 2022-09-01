@@ -1,13 +1,16 @@
-from rectangular_gradient import WaypointGridGradient
-from waypoint import WaypointGenerator
-import matplotlib.pyplot as plt
 import os
+
+import matplotlib.pyplot as plt
 import numpy
+
+import constants
+from calculate_gradient import WaypointGradient
+from waypoint import WaypointGenerator
 
 
 class Grid:
     def __init__(self) -> None:
-        obj = WaypointGenerator("data/cloud_lasground.h5")
+        obj = WaypointGenerator(constants.FILE)
         lines = obj.waypoints
 
         for i in range(1, len(lines)):
@@ -25,15 +28,12 @@ class Grid:
             # Find the closest point in long to each point in short and get distance between two points
             for j in range(len(short)):
                 closest = min(long, key=lambda x: abs(x[1] - short[j][1]))
-
                 v_average += ((short[j][0] - closest[0]) ** 2 + (short[j][1] - closest[1]) ** 2) ** 0.5
-
                 plt.plot([short[j][0], closest[0]], [short[j][1], closest[1]], "r")
 
             # Go through all points and find horizontal deviation
             for j in range(1, len(cur)):
                 h_average += ((cur[j][0] - cur[j - 1][0]) ** 2 + (cur[j][1] - cur[j - 1][1]) ** 2) ** 0.5
-
                 plt.plot(cur[j][0], cur[j][1], "b.")
 
             print(h_average / len(cur))
@@ -49,15 +49,15 @@ class Grid3:
 
     def __init__(self) -> None:
         # Read and rasterize the site data
-        points = WaypointGenerator("data/cloud_lasground.h5")
-        obj = WaypointGridGradient("data/cloud_lasground.h5")
+        points = WaypointGenerator(constants.FILE)
+        obj = WaypointGradient(constants.FILE)
         x, y = obj.x_grid, obj.y_grid
         z = obj.height
         x, y = numpy.meshgrid(x, y)
 
-        x_min = 950300
+        x_min = constants.LEFT_BOUND
         y_min = 798900
-        z_min = 3450
+        z_min = constants.Z_FILTER
 
         graph = plt.axes(projection="3d")
         graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
@@ -97,7 +97,7 @@ class Reader:
         elif "Easting" in header:
             graph.set_xlabel("Easting (ft)")
             graph.set_ylabel("Northing (ft)")
-        
+
         graph.set_zlabel("Altitude (ft)")
 
         # Pull out first point

@@ -1,4 +1,4 @@
-from testing.gradient import InterpolatedGridGradient
+from gradient import InterpolatedGridGradient
 import numpy
 import matplotlib.pyplot as plt
 
@@ -148,8 +148,8 @@ def test_3d() -> None:
 
 
 if __name__ == "__main__":
-    # site_test()
-    lasground_test()
+    site_test()
+    # lasground_test()
     # site_slope_only()
     # quadrant()
     # test_3d()

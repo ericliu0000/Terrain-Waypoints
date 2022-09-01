@@ -16,7 +16,6 @@ class WaypointGenerator:
         self.values = self.site.filtered
         inverted = False
 
-
         for row in self.values:
             line = []
 
@@ -66,7 +65,7 @@ class WaypointGenerator:
 class WaypointPlotter(WaypointGenerator):
     """Generate and plot waypoints"""
 
-    def __init__(self, doc: str) -> None:
+    def __init__(self, doc: str, plot_surface=True) -> None:
         super().__init__(doc)
         # Plot terrain
         x, y = self.site.obj.x_grid, self.site.obj.y_grid
@@ -78,7 +77,9 @@ class WaypointPlotter(WaypointGenerator):
         graph.set_zlabel("Altitude (z)")
 
         x, y = numpy.meshgrid(x, y)
-        graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
+
+        if plot_surface:
+            graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
 
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], self.waypoints[0][0][2])
@@ -97,4 +98,4 @@ if __name__ == "__main__":
     # a.export()
     # a.export_latlong()
 
-    WaypointPlotter(constants.FILE)
+    WaypointPlotter(constants.FILE, True)

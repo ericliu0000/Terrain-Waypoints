@@ -85,6 +85,8 @@ class UiApp:
             return
 
         # TODO: handle button events
+        # Create object, set up objects with camera h and v based on frame/overlap calculation and other variables
+        # based on values inputted. Handle exit event as well
         match widget_id:
             case "graph":
                 color, message = Messages.OK_GRAPH

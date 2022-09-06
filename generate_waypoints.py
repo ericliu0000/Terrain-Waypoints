@@ -11,8 +11,8 @@ camera v: feet
 camera h: feet
 clearance: feet agl
 z filter: feet amsl
-
 """
+
 
 def normal(x, y):
     # Return upward unit normal vector from dx, dy
@@ -113,7 +113,3 @@ class WaypointPlotter(WaypointGenerator):
                 plt.plot(*last, "bo")
 
         plt.show()
-
-
-if __name__ == "__main__":
-    WaypointPlotter(FILE)

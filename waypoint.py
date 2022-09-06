@@ -1,8 +1,5 @@
-import datetime
-
 import matplotlib.pyplot as plt
 import numpy
-import pyproj
 
 import constants
 from filter import SiteFilter
@@ -32,34 +29,10 @@ class WaypointGenerator:
             inverted = not inverted
 
     def export(self) -> None:
-        """Export the waypoints to a file (EPSG 32119)."""
-
-        with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
-            file.write(constants.OUTPUT_HEADER)
-            count = 0
-
-            for row in self.waypoints:
-                for point in row:
-                    count += 1
-                    file.write(f"{count},{point[0]},{point[1]},{point[2]}\n")
-
-            print(f"Exported {count} waypoints to {file.name}")
+        constants.export(self.waypoints)
 
     def export_latlong(self) -> None:
-        """Export the waypoints to a file (EPSG 4326)."""
-
-        p = pyproj.Proj(constants.PROJECTION)
-        with open(f"output/{datetime.datetime.now()}_latlong.csv", "w") as file:
-            file.write(constants.OUTPUT_HEADER)
-            count = 0
-
-            for row in self.waypoints:
-                for point in row:
-                    count += 1
-                    x, y = p(point[0], point[1], inverse=True)
-                    file.write(f"{count},{x},{y},{point[2]}\n")
-
-            print(f"Exported {count} waypoints to {file.name}")
+        constants.export_latlong(self.waypoints)
 
 
 class WaypointPlotter(WaypointGenerator):

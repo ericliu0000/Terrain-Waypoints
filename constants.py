@@ -39,7 +39,7 @@ def export(waypoints) -> None:
                 count += 1
                 file.write(f"{count},{point[0]},{point[1]},{point[2]}\n")
 
-        print(f"Exported {count} waypoints to {file.name}")
+        return f"Exported {count} waypoints to {file.name}"
 
 
 def export_latlong(waypoints) -> None:
@@ -56,4 +56,4 @@ def export_latlong(waypoints) -> None:
                 x, y = p(point[0], point[1], inverse=True)
                 file.write(f"{count},{x},{y},{point[2]}\n")
 
-        print(f"Exported {count} waypoints to {file.name}")
+        return f"Exported {count} waypoints to {file.name}"

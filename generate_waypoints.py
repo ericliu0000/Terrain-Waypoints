@@ -78,10 +78,10 @@ class WaypointGenerator:
             inverted = not inverted
 
     def export(self) -> None:
-        export(self.waypoints)
+        return export(self.waypoints)
 
     def export_latlong(self) -> None:
-        export_latlong(self.waypoints)
+        return export_latlong(self.waypoints)
 
 
 class WaypointPlotter(WaypointGenerator):
@@ -113,3 +113,11 @@ class WaypointPlotter(WaypointGenerator):
                 plt.plot(*last, "bo")
 
         plt.show()
+
+if __name__ == "__main__":
+    a = WaypointGenerator(FILE)
+    a.export()
+    print(CAMERA_H)
+    print(CAMERA_V)
+    print(CLEARANCE)
+    print(Z_FILTER)

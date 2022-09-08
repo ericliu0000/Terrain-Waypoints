@@ -29,10 +29,10 @@ class WaypointGenerator:
             inverted = not inverted
 
     def export(self) -> None:
-        constants.export(self.waypoints)
+        print(constants.export(self.waypoints))
 
     def export_latlong(self) -> None:
-        constants.export_latlong(self.waypoints)
+        print(constants.export_latlong(self.waypoints))
 
 
 class WaypointPlotter(WaypointGenerator):

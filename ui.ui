@@ -171,7 +171,7 @@
         <property name="text" translatable="yes">Application loading</property>
         <layout manager="place">
           <property name="anchor">nw</property>
-          <property name="width">400</property>
+          <property name="width">550</property>
           <property name="x">20</property>
           <property name="y">300</property>
         </layout>

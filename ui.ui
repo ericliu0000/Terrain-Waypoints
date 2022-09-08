@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <interface version="1.3">
   <object class="ttk.Frame" id="frame1">
-    <property name="height">720</property>
+    <property name="height">400</property>
     <property name="padding">10</property>
-    <property name="width">1280</property>
+    <property name="width">620</property>
     <layout manager="place">
       <property name="anchor">nw</property>
       <property name="x">0</property>
@@ -33,8 +33,7 @@
     </child>
     <child>
       <object class="ttk.Entry" id="frame_h" named="True">
-        <property name="justify">left</property>
-        <property name="text" translatable="yes">9</property>
+        <property name="text" translatable="yes">60</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="height">30</property>
@@ -46,7 +45,7 @@
     </child>
     <child>
       <object class="ttk.Entry" id="frame_v" named="True">
-        <property name="text" translatable="yes">6.9</property>
+        <property name="text" translatable="yes">46</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="height">30</property>
@@ -59,7 +58,7 @@
     <child>
       <object class="ttk.Label" id="label_b" named="True">
         <property name="font">{default} 11 {}</property>
-        <property name="text" translatable="yes">Overlap %</property>
+        <property name="text" translatable="yes">Overlap (%)</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="x">20</property>
@@ -115,7 +114,7 @@
     </child>
     <child>
       <object class="ttk.Entry" id="z_crop" named="True">
-        <property name="text" translatable="yes">3400</property>
+        <property name="text" translatable="yes">3390</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="height">30</property>

@@ -1,7 +1,8 @@
-from email.message import Message
 import pathlib
 import tkinter as tk
+
 import pygubu
+
 import generate_waypoints
 
 PROJECT_PATH = pathlib.Path(__file__).parent
@@ -22,7 +23,9 @@ class Messages:
     OVERLAP = (ERROR, "Overlap value must be between 0 and 100%. Nothing was executed.")
     Z_FILTER = (ERROR, f"Minimum Z height must be below {max_z} feet. Nothing was executed.")
     LOW_MIN_HEIGHT = (WARN, "\nMinimum distance is too low. Results may be undesirable.")
-    LONG_RUN_TIME = (WARN, "Requested waypoints are very close together, and run time could be long.\nPress button again to confirm.")
+    LONG_RUN_TIME = (
+        WARN,
+        "Requested waypoints are very close together, and run time could be long.\nPress button again to confirm.")
     OK_GRAPH = (OK, "Graph generated successfully.")
     OK_EXPORT_FT = (OK, "Exporting to feet completed successfully: ")
     OK_EXPORT_LL = (OK, "Exporting to latitude/longitude completed successfully: ")
@@ -86,7 +89,7 @@ class UiApp:
 
         # Transfer button info to variables and calculate frame spacing
         frame_h, frame_v, overlap, dist, z_crop = labels["frame_h"], labels["frame_v"], labels["frame_overlap"], \
-            labels["dist"], labels["z_crop"]
+                                                  labels["dist"], labels["z_crop"]
         camera_h, camera_v = frame_h * (1 - overlap / 100), frame_v * (1 - overlap / 100)
 
         # Check for excessive run time and ask for confirmation

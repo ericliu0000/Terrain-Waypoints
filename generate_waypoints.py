@@ -12,10 +12,10 @@ def normal(x, y):
 
 
 class WaypointGenerator:
-    filtered: list = []
-    waypoints: list = []
-
     def __init__(self, doc: str, aclearance=CLEARANCE) -> None:
+        self.filtered = []
+        self.waypoints = []
+
         # Read data from h5 file
         self.data = pandas.read_hdf(doc, "a").to_numpy()
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]
@@ -77,8 +77,6 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
-    """Generate and plot waypoints"""
-
     def __init__(self, doc: str, plot_surface=True) -> None:
         super().__init__(doc)
         # Plot terrain

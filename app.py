@@ -109,7 +109,7 @@ class UiApp:
 
         match widget_id:
             case "graph":
-                obj = generate_waypoints.WaypointPlotter(generate_waypoints.FILE)
+                generate_waypoints.WaypointPlotter(generate_waypoints.FILE)
 
                 color, message = Messages.OK_GRAPH
             case "export_feet":
@@ -122,8 +122,6 @@ class UiApp:
                 message = Messages.OK_EXPORT_LL[1] + "\n" + obj.export_latlong()
 
                 color = Messages.OK_EXPORT_LL[0]
-
-        del obj
 
         if labels["dist"] < 10:
             color, message = Messages.LOW_MIN_HEIGHT[0], message + Messages.LOW_MIN_HEIGHT[1]

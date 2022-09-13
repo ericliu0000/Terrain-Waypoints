@@ -69,10 +69,10 @@ class WaypointGenerator:
                 self.waypoints.append(line)
             inverted = not inverted
 
-    def export(self) -> None:
+    def export(self) -> str:
         return export(self.waypoints)
 
-    def export_latlong(self) -> None:
+    def export_latlong(self) -> str:
         return export_latlong(self.waypoints)
 
 

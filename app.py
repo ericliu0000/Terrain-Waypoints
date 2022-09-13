@@ -78,7 +78,6 @@ class UiApp:
         # Catch special cases of numbers
         if not 0 <= labels["frame_overlap"] <= 100:
             color, message = Messages.OVERLAP
-        # TODO: Fix these labels
         if labels["z_crop"] > max_z:
             color, message = Messages.Z_FILTER
 

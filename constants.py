@@ -27,7 +27,7 @@ def lower(coord):
     return max((-16.8125 * (coord - 950304) + 799400), (-3.6393 * (coord - 950304) + 799400), 798956)
 
 
-def export(waypoints) -> None:
+def export(waypoints) -> str:
     """Export the waypoints to a file (EPSG 32119)."""
 
     with open(f"output/{datetime.datetime.now()}.csv", "w") as file:
@@ -42,7 +42,7 @@ def export(waypoints) -> None:
         return f"Exported {count} waypoints to {file.name}"
 
 
-def export_latlong(waypoints) -> None:
+def export_latlong(waypoints) -> str:
     """Export the waypoints to a file (EPSG 4326)."""
 
     p = pyproj.Proj(PROJECTION)

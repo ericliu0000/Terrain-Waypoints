@@ -44,6 +44,7 @@ class UiApp:
         self.mainwindow = builder.get_object("frame1", master)
         builder.connect_callbacks(self)
 
+        # Pull in labels from UI
         for name, obj in self.builder.objects.items():
             if type(obj) == pygubu.plugins.ttk.ttkstdwidgets.TTKEntry:
                 self.labels.append(name)
@@ -132,5 +133,7 @@ class UiApp:
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("800x600")
+    root.title("Waypoint Generator")
+    root.wm_iconphoto(False, tk.PhotoImage(file="data/site.png"))
     app = UiApp(root)
     app.run()

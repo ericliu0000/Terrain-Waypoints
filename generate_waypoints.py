@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 import numpy
 import pandas
@@ -47,7 +48,7 @@ class WaypointGenerator:
                 # Filter bounds and remove points below 3420 feet
                 point = coordinates[j][i]
                 if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
-                    2] > Z_FILTER:
+                        2] > Z_FILTER:
                     row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
             if row:
                 self.filtered.append(row)
@@ -70,9 +71,14 @@ class WaypointGenerator:
             inverted = not inverted
 
     def export(self) -> str:
+        if not os.path.exists("output"):
+            os.makedirs("output")
         return export(self.waypoints)
 
     def export_latlong(self) -> str:
+        if not os.path.exists("output"):
+            os.makedirs("output")
+
         return export_latlong(self.waypoints)
 
 

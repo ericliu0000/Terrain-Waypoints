@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.3">
+  <object class="ttk.Frame" id="frame1">
+    <property name="height">400</property>
+    <property name="padding">10</property>
+    <property name="width">620</property>
+    <layout manager="place">
+      <property name="anchor">nw</property>
+      <property name="x">0</property>
+      <property name="y">0</property>
+    </layout>
+    <child>
+      <object class="ttk.Label" id="title" named="True">
+        <property name="font">{Tk} 24 {}</property>
+        <property name="text" translatable="yes">Waypoint Generator</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">20</property>
+          <property name="y">20</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_a" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="text" translatable="yes">Frame distances (X and Y, m)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">20</property>
+          <property name="y">85</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="frame_h" named="True">
+        <property name="text" translatable="yes">60</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">240</property>
+          <property name="y">80</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="frame_v" named="True">
+        <property name="text" translatable="yes">46</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">400</property>
+          <property name="y">80</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_b" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="text" translatable="yes">Overlap (%)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">20</property>
+          <property name="y">125</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="frame_overlap" named="True">
+        <property name="text" translatable="yes">80</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">240</property>
+          <property name="y">120</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_c" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="text" translatable="yes">Distance to terrain (ft)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">20</property>
+          <property name="y">165</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="dist" named="True">
+        <property name="text" translatable="yes">100</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">240</property>
+          <property name="y">160</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_d" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="text" translatable="yes">Minimum height (ft AMSL)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">20</property>
+          <property name="y">205</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="z_crop" named="True">
+        <property name="text" translatable="yes">3390</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">240</property>
+          <property name="y">200</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="graph" named="True">
+        <property name="command" type="command" cbtype="with_wid">handle</property>
+        <property name="text" translatable="yes">Generate Waypoints</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">130</property>
+          <property name="x">20</property>
+          <property name="y">250</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="export_feet" named="True">
+        <property name="command" type="command" cbtype="with_wid">handle</property>
+        <property name="text" translatable="yes">Export (NC SPCS)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">130</property>
+          <property name="x">160</property>
+          <property name="y">250</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="export_latlong" named="True">
+        <property name="command" type="command" cbtype="with_wid">handle</property>
+        <property name="text" translatable="yes">Export (Lat/Long)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">130</property>
+          <property name="x">300</property>
+          <property name="y">250</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="message" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="foreground">#eb0b1f</property>
+        <property name="text" translatable="yes">Application loading</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="width">550</property>
+          <property name="x">20</property>
+          <property name="y">300</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -3,7 +3,7 @@
   <object class="ttk.Frame" id="frame1">
     <property name="height">400</property>
     <property name="padding">10</property>
-    <property name="width">620</property>
+    <property name="width">1000</property>
     <layout manager="place">
       <property name="anchor">nw</property>
       <property name="x">0</property>
@@ -11,7 +11,7 @@
     </layout>
     <child>
       <object class="ttk.Label" id="title" named="True">
-        <property name="font">{Tk} 24 {}</property>
+        <property name="font">{Tk} 20 {}</property>
         <property name="text" translatable="yes">Waypoint Generator</property>
         <layout manager="place">
           <property name="anchor">nw</property>
@@ -21,9 +21,9 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="label_a" named="True">
+      <object class="ttk.Label" id="label_h" named="True">
         <property name="font">{default} 11 {}</property>
-        <property name="text" translatable="yes">Frame distances (X and Y, m)</property>
+        <property name="text" translatable="yes">Desired width of frame (m)</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="x">20</property>
@@ -44,21 +44,9 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Entry" id="frame_v" named="True">
-        <property name="text" translatable="yes">46</property>
-        <layout manager="place">
-          <property name="anchor">nw</property>
-          <property name="height">30</property>
-          <property name="width">150</property>
-          <property name="x">400</property>
-          <property name="y">80</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="ttk.Label" id="label_b" named="True">
+      <object class="ttk.Label" id="label_res" named="True">
         <property name="font">{default} 11 {}</property>
-        <property name="text" translatable="yes">Overlap (%)</property>
+        <property name="text" translatable="yes">Camera Resolution (px)</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="x">20</property>
@@ -67,8 +55,8 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Entry" id="frame_overlap" named="True">
-        <property name="text" translatable="yes">80</property>
+      <object class="ttk.Entry" id="cam_h" named="True">
+        <property name="text" translatable="yes">5280</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="height">30</property>
@@ -79,9 +67,21 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="label_c" named="True">
+      <object class="ttk.Entry" id="cam_v" named="True">
+        <property name="text" translatable="yes">3956</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">400</property>
+          <property name="y">120</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_of" named="True">
         <property name="font">{default} 11 {}</property>
-        <property name="text" translatable="yes">Distance to terrain (ft)</property>
+        <property name="text" translatable="yes">Overlap (%)</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="x">20</property>
@@ -90,8 +90,19 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Entry" id="dist" named="True">
-        <property name="text" translatable="yes">100</property>
+      <object class="ttk.Label" id="label_os" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="text" translatable="yes">Overlap (Frontal and Side, %)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">20</property>
+          <property name="y">165</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="f_overlap" named="True">
+        <property name="text" translatable="yes">80</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="height">30</property>
@@ -102,13 +113,48 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="label_d" named="True">
+      <object class="ttk.Entry" id="s_overlap" named="True">
+        <property name="text" translatable="yes">80</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">400</property>
+          <property name="y">160</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_dist" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="text" translatable="yes">Distance to terrain (ft)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">570</property>
+          <property name="y">85</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="dist" named="True">
+        <property name="text" translatable="yes">100</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">30</property>
+          <property name="width">150</property>
+          <property name="x">790</property>
+          <property name="y">80</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_minh" named="True">
         <property name="font">{default} 11 {}</property>
         <property name="text" translatable="yes">Minimum height (ft AMSL)</property>
         <layout manager="place">
           <property name="anchor">nw</property>
-          <property name="x">20</property>
-          <property name="y">205</property>
+          <property name="x">570</property>
+          <property name="y">125</property>
         </layout>
       </object>
     </child>
@@ -119,8 +165,8 @@
           <property name="anchor">nw</property>
           <property name="height">30</property>
           <property name="width">150</property>
-          <property name="x">240</property>
-          <property name="y">200</property>
+          <property name="x">790</property>
+          <property name="y">120</property>
         </layout>
       </object>
     </child>

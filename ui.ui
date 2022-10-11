@@ -11,7 +11,7 @@
     </layout>
     <child>
       <object class="ttk.Label" id="title" named="True">
-        <property name="font">{Tk} 24 {}</property>
+        <property name="font">{Tk} 20 {}</property>
         <property name="text" translatable="yes">Waypoint Generator</property>
         <layout manager="place">
           <property name="anchor">nw</property>
@@ -79,9 +79,9 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="label_fov" named="True">
+      <object class="ttk.Label" id="label_of" named="True">
         <property name="font">{default} 11 {}</property>
-        <property name="text" translatable="yes">not implemented: FOV</property>
+        <property name="text" translatable="yes">Overlap (%)</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="x">20</property>
@@ -90,8 +90,19 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Entry" id="fov" named="True">
-        <property name="text" translatable="yes">84</property>
+      <object class="ttk.Label" id="label_os" named="True">
+        <property name="font">{default} 11 {}</property>
+        <property name="text" translatable="yes">Overlap (Frontal and Side, %)</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="x">20</property>
+          <property name="y">165</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="f_overlap" named="True">
+        <property name="text" translatable="yes">80</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="height">30</property>
@@ -102,25 +113,14 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="label_o" named="True">
-        <property name="font">{default} 11 {}</property>
-        <property name="text" translatable="yes">Overlap (%)</property>
-        <layout manager="place">
-          <property name="anchor">nw</property>
-          <property name="x">570</property>
-          <property name="y">85</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="ttk.Entry" id="frame_overlap" named="True">
+      <object class="ttk.Entry" id="s_overlap" named="True">
         <property name="text" translatable="yes">80</property>
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="height">30</property>
           <property name="width">150</property>
-          <property name="x">790</property>
-          <property name="y">80</property>
+          <property name="x">400</property>
+          <property name="y">160</property>
         </layout>
       </object>
     </child>
@@ -131,7 +131,7 @@
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="x">570</property>
-          <property name="y">125</property>
+          <property name="y">85</property>
         </layout>
       </object>
     </child>
@@ -143,7 +143,7 @@
           <property name="height">30</property>
           <property name="width">150</property>
           <property name="x">790</property>
-          <property name="y">120</property>
+          <property name="y">80</property>
         </layout>
       </object>
     </child>
@@ -154,7 +154,7 @@
         <layout manager="place">
           <property name="anchor">nw</property>
           <property name="x">570</property>
-          <property name="y">165</property>
+          <property name="y">125</property>
         </layout>
       </object>
     </child>
@@ -166,7 +166,7 @@
           <property name="height">30</property>
           <property name="width">150</property>
           <property name="x">790</property>
-          <property name="y">160</property>
+          <property name="y">120</property>
         </layout>
       </object>
     </child>

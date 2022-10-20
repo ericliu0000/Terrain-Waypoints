@@ -115,7 +115,31 @@ class Reader:
         plt.show()
 
 
+class Ruler:
+    def __init__(self) -> None:
+        list_of_files = {"output/" + file for file in os.listdir("output/")}
+        latest_file = max(list_of_files, key=os.path.getctime)
+        with open(latest_file) as f:
+            lines = f.readlines()[1:]
+
+        # Pull out first point
+        total = 0
+        last = [float(point) for point in lines[0][:-1].split(",")[1:]]
+
+        # Calculate distance between first and next point
+        for line in lines[1:]:
+            _, x, y, z = [float(point) for point in line[:-1].split(",")]
+            total += ((float(x) - last[0]) ** 2 + (float(y) - last[1]) ** 2 + (float(z) - last[2]) ** 2) ** 0.5
+            last = [float(x), float(y), float(z)]
+            print(total)
+
+        print(total)
+
+        
+
+
 if __name__ == "__main__":
     # Grid()
     # Grid3()
-    Reader()
+    # Reader()
+    Ruler()

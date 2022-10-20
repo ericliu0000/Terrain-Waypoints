@@ -120,7 +120,11 @@ class Ruler:
         list_of_files = {"output/" + file for file in os.listdir("output/")}
         latest_file = max(list_of_files, key=os.path.getctime)
         with open(latest_file) as f:
-            lines = f.readlines()[1:]
+            lines = f.readlines()
+
+        if "Latitude" in lines.pop(0):
+            print("Cannot measure distance on lat/long/feet data")
+            return
 
         # Pull out first point
         total = 0

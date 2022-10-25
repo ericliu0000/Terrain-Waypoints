@@ -52,6 +52,17 @@ class WaypointGenerator:
                     row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
             if row:
                 self.filtered.append(row)
+                
+        # Double grid: same as above, but by columns
+        for i in range(len(coordinates)):
+            column = []
+            for j in range(len(coordinates[0]) - 1, -1, -1):
+                point = coordinates[i][j]
+                if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
+                        2] > Z_FILTER:
+                    column.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
+            if column:
+                self.filtered.append(column)
 
         inverted = False
 

@@ -81,7 +81,8 @@ class Grid3:
 
 class Reader:
     def __init__(self) -> None:
-        graph = plt.axes(projection="3d")
+        main = plt.figure(figsize=(10, 5))
+        graph = main.add_subplot(111, projection="3d")
 
         # Open most recent file from output/ and remove header
         list_of_files = {"output/" + file for file in os.listdir("output/")}
@@ -106,10 +107,15 @@ class Reader:
         graph.plot(*last, "gH", ms=10)
 
         # Plot the points
-        for line in lines[1:]:
+        for line in lines[1:int(len(lines) / 2)]:
             _, x, y, z = [point[:9] for point in line.split(",")]
             graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "r")
             last = [float(x), float(y), float(z)]
+        for line in lines[int(len(lines) / 2):]:
+            _, x, y, z = [point[:9] for point in line.split(",")]
+            graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "b")
+            last = [float(x), float(y), float(z)]
+
 
         graph.plot(*last, "m^", ms=10)
         plt.show()
@@ -145,5 +151,5 @@ class Ruler:
 if __name__ == "__main__":
     # Grid()
     # Grid3()
-    # Reader()
-    Ruler()
+    Reader()
+    # Ruler()

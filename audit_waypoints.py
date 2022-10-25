@@ -81,7 +81,8 @@ class Grid3:
 
 class Reader:
     def __init__(self) -> None:
-        graph = plt.axes(projection="3d")
+        main = plt.figure(figsize=(10, 5))
+        graph = main.add_subplot(111, projection="3d")
 
         # Open most recent file from output/ and remove header
         list_of_files = {"output/" + file for file in os.listdir("output/")}
@@ -106,16 +107,57 @@ class Reader:
         graph.plot(*last, "gH", ms=10)
 
         # Plot the points
-        for line in lines[1:]:
+        for line in lines[1:int(len(lines) / 2)]:
             _, x, y, z = [point[:9] for point in line.split(",")]
             graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "r")
+            last = [float(x), float(y), float(z)]
+        for line in lines[int(len(lines) / 2):]:
+            _, x, y, z = [point[:9] for point in line.split(",")]
+            graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "b")
             last = [float(x), float(y), float(z)]
 
         graph.plot(*last, "m^", ms=10)
         plt.show()
 
 
+class Ruler:
+    def __init__(self) -> None:
+        list_of_files = {"output/" + file for file in os.listdir("output/")}
+        latest_file = max(list_of_files, key=os.path.getctime)
+        with open(latest_file) as f:
+            lines = f.readlines()
+
+        if "Latitude" in lines.pop(0):
+            print("Cannot measure distance on lat/long/feet data")
+            return
+
+        # Pull out first point
+        total = 0
+        last = [float(point) for point in lines[0][:-1].split(",")[1:]]
+        slopes = []
+
+        # Calculate distance between first and next point and slope
+        for line in lines[1:]:
+            _, x, y, z = [float(point) for point in line[:-1].split(",")]
+            total += ((x - last[0]) ** 2 + (y - last[1]) ** 2 + (z - last[2]) ** 2) ** 0.5
+
+            # Get slope between XY and Z
+            slope = (z - last[2]) / (((x - last[0]) ** 2 + (y - last[1]) ** 2) ** 0.5)
+            print(f"XY diff {(x - last[0]) ** 2 + (y - last[1]) ** 2} Z diff {z - last[2]} Slope {slope}")
+            slopes.append(slope)    
+
+            last = [x, y, z]
+
+        print(f"Total length: {total}")
+        counts, bins = numpy.histogram(slopes)
+        plt.hist(bins[:-1], bins, weights=counts)
+        plt.show()
+
+        
+
+
 if __name__ == "__main__":
     # Grid()
     # Grid3()
-    Reader()
+    # Reader()
+    Ruler()

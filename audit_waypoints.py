@@ -116,7 +116,6 @@ class Reader:
             graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "b")
             last = [float(x), float(y), float(z)]
 
-
         graph.plot(*last, "m^", ms=10)
         plt.show()
 
@@ -135,15 +134,24 @@ class Ruler:
         # Pull out first point
         total = 0
         last = [float(point) for point in lines[0][:-1].split(",")[1:]]
+        slopes = []
 
-        # Calculate distance between first and next point
+        # Calculate distance between first and next point and slope
         for line in lines[1:]:
             _, x, y, z = [float(point) for point in line[:-1].split(",")]
-            total += ((float(x) - last[0]) ** 2 + (float(y) - last[1]) ** 2 + (float(z) - last[2]) ** 2) ** 0.5
-            last = [float(x), float(y), float(z)]
-            print(total)
+            total += ((x - last[0]) ** 2 + (y - last[1]) ** 2 + (z - last[2]) ** 2) ** 0.5
 
-        print(total)
+            # Get slope between XY and Z
+            slope = (z - last[2]) / (((x - last[0]) ** 2 + (y - last[1]) ** 2) ** 0.5)
+            print(f"XY diff {(x - last[0]) ** 2 + (y - last[1]) ** 2} Z diff {z - last[2]} Slope {slope}")
+            slopes.append(slope)    
+
+            last = [x, y, z]
+
+        print(f"Total length: {total}")
+        counts, bins = numpy.histogram(slopes)
+        plt.hist(bins[:-1], bins, weights=counts)
+        plt.show()
 
         
 
@@ -151,5 +159,5 @@ class Ruler:
 if __name__ == "__main__":
     # Grid()
     # Grid3()
-    Reader()
-    # Ruler()
+    # Reader()
+    Ruler()

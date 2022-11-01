@@ -159,5 +159,5 @@ class Ruler:
 if __name__ == "__main__":
     # Grid()
     # Grid3()
-    # Reader()
-    Ruler()
+    Reader()
+    # Ruler()

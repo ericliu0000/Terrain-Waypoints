@@ -43,43 +43,33 @@ class WaypointGenerator:
 
         # For each point, place in filtered (x, y, z, [unit normal -- dy, dx, dz])
         for i in range(len(coordinates[0]) - 1, -1, -1):
-            row = []
             for j in range(len(coordinates)):
-                # Filter bounds and remove points below 3420 feet
+                # Filter bounds and remove points below z filter
                 point = coordinates[j][i]
                 if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
                         2] > Z_FILTER:
-                    row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
-            if row:
-                self.filtered.append(row)
-                
-        # Double grid: same as above, but by columns
-        for i in range(len(coordinates)):
-            column = []
-            for j in range(len(coordinates[0]) - 1, -1, -1):
-                point = coordinates[i][j]
-                if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
-                        2] > Z_FILTER:
-                    column.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
-            if column:
-                self.filtered.append(column)
+                    self.filtered.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
 
-        inverted = False
+        # Give offsets to each point and add to waypoints list
+        for point in self.filtered:
+            self.waypoints.append([point[0] + point[3] * aclearance, point[1] + point[4] * aclearance,
+                                   point[2] + point[5] * CLEARANCE])
+        
+        # Sort waypoints by z, then by x
+        self.waypoints.sort(key=lambda x: (x[2], x[0]))
 
-        for row in self.filtered:
-            line = []
+        # Split waypoints into 10 rows
+        self.waypoints = numpy.array_split(self.waypoints, 10)
+        
+        invert = False
+        # Sort each row by x
+        for i in range(len(self.waypoints)):
+            self.waypoints[i] = numpy.sort(self.waypoints[i], axis=0)
+            if invert:
+                self.waypoints[i] = numpy.flip(self.waypoints[i], axis=0)
+            invert = not invert
 
-            # Translate each point normal to the surface by clearance distance
-            for point in row:
-                line.append([point[0] + point[3] * aclearance, point[1] + point[4] * aclearance,
-                             point[2] + point[5] * CLEARANCE])
-
-            # Reverse the order of every other line
-            if inverted:
-                self.waypoints.append(line[::-1])
-            else:
-                self.waypoints.append(line)
-            inverted = not inverted
+        # print(self.waypoints)
 
     def export(self) -> str:
         if not os.path.exists("output"):
@@ -125,7 +115,7 @@ class WaypointPlotter(WaypointGenerator):
 if __name__ == "__main__":
     a = WaypointGenerator(FILE)
     a.export()
-    print(CAMERA_H)
-    print(CAMERA_V)
-    print(CLEARANCE)
-    print(Z_FILTER)
+    # print(CAMERA_H)
+    # print(CAMERA_V)
+    # print(CLEARANCE)
+    # print(Z_FILTER)

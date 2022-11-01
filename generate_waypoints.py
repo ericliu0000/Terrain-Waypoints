@@ -59,14 +59,19 @@ class WaypointGenerator:
         self.waypoints.sort(key=lambda x: (x[2], x[0]))
 
         # Split waypoints into 10 rows
-        self.waypoints = numpy.array_split(self.waypoints, 10)
+        self.waypoints = numpy.array_split(self.waypoints, 5)
+
+        # Split waypoints every 50 feet (z axis)
+
+        # self.waypoints =         
         
         invert = False
         # Sort each row by x
         for i in range(len(self.waypoints)):
-            self.waypoints[i] = numpy.sort(self.waypoints[i], axis=0)
+            self.waypoints[i] = sorted(self.waypoints[i].tolist(), key=lambda x: x[0])
+            # self.waypoints[i].tolist().sort(key=lambda x: x[0])
             if invert:
-                self.waypoints[i] = numpy.flip(self.waypoints[i], axis=0)
+                self.waypoints[i] = self.waypoints[i][::-1]
             invert = not invert
 
         # print(self.waypoints)

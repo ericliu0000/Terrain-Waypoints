@@ -48,32 +48,28 @@ class WaypointGenerator:
                 point = coordinates[j][i]
                 if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
                         2] > Z_FILTER:
-                    self.filtered.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
+                    point = [*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))]
 
-        # Give offsets to each point and add to waypoints list
-        for point in self.filtered:
-            self.waypoints.append([point[0] + point[3] * aclearance, point[1] + point[4] * aclearance,
-                                   point[2] + point[5] * CLEARANCE])
-        
+                    # Give offsets to each point and add to waypoints list
+                    self.filtered.append([point[0] + point[3] * aclearance, point[1] + point[4] * aclearance,
+                                          point[2] + point[5] * CLEARANCE])
+
         # Sort waypoints by z, then by x
-        self.waypoints.sort(key=lambda x: (x[2], x[0]))
+        self.filtered.sort(key=lambda x: (x[2], x[0]))
 
         # Split waypoints into 10 rows
-        self.waypoints = numpy.array_split(self.waypoints, 5)
+        self.filtered = numpy.array_split(self.filtered, 10)
 
         # Split waypoints every 50 feet (z axis)
 
-        # self.waypoints =         
-        
         invert = False
         # Sort each row by x
-        for i in range(len(self.waypoints)):
-            self.waypoints[i] = sorted(self.waypoints[i].tolist(), key=lambda x: x[0])
-            # self.waypoints[i].tolist().sort(key=lambda x: x[0])
+        for i in range(len(self.filtered)):
+            line = sorted(self.filtered[i].tolist(), key=lambda x: x[0])
             if invert:
-                self.waypoints[i] = self.waypoints[i][::-1]
+                line = line[::-1]
             invert = not invert
-
+            self.waypoints.append(line)
         # print(self.waypoints)
 
     def export(self) -> str:

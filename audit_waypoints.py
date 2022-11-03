@@ -107,14 +107,13 @@ class Reader:
         graph.plot(*last, "gH", ms=10)
 
         # Plot the points
-        for line in lines[1:int(len(lines) / 2)]:
+        count = 0
+        length = len(lines)
+        for line in lines:
             _, x, y, z = [point[:9] for point in line.split(",")]
-            graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "r")
+            graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "bgrcmykbgr"[int(10 * count / length)])
             last = [float(x), float(y), float(z)]
-        for line in lines[int(len(lines) / 2):]:
-            _, x, y, z = [point[:9] for point in line.split(",")]
-            graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "b")
-            last = [float(x), float(y), float(z)]
+            count += 1
 
         graph.plot(*last, "m^", ms=10)
         plt.show()

@@ -111,7 +111,7 @@ class Reader:
         length = len(lines)
         for line in lines:
             _, x, y, z = [point[:9] for point in line.split(",")]
-            graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "bgrcmykbgr"[int(10 * count / length)])
+            graph.plot([last[0], float(x)], [last[1], float(y)], [last[2], float(z)], "b")
             last = [float(x), float(y), float(z)]
             count += 1
 

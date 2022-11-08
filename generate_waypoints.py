@@ -55,17 +55,24 @@ class WaypointGenerator:
                                           point[2] + point[5] * CLEARANCE])
 
         # Sort waypoints by z, then by x
+        #TODO clean this all up
         self.filtered.sort(key=lambda x: x[2])
 
+        # bucket count = max height minus min height divided by 50
+        bucket_count = (float(self.filtered[-1][2]) - Z_FILTER) / 20
+        self.f2 = [[] for _ in range(int(bucket_count) + 1)]
+
         # Split waypoints into 10 rows
-        self.filtered = numpy.array_split(self.filtered, 10)
+        # self.filtered = numpy.array_split(self.filtered, 15)
 
         # Split waypoints every 50 feet (z axis)
+        for i in self.filtered:
+            self.f2[int((i[2] - Z_FILTER) // 20)].append(i)
 
         invert = False
-        # Sort each row by x
-        for i in range(len(self.filtered)):
-            line = sorted(self.filtered[i].tolist(), key=lambda x: x[1])
+        # Sort each row by y
+        for i in self.f2:
+            line = sorted(i, key=lambda x: x[1])
             if invert:
                 line = line[::-1]
             invert = not invert

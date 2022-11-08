@@ -55,7 +55,7 @@ class WaypointGenerator:
                                           point[2] + point[5] * CLEARANCE])
 
         # Sort waypoints by z, then by x
-        self.filtered.sort(key=lambda x: (x[2], x[0]))
+        self.filtered.sort(key=lambda x: x[2])
 
         # Split waypoints into 10 rows
         self.filtered = numpy.array_split(self.filtered, 10)
@@ -65,7 +65,7 @@ class WaypointGenerator:
         invert = False
         # Sort each row by x
         for i in range(len(self.filtered)):
-            line = sorted(self.filtered[i].tolist(), key=lambda x: x[0])
+            line = sorted(self.filtered[i].tolist(), key=lambda x: x[1])
             if invert:
                 line = line[::-1]
             invert = not invert

@@ -1,4 +1,5 @@
 import os
+
 import matplotlib.pyplot as plt
 import numpy
 import pandas
@@ -46,8 +47,8 @@ class WaypointGenerator:
             for j in range(len(coordinates)):
                 # Filter bounds and remove points below z filter
                 point = coordinates[j][i]
-                if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
-                        2] > Z_FILTER:
+                if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and \
+                        point[2] > Z_FILTER:
                     point = [*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))]
 
                     # Give offsets to each point and add to waypoints list
@@ -55,7 +56,7 @@ class WaypointGenerator:
                                           point[2] + point[5] * CLEARANCE])
 
         # Sort waypoints by z, then by x
-        #TODO clean this all up
+        # TODO clean this all up
         self.filtered.sort(key=lambda x: x[2])
 
         # bucket count = max height minus min height divided by 50

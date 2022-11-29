@@ -4,8 +4,8 @@ import scipy.interpolate
 from constants import *
 import matplotlib.pyplot as plt
 
-CAMERA_H *= 3
-CAMERA_V *= 3
+# CAMERA_H *= 2
+# CAMERA_V *= 2
 
 class WaypointGenerator:
     def __init__(self, doc: str, aclearance=CLEARANCE) -> None:
@@ -35,13 +35,25 @@ class WaypointGenerator:
         # Smooth values
         # dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[0].T, s=100)
         # dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[1].T, s=100)
+        print(coordinates[..., 2].T)
+        # okay we can't use this, we need to use griddata with a list of points. they aren't going to be ordered if they
+        # are not in a grid, but i think we can deal with that by generating the lists of points (3rd parameter) in the
+        # order beforehand and then doing all the calculation at the end. this might have dramatic side effects though
+        # maybe there is an alternative to griddata (like the bivariate splines) that works in 2d? 
+        # TODO look into above
         h = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, coordinates[..., 2].T, s=100)
 
         hev = lambda x, y: h.ev(x, y)
-        height_result = hev(self.x_grid, self.y_grid)
+        height_result = []
+        for y in self.y_grid:
+            row = []
+            for x in self.x_grid:
+                row.append(hev(x, y))
+            height_result.append(row)
         # plot dx and dy
         plt.contourf(self.x_grid, self.y_grid, height_result, 20, cmap=plt.cm.Reds, vmin=3000, vmax=3800)
         plt.colorbar()
+        # print(height_result)
 
         plt.show()
 

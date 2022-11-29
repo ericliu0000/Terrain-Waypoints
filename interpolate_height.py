@@ -33,8 +33,8 @@ class WaypointGenerator:
         gradient = numpy.nan_to_num(self.gradient)
 
         # Smooth values
-        dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[0].T, s=100)
-        dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[1].T, s=100)
+        # dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[0].T, s=100)
+        # dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[1].T, s=100)
         h = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, coordinates[..., 2].T, s=100)
 
         hev = lambda x, y: h.ev(x, y)

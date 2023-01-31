@@ -40,6 +40,11 @@ class WaypointGenerator:
         # Smooth values
         dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[0].T, s=100)
         dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[1].T, s=100)
+        print(self.x_grid.shape, self.y_grid.shape, self.height.T.shape)
+        print(self.spacing.shape, self.values.shape)
+        print(self.spacing[0].shape, self.spacing[1].shape, self.spacing[0], self.spacing[1])
+
+        h_interp = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, self.height.T)
 
         # For each point, place in filtered (x, y, z, [unit normal -- dy, dx, dz])
         for i in range(len(coordinates[0]) - 1, -1, -1):
@@ -113,9 +118,10 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    a = WaypointGenerator(FILE)
-    a.export()
-    print(CAMERA_H)
-    print(CAMERA_V)
-    print(CLEARANCE)
-    print(Z_FILTER)
+    # a = WaypointGenerator(FILE)
+    a = WaypointPlotter(FILE, True)
+    # a.export()
+    # print(CAMERA_H)
+    # print(CAMERA_V)
+    # print(CLEARANCE)
+    # print(Z_FILTER)

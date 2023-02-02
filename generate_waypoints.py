@@ -44,8 +44,6 @@ class WaypointGenerator:
         print(self.spacing.shape, self.values.shape)
         print(self.spacing[0].shape, self.spacing[1].shape, self.spacing[0], self.spacing[1])
 
-        h_interp = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, self.height.T)
-
         # For each point, place in filtered (x, y, z, [unit normal -- dy, dx, dz])
         for i in range(len(coordinates[0]) - 1, -1, -1):
             row = []

@@ -83,7 +83,7 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
-    def __init__(self, doc: str, plot_surface=False) -> None:
+    def __init__(self, doc: str, plot_surface=False, lim=None) -> None:
         super().__init__(doc)
         # Plot terrain
         x, y = self.x_grid, self.y_grid
@@ -94,6 +94,12 @@ class WaypointPlotter(WaypointGenerator):
         graph.set_xlabel("Easting (x)")
         graph.set_ylabel("Northing (y)")
         graph.set_zlabel("Altitude (z)")
+
+        # Set limits to fix bound
+        if lim is not None:
+            graph.set_xlim(lim[0])
+            graph.set_ylim(lim[1])
+            graph.set_zlim(lim[2])
 
         x, y = numpy.meshgrid(x, y)
 
@@ -113,9 +119,14 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    a = WaypointGenerator(FILE)
-    a.export()
-    print(CAMERA_H)
-    print(CAMERA_V)
-    print(CLEARANCE)
-    print(Z_FILTER)
+    # a = WaypointGenerator(FILE)
+    # a.export()
+    # print(CAMERA_H)
+    # print(CAMERA_V)
+    # print(CLEARANCE)
+    # print(Z_FILTER)
+
+    a = WaypointPlotter(FILE, True)
+    plt.savefig("a.png")
+    b = WaypointPlotter(FILE, False)
+    plt.savefig("b.png")

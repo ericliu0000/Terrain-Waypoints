@@ -53,17 +53,6 @@ class WaypointGenerator:
             if row:
                 self.filtered.append(row)
                 
-        # Double grid: same as above, but by columns
-        for i in range(len(coordinates)):
-            column = []
-            for j in range(len(coordinates[0]) - 1, -1, -1):
-                point = coordinates[i][j]
-                if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
-                        2] > Z_FILTER:
-                    column.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
-            if column:
-                self.filtered.append(column)
-
         inverted = False
 
         for row in self.filtered:
@@ -94,13 +83,14 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
-    def __init__(self, doc: str, plot_surface=True) -> None:
+    def __init__(self, doc: str, plot_surface=False) -> None:
         super().__init__(doc)
         # Plot terrain
         x, y = self.x_grid, self.y_grid
         z = self.height
 
         graph = plt.axes(projection="3d")
+        graph.view_init(elev=10, azim=-110)
         graph.set_xlabel("Easting (x)")
         graph.set_ylabel("Northing (y)")
         graph.set_zlabel("Altitude (z)")

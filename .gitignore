@@ -4,3 +4,4 @@ output/
 *.py[cod]
 *$py.class
 data/ncsutest.h5
+.vscode/

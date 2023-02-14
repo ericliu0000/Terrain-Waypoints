@@ -16,6 +16,14 @@ class WaypointGenerator:
         self.data = pandas.read_hdf(doc, "a").to_numpy()
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]
 
+
+
+        # bring all of the points to the origin
+        # spin them all around
+        # and then move them out
+        # then do griddata on that
+
+
         # Create grid
         self.x_grid = numpy.arange(self.spacing[:, 0].min(), self.spacing[:, 0].max(), CAMERA_V,
                                    dtype=numpy.float64)

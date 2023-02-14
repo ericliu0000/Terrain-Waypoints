@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 # the point of this file is to see whether i can spin a grid of points around
 # the origin and then move it to the site
 
+
 def rotation_test() -> None:
     # just for proof of concept of spinning points, i think
     points = numpy.meshgrid(numpy.linspace(-5, 5, 10), numpy.linspace(-5, 5, 10))
@@ -40,10 +41,10 @@ def rotation_translation_test() -> None:
 
     # okay move it back
     res_x, res_y = res[0] + x_center, res[1] + y_center
-
     marker_size = 0.75
 
     plt.plot(x_center, y_center, marker="*", markersize=15)
+
     # original
     plt.scatter(x, y, color='b', s=marker_size)
     # shift to origin
@@ -53,11 +54,27 @@ def rotation_translation_test() -> None:
     # move it back
     plt.scatter(res_x, res_y, color='purple', s=marker_size)
 
+    # try the function
+    func_x, func_y = spin_around_point(x, y, x_center, y_center, spin)
+    plt.scatter(func_x, func_y, s=2.1)
+
+    print(res_x == func_x, res_y == func_y)
+
     # make plot square
     plt.xlim(-15, 26)
     plt.ylim(-9, 32)
-    
+
     plt.show()
+
+
+def spin_around_point(x, y, x_center, y_center, r) -> numpy.ndarray:
+    origin_graph = x - x_center, y - y_center
+    rotation = numpy.array([[numpy.cos(r), -numpy.sin(r)],
+                            [numpy.sin(r), numpy.cos(r)]])
+    rotated_x, rotated_y = numpy.einsum("ji, mni -> jmn", rotation, numpy.dstack(origin_graph))
+
+    output = rotated_x + x_center, rotated_y + y_center
+    return output
 
 
 rotation_translation_test()

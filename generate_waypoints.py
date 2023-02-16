@@ -41,11 +41,12 @@ class WaypointGenerator:
 
         # Rotate points
         a, b = numpy.meshgrid(self.x_grid, self.y_grid)
-        self.rotated = spin_around_point(a, b, 950500, 799500, 45)
+        self.rotated = spin_around_point(a, b, 950500, 799500, 180)
 
         #TODO a lot of things here are not lining up
         # I think after rotating it, the coordinates used to plot everything are messed up
         # Maybe a rotation has to be undone somewhere, or something has to be written to account for it
+        # Probably gradient -- need to fix gradient
 
         # Interpolate values and calculate gradient
         self.height = scipy.interpolate.griddata(self.spacing, self.values, self.rotated, method="linear")
@@ -117,7 +118,6 @@ class WaypointPlotter(WaypointGenerator):
         graph.set_xlabel("Easting (x)")
         graph.set_ylabel("Northing (y)")
         graph.set_zlabel("Altitude (z)")
-
 
         if plot_surface:
             graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)

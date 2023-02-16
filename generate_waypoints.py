@@ -7,9 +7,21 @@ import scipy.interpolate
 from constants import *
 
 
-def normal(x, y):
+def normal(x: float, y: float) -> numpy.ndarray:
     # Return upward unit normal vector from dx, dy
     return [-x, -y, 1] / numpy.linalg.norm([-x, -y, 1])
+
+
+def spin_around_point(x: numpy.ndarray, y: numpy.ndarray,
+                      x_center: float, y_center: float, r: float) -> numpy.ndarray:
+    r = numpy.radians(r)
+    origin_graph = x - x_center, y - y_center
+    rotation = numpy.array([[numpy.cos(r), -numpy.sin(r)],
+                            [numpy.sin(r), numpy.cos(r)]])
+    rotated_x, rotated_y = numpy.einsum("ji, mni -> jmn", rotation, numpy.dstack(origin_graph))
+
+    output = rotated_x + x_center, rotated_y + y_center
+    return output
 
 
 class WaypointGenerator:
@@ -27,11 +39,17 @@ class WaypointGenerator:
         self.y_grid = numpy.arange(self.spacing[:, 1].min(), self.spacing[:, 1].max(), CAMERA_H,
                                    dtype=numpy.float64)
 
-        # Interpolate values and calculate gradient
-        self.height = scipy.interpolate.griddata(self.spacing, self.values,
-                                                 (self.x_grid[None, :], self.y_grid[:, None]), method="linear")
-        self.gradient = numpy.gradient(self.height, self.x_grid[1] - self.x_grid[0], self.y_grid[1] - self.y_grid[0])
+        # Rotate points
         a, b = numpy.meshgrid(self.x_grid, self.y_grid)
+        self.rotated = spin_around_point(a, b, 950500, 799500, 45)
+
+        #TODO a lot of things here are not lining up
+        # I think after rotating it, the coordinates used to plot everything are messed up
+        # Maybe a rotation has to be undone somewhere, or something has to be written to account for it
+
+        # Interpolate values and calculate gradient
+        self.height = scipy.interpolate.griddata(self.spacing, self.values, self.rotated, method="linear")
+        self.gradient = numpy.gradient(self.height, self.x_grid[1] - self.x_grid[0], self.y_grid[1] - self.y_grid[0])
 
         # Create a grid of coordinates with corresponding gradient values
         coordinates = numpy.dstack((a, b, self.height))
@@ -52,7 +70,7 @@ class WaypointGenerator:
                     row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
             if row:
                 self.filtered.append(row)
-                
+
         inverted = False
 
         for row in self.filtered:
@@ -86,8 +104,13 @@ class WaypointPlotter(WaypointGenerator):
     def __init__(self, doc: str, plot_surface=False) -> None:
         super().__init__(doc)
         # Plot terrain
-        x, y = self.x_grid, self.y_grid
-        z = self.height
+
+        # Create new variables to fix terrain appearance
+        x = numpy.arange(self.spacing[:, 0].min(), self.spacing[:, 0].max(), SURFACE_RES, dtype=numpy.float64)
+        y = numpy.arange(self.spacing[:, 1].min(), self.spacing[:, 1].max(), SURFACE_RES, dtype=numpy.float64)
+        x, y = numpy.meshgrid(x, y)
+
+        z = scipy.interpolate.griddata(self.spacing, self.values, (x, y), method="linear")
 
         graph = plt.axes(projection="3d")
         graph.view_init(elev=10, azim=-110)
@@ -95,7 +118,6 @@ class WaypointPlotter(WaypointGenerator):
         graph.set_ylabel("Northing (y)")
         graph.set_zlabel("Altitude (z)")
 
-        x, y = numpy.meshgrid(x, y)
 
         if plot_surface:
             graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
@@ -113,9 +135,11 @@ class WaypointPlotter(WaypointGenerator):
 
 
 if __name__ == "__main__":
-    a = WaypointGenerator(FILE)
-    a.export()
-    print(CAMERA_H)
-    print(CAMERA_V)
-    print(CLEARANCE)
-    print(Z_FILTER)
+    a = WaypointPlotter(FILE, True)
+
+    # a = WaypointGenerator(FILE)
+    # a.export()
+    # print(CAMERA_H)
+    # print(CAMERA_V)
+    # print(CLEARANCE)
+    # print(Z_FILTER)

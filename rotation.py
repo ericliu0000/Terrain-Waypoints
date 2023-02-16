@@ -1,5 +1,7 @@
 import numpy
 import matplotlib.pyplot as plt
+import pandas
+from constants import *
 
 # the point of this file is to see whether i can spin a grid of points around
 # the origin and then move it to the site
@@ -68,6 +70,7 @@ def rotation_translation_test() -> None:
 
 
 def spin_around_point(x, y, x_center, y_center, r) -> numpy.ndarray:
+    r = numpy.radians(r)
     origin_graph = x - x_center, y - y_center
     rotation = numpy.array([[numpy.cos(r), -numpy.sin(r)],
                             [numpy.sin(r), numpy.cos(r)]])
@@ -76,5 +79,31 @@ def spin_around_point(x, y, x_center, y_center, r) -> numpy.ndarray:
     output = rotated_x + x_center, rotated_y + y_center
     return output
 
+# rotation_translation_test()
 
-rotation_translation_test()
+
+class SiteTest:
+    def __init__(self, doc) -> None:
+        self.data = pandas.read_hdf(doc, "a").to_numpy()
+        self.spacing, self.values = self.data[..., :2], self.data[..., 2]
+
+        self.x_grid = numpy.arange(self.spacing[:, 0].min(), self.spacing[:, 0].max(), CAMERA_V,
+                                   dtype=numpy.float64)
+        self.y_grid = numpy.arange(self.spacing[:, 1].min(), self.spacing[:, 1].max(), CAMERA_H,
+                                   dtype=numpy.float64)
+
+        a, b = numpy.meshgrid(self.x_grid, self.y_grid)
+
+        self.rotated = spin_around_point(a, b, 950500, 799500, 10)
+
+        plt.scatter(a, b)
+        plt.scatter(self.rotated[0], self.rotated[1])
+
+        plt.axis("square")
+        plt.imshow(plt.imread("data/site.png"), extent=[950132.25, 950764.18, 798442.81, 800597.99])
+
+        plt.show()
+
+
+if __name__ == "__main__":
+    SiteTest(FILE)

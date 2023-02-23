@@ -41,25 +41,24 @@ class WaypointGenerator:
 
         # Rotate points
         a, b = numpy.meshgrid(self.x_grid, self.y_grid)
-        self.rotated = spin_around_point(a, b, 950500, 799500, 180)
-
-        #TODO a lot of things here are not lining up
-        # I think after rotating it, the coordinates used to plot everything are messed up
-        # Maybe a rotation has to be undone somewhere, or something has to be written to account for it
-        # Probably gradient -- need to fix gradient
+        # TODO make this a constant when done
+        self.rotated = spin_around_point(a, b, 950500, 799500, 8)
 
         # Interpolate values and calculate gradient
         self.height = scipy.interpolate.griddata(self.spacing, self.values, self.rotated, method="linear")
-        self.gradient = numpy.gradient(self.height, self.x_grid[1] - self.x_grid[0], self.y_grid[1] - self.y_grid[0])
+        # Unsure whether this is right
+        # self.gradient = numpy.gradient(self.height, self.rotated[1][:, 0], self.rotated[0][0])
+        self.gradient = numpy.gradient(self.height, self.y_grid, self.x_grid)
 
         # Create a grid of coordinates with corresponding gradient values
-        coordinates = numpy.dstack((a, b, self.height))
+        coordinates = numpy.dstack((self.rotated[0], self.rotated[1], self.height))
         gradient = numpy.nan_to_num(self.gradient)
 
         # Smooth values
         dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[0].T, s=100)
         dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[1].T, s=100)
 
+        # TODO Evaluate gradient --- make sure it's still perpendicular to ground
         # For each point, place in filtered (x, y, z, [unit normal -- dy, dx, dz])
         for i in range(len(coordinates[0]) - 1, -1, -1):
             row = []

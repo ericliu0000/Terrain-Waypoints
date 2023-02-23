@@ -88,6 +88,8 @@ class WaypointGenerator:
                 self.waypoints.append(line)
             inverted = not inverted
 
+
+    # TODO maybe encode some data into each file about tiles, rotation
     def export(self) -> str:
         if not os.path.exists("output"):
             os.makedirs("output")

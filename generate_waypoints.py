@@ -13,7 +13,7 @@ def normal(x: float, y: float) -> numpy.ndarray:
 
 
 def spin_around_point(x: numpy.ndarray, y: numpy.ndarray,
-                      x_center: float, y_center: float, r: float) -> numpy.ndarray:
+                      x_center: float, y_center: float, r: float) -> tuple[numpy.ndarray, numpy.ndarray]:
     r = numpy.radians(r)
     origin_graph = x - x_center, y - y_center
     rotation = numpy.array([[numpy.cos(r), -numpy.sin(r)],
@@ -25,6 +25,9 @@ def spin_around_point(x: numpy.ndarray, y: numpy.ndarray,
 
 
 class WaypointGenerator:
+    spacing = []
+    values = []
+
     def __init__(self, doc: str, aclearance=CLEARANCE) -> None:
         self.filtered = []
         self.waypoints = []
@@ -52,11 +55,11 @@ class WaypointGenerator:
 
         # Create a grid of coordinates with corresponding gradient values
         coordinates = numpy.dstack((self.rotated[0], self.rotated[1], self.height))
-        gradient = numpy.nan_to_num(self.gradient)
+        self.gradient = numpy.nan_to_num(self.gradient)
 
         # Smooth values
-        dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[0].T, s=100)
-        dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, gradient[1].T, s=100)
+        dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, self.gradient[0].T, s=100)
+        dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, self.gradient[1].T, s=100)
 
         # TODO Evaluate gradient --- make sure it's still perpendicular to ground
         # For each point, place in filtered (x, y, z, [unit normal -- dy, dx, dz])
@@ -65,8 +68,8 @@ class WaypointGenerator:
             for j in range(len(coordinates)):
                 # Filter bounds and remove points below 3420 feet
                 point = coordinates[j][i]
-                if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and point[
-                        2] > Z_FILTER:
+                if LEFT_BOUND < point[0] < RIGHT_BOUND and lower(point[0]) < point[1] < upper(point[0]) and \
+                        point[2] > Z_FILTER:
                     row.append([*point, *normal(dy.ev(point[0], point[1]), dx.ev(point[0], point[1]))])
             if row:
                 self.filtered.append(row)
@@ -87,7 +90,6 @@ class WaypointGenerator:
             else:
                 self.waypoints.append(line)
             inverted = not inverted
-
 
     # TODO maybe encode some data into each file about tiles, rotation
     def export(self) -> str:

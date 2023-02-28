@@ -144,7 +144,7 @@ class Ruler:
             # Get slope between XY and Z
             slope = (z - last[2]) / (((x - last[0]) ** 2 + (y - last[1]) ** 2) ** 0.5)
             print(f"XY diff {(x - last[0]) ** 2 + (y - last[1]) ** 2} Z diff {z - last[2]} Slope {slope}")
-            slopes.append(slope)    
+            slopes.append(slope)
 
             last = [x, y, z]
 
@@ -152,8 +152,6 @@ class Ruler:
         counts, bins = numpy.histogram(slopes)
         plt.hist(bins[:-1], bins, weights=counts)
         plt.show()
-
-        
 
 
 if __name__ == "__main__":

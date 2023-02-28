@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy
 
 import constants
-from calculate_gradient import WaypointGradient
-from waypoint import WaypointGenerator
+# from calculate_gradient import WaypointGradient, WaypointGenerator
+from generate_waypoints import WaypointGenerator
 
 
 class Grid:
@@ -44,15 +44,14 @@ class Grid:
         plt.show()
 
 
-class Grid3:
+class GradientCheck:
     length = 500
 
     def __init__(self) -> None:
         # Read and rasterize the site data
         points = WaypointGenerator(constants.FILE)
-        obj = WaypointGradient(constants.FILE)
-        x, y = obj.x_grid, obj.y_grid
-        z = obj.height
+        x, y = points.x_grid, points.y_grid
+        z = points.height
         x, y = numpy.meshgrid(x, y)
 
         x_min = constants.LEFT_BOUND
@@ -72,7 +71,10 @@ class Grid3:
         graph.set_zlim(z_min, z_min + self.length)
 
         # Plot line between original point and waypoint
-        for r1, r2 in zip(points.values, points.waypoints):
+        for count, (r1, r2) in enumerate(zip(points.filtered, points.waypoints)):
+            # Reverse every other row as well --- imperfect fix but should cover most bases
+            if count % 2:
+                r2 = r2[::-1]
             for p1, p2 in zip(r1, r2):
                 plt.plot([p1[0], p2[0]], [p1[1], p2[1]], [p1[2], p2[2]], "r")
 
@@ -156,6 +158,6 @@ class Ruler:
 
 if __name__ == "__main__":
     # Grid()
-    # Grid3()
+    GradientCheck()
     # Reader()
-    Ruler()
+    # Ruler()

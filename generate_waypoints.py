@@ -12,9 +12,10 @@ def normal(x: float, y: float) -> numpy.ndarray:
     return [-x, -y, 1] / numpy.linalg.norm([-x, -y, 1])
 
 
-def spin_around_point(x: numpy.ndarray, y: numpy.ndarray,
-                      x_center: float, y_center: float, r: float) -> tuple[numpy.ndarray, numpy.ndarray]:
+def spin_around_point(xy: numpy.ndarray, x_center: float,
+                      y_center: float, r: float) -> tuple[numpy.ndarray, numpy.ndarray]:
     r = numpy.radians(r)
+    x, y = xy[0], xy[1]
     origin_graph = x - x_center, y - y_center
     rotation = numpy.array([[numpy.cos(r), -numpy.sin(r)],
                             [numpy.sin(r), numpy.cos(r)]])
@@ -27,11 +28,10 @@ def spin_around_point(x: numpy.ndarray, y: numpy.ndarray,
 class WaypointGenerator:
     spacing = []
     values = []
+    filtered = []
+    waypoints = []
 
     def __init__(self, doc: str, aclearance=CLEARANCE) -> None:
-        self.filtered = []
-        self.waypoints = []
-
         # Read data from h5 file
         self.data = pandas.read_hdf(doc, "a").to_numpy()
         self.spacing, self.values = self.data[..., :2], self.data[..., 2]
@@ -43,25 +43,20 @@ class WaypointGenerator:
                                    dtype=numpy.float64)
 
         # Rotate points
-        a, b = numpy.meshgrid(self.x_grid, self.y_grid)
         # TODO make this a constant when done
-        self.rotated = spin_around_point(a, b, 950500, 799500, 8)
+        self.rotated = spin_around_point(numpy.meshgrid(self.x_grid, self.y_grid), 950500, 799500, 5)
 
         # Interpolate values and calculate gradient
         self.height = scipy.interpolate.griddata(self.spacing, self.values, self.rotated, method="linear")
-        # Unsure whether this is right
-        # self.gradient = numpy.gradient(self.height, self.rotated[1][:, 0], self.rotated[0][0])
-        self.gradient = numpy.gradient(self.height, self.y_grid, self.x_grid)
 
         # Create a grid of coordinates with corresponding gradient values
+        self.gradient = numpy.nan_to_num(numpy.gradient(self.height, self.y_grid, self.x_grid))
         coordinates = numpy.dstack((self.rotated[0], self.rotated[1], self.height))
-        self.gradient = numpy.nan_to_num(self.gradient)
 
         # Smooth values
         dx = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, self.gradient[0].T, s=100)
         dy = scipy.interpolate.RectBivariateSpline(self.x_grid, self.y_grid, self.gradient[1].T, s=100)
 
-        # TODO Evaluate gradient --- make sure it's still perpendicular to ground
         # For each point, place in filtered (x, y, z, [unit normal -- dy, dx, dz])
         for i in range(len(coordinates[0]) - 1, -1, -1):
             row = []

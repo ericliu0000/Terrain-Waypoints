@@ -105,28 +105,28 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
-    def __init__(self, doc: str, plot_surface=False, lim=None, name=None, x_ratio=1, y_ratio=1) -> None:
+    def __init__(self, doc: str, plot_surface=False, lim=None, name=None) -> None:
         super().__init__(doc)
         
-        # Plot terrain
-
-        # Create new variables to fix terrain appearance
+        # Create new variables to make terrain appearance independent of waypoints
         x = numpy.arange(self.spacing[:, 0].min(), self.spacing[:, 0].max(), SURFACE_RES, dtype=numpy.float64)
         y = numpy.arange(self.spacing[:, 1].min(), self.spacing[:, 1].max(), SURFACE_RES, dtype=numpy.float64)
         x, y = numpy.meshgrid(x, y)
-
         z = scipy.interpolate.griddata(self.spacing, self.values, (x, y), method="linear")
 
-        # Configure graph
-        graph = plt.axes(projection="3d")
+        # Configure graph axes and labels
+        graph = plt.axes(projection="3d", computed_zorder=False)
         graph.set_xlabel("Easting (x)", labelpad=11)
         graph.set_ylabel("Northing (y)", labelpad=11)
         graph.set_zlabel("Altitude (z)")
-
         graph.tick_params(axis="x", pad=-1, labelsize=8, labelrotation=-30)
         graph.tick_params(axis="y", pad=-1, labelsize=8, labelrotation=30)
 
         graph.view_init(elev=12, azim=-120)
+
+        # Plot terrain
+        if plot_surface:
+            graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
 
         # Set limits to fix bound
         if lim is not None:
@@ -134,15 +134,11 @@ class WaypointPlotter(WaypointGenerator):
             graph.set_ylim(lim[1])
             graph.set_zlim(lim[2])
 
-        if plot_surface:
-            graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
-
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], self.waypoints[0][0][2])
 
-        # To improve terrain resolution, remove a lot of waypoints
-        for row in self.waypoints[::x_ratio]:
-            for point in row[::y_ratio]:
+        for row in self.waypoints:
+            for point in row:
                 plt.plot([point[0], last[0]], [point[1], last[1]], [point[2], last[2]], "r")
                 last = (point[0], point[1], point[2])
                 plt.plot(*last, "bo")
@@ -157,5 +153,5 @@ class WaypointPlotter(WaypointGenerator):
 if __name__ == "__main__":
     bounds = [(950101, 950800), (798340, 800600), (3370, 3670)]
 
-    a = WaypointPlotter(FILE, True, bounds, "a", 3, 7)
-    b = WaypointPlotter(FILE, False, bounds, "b", 3, 7)
+    a = WaypointPlotter(FILE, True, bounds, "a")
+    b = WaypointPlotter(FILE, False, bounds, "b")

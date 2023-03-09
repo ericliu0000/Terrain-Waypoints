@@ -118,11 +118,11 @@ class WaypointPlotter(WaypointGenerator):
         graph = plt.axes(projection="3d", computed_zorder=False)
         graph.set_xlabel("Easting (x)\n(ft)", labelpad=5)
         graph.set_ylabel("Northing (y)\n(ft)", labelpad=5)
-        graph.set_zlabel("Altitude (z)\n(ft)")
+        graph.set_zlabel("Altitude (z)\n(ft)", labelpad=15)
 
         graph.set_xticklabels([])
         graph.set_yticklabels([])
-        graph.tick_params(axis="z", pad=1.5, labelsize=10)
+        graph.tick_params(axis="z", pad=4, labelsize=8)
 
         # graph.tick_params(axis="x", pad=1.5, labelsize=7)
         # graph.tick_params(axis="y", pad=1.5, labelsize=7)

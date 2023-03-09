@@ -76,7 +76,8 @@ class WaypointGenerator:
 
             # Translate each point normal to the surface by clearance distance
             for point in row:
-                line.append([point[0] + point[3] * aclearance, point[1] + point[4] * aclearance,
+                line.append([point[0] + point[3] * aclearance, 
+                             point[1] + point[4] * aclearance,
                              point[2] + point[5] * CLEARANCE])
 
             # Reverse the order of every other line

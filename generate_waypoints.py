@@ -115,14 +115,21 @@ class WaypointPlotter(WaypointGenerator):
         z = scipy.interpolate.griddata(self.spacing, self.values, (x, y), method="linear")
 
         # Configure graph axes and labels
+
         graph = plt.axes(projection="3d", computed_zorder=False)
-        graph.set_xlabel("Easting (x)", labelpad=11)
+        graph.set_xlabel("Easting (x) (ft)", labelpad=11)
         graph.set_ylabel("Northing (y)", labelpad=11)
         graph.set_zlabel("Altitude (z)")
-        graph.tick_params(axis="x", pad=-1, labelsize=8, labelrotation=-30)
-        graph.tick_params(axis="y", pad=-1, labelsize=8, labelrotation=30)
+        graph.tick_params(axis="x", pad=0.2, labelsize=8)
+        graph.tick_params(axis="y", pad=0.2, labelsize=8)
 
-        graph.view_init(elev=12, azim=-120)
+        # graph.xaxis._axinfo['label']['space_factor'] = 2.0
+        # graph.yaxis._axinfo['label']['space_factor'] = 2.0
+        # graph.zaxis._axinfo['label']['space_factor'] = 2.0
+
+        graph.xaxis.labelpad = 30
+        graph.yaxis.labelpad = 30
+        graph.zaxis.labelpad = 30
 
         # Plot terrain
         if plot_surface:
@@ -143,11 +150,18 @@ class WaypointPlotter(WaypointGenerator):
                 last = (point[0], point[1], point[2])
                 plt.plot(*last, "bo")
 
-        # If desired, save file
-        if name is not None:
-            plt.savefig(f"{name}.png", dpi=600)
-        else:
-            plt.show()
+        # do a bunch of views
+        for e in range(5, 31, 5):
+            for a in range(-90, 91, 15):
+                graph.view_init(elev=e, azim=a)
+                file = f"figures/e{e}a{a}-{'' if plot_surface else 'no'}surface.png"
+                plt.savefig(file, dpi=100)
+                print(f"saved {file}")
+        # # If desired, save file
+        # if name is not None:
+        #     plt.savefig(f"{name}.png", dpi=600)
+        # else:
+        #     plt.show()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 __pycache__/
 .idea/
 output/
+figures/
 *.py[cod]
 *$py.class
 data/ncsutest.h5

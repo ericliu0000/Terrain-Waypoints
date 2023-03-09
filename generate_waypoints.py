@@ -45,7 +45,7 @@ class WaypointGenerator:
         # Rotate points
         a, b = numpy.meshgrid(self.x_grid, self.y_grid)
         # TODO make this a constant when done
-        self.rotated = spin_around_point(a, b, 950500, 799500, 8)
+        self.rotated = spin_around_point(a, b, 950500, 799500, -8)
 
         # Interpolate values and calculate gradient
         self.height = scipy.interpolate.griddata(self.spacing, self.values, self.rotated, method="linear")
@@ -105,7 +105,7 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
-    def __init__(self, doc: str, plot_surface=False, lim=None, name=None) -> None:
+    def __init__(self, doc: str, plot_surface=False, plot_waypoints=True, lim=None) -> None:
         super().__init__(doc)
         
         # Create new variables to make terrain appearance independent of waypoints
@@ -115,13 +115,17 @@ class WaypointPlotter(WaypointGenerator):
         z = scipy.interpolate.griddata(self.spacing, self.values, (x, y), method="linear")
 
         # Configure graph axes and labels
-
         graph = plt.axes(projection="3d", computed_zorder=False)
-        graph.set_xlabel("Easting (x) (ft)", labelpad=25)
-        graph.set_ylabel("Northing (y)", labelpad=25)
-        graph.set_zlabel("Altitude (z)")
-        graph.tick_params(axis="x", pad=0.2, labelsize=8)
-        graph.tick_params(axis="y", pad=0.2, labelsize=8)
+        graph.set_xlabel("Easting (x)\n(ft)", labelpad=5)
+        graph.set_ylabel("Northing (y)\n(ft)", labelpad=5)
+        graph.set_zlabel("Altitude (z)\n(ft)")
+
+        graph.set_xticklabels([])
+        graph.set_yticklabels([])
+        graph.tick_params(axis="z", pad=1.5, labelsize=10)
+
+        # graph.tick_params(axis="x", pad=1.5, labelsize=7)
+        # graph.tick_params(axis="y", pad=1.5, labelsize=7)
 
         # Plot terrain
         if plot_surface:
@@ -146,12 +150,12 @@ class WaypointPlotter(WaypointGenerator):
         for e in range(5, 31, 5):
             for a in range(-90, 91, 15):
                 graph.view_init(elev=e, azim=a)
-                xrot, yrot = max(-45, min((90 + a) % 180, 45)), a
-                graph.tick_params(axis="x", pad=0.2, labelsize=8, labelrotation=xrot)
-                graph.tick_params(axis="y", pad=0.2, labelsize=8, labelrotation=yrot)
+                # xrot, yrot = max(-45, min((90 + a) % 180, 45)), max(-45, min(a % 180, 45))
+                # graph.tick_params(axis="x", pad=0.2, labelsize=8, labelrotation=xrot)
+                # graph.tick_params(axis="y", pad=0.2, labelsize=8, labelrotation=yrot)
 
                 file = f"figures/e{e}a{a}-{'' if plot_surface else 'no'}surface.png"
-                plt.savefig(file, dpi=100)
+                plt.savefig(file, dpi=300)
                 print(f"saved {file}")
 
         # # If desired, save file
@@ -164,5 +168,5 @@ class WaypointPlotter(WaypointGenerator):
 if __name__ == "__main__":
     bounds = [(950101, 950800), (798340, 800600), (3370, 3670)]
 
-    a = WaypointPlotter(FILE, True, bounds, "a")
-    b = WaypointPlotter(FILE, False, bounds, "b")
+    WaypointPlotter(FILE, True, True, bounds)
+    # b = WaypointPlotter(FILE, False, bounds, "b")

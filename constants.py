@@ -17,6 +17,8 @@ METERS_TO_FEET: float = 3.048
 CAMERA_H: float = 15 * METERS_TO_FEET * GLOBAL_SCALE
 CAMERA_V: float = 11.5 * METERS_TO_FEET * GLOBAL_SCALE
 
+SURFACE_RES: float = 5
+
 FILE = "data/cloud_lasground.h5"
 
 

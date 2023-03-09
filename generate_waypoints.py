@@ -117,19 +117,11 @@ class WaypointPlotter(WaypointGenerator):
         # Configure graph axes and labels
 
         graph = plt.axes(projection="3d", computed_zorder=False)
-        graph.set_xlabel("Easting (x) (ft)", labelpad=11)
-        graph.set_ylabel("Northing (y)", labelpad=11)
+        graph.set_xlabel("Easting (x) (ft)", labelpad=25)
+        graph.set_ylabel("Northing (y)", labelpad=25)
         graph.set_zlabel("Altitude (z)")
         graph.tick_params(axis="x", pad=0.2, labelsize=8)
         graph.tick_params(axis="y", pad=0.2, labelsize=8)
-
-        # graph.xaxis._axinfo['label']['space_factor'] = 2.0
-        # graph.yaxis._axinfo['label']['space_factor'] = 2.0
-        # graph.zaxis._axinfo['label']['space_factor'] = 2.0
-
-        graph.xaxis.labelpad = 30
-        graph.yaxis.labelpad = 30
-        graph.zaxis.labelpad = 30
 
         # Plot terrain
         if plot_surface:
@@ -154,9 +146,14 @@ class WaypointPlotter(WaypointGenerator):
         for e in range(5, 31, 5):
             for a in range(-90, 91, 15):
                 graph.view_init(elev=e, azim=a)
+                xrot, yrot = max(-45, min((90 + a) % 180, 45)), a
+                graph.tick_params(axis="x", pad=0.2, labelsize=8, labelrotation=xrot)
+                graph.tick_params(axis="y", pad=0.2, labelsize=8, labelrotation=yrot)
+
                 file = f"figures/e{e}a{a}-{'' if plot_surface else 'no'}surface.png"
                 plt.savefig(file, dpi=100)
                 print(f"saved {file}")
+
         # # If desired, save file
         # if name is not None:
         #     plt.savefig(f"{name}.png", dpi=600)

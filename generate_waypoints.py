@@ -105,8 +105,9 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
-    def __init__(self, doc: str, plot_surface=False) -> None:
+    def __init__(self, doc: str, plot_surface=False, lim=None, name=None, x_ratio=1, y_ratio=1) -> None:
         super().__init__(doc)
+        
         # Plot terrain
 
         # Create new variables to fix terrain appearance
@@ -116,11 +117,22 @@ class WaypointPlotter(WaypointGenerator):
 
         z = scipy.interpolate.griddata(self.spacing, self.values, (x, y), method="linear")
 
+        # Configure graph
         graph = plt.axes(projection="3d")
-        graph.view_init(elev=10, azim=-110)
-        graph.set_xlabel("Easting (x)")
-        graph.set_ylabel("Northing (y)")
+        graph.set_xlabel("Easting (x)", labelpad=11)
+        graph.set_ylabel("Northing (y)", labelpad=11)
         graph.set_zlabel("Altitude (z)")
+
+        graph.tick_params(axis="x", pad=-1, labelsize=8, labelrotation=-30)
+        graph.tick_params(axis="y", pad=-1, labelsize=8, labelrotation=30)
+
+        graph.view_init(elev=12, azim=-120)
+
+        # Set limits to fix bound
+        if lim is not None:
+            graph.set_xlim(lim[0])
+            graph.set_ylim(lim[1])
+            graph.set_zlim(lim[2])
 
         if plot_surface:
             graph.plot_surface(x, y, z, linewidth=0, cmap=plt.cm.terrain)
@@ -128,21 +140,22 @@ class WaypointPlotter(WaypointGenerator):
         # Plot waypoints
         last = (self.waypoints[0][0][0], self.waypoints[0][0][1], self.waypoints[0][0][2])
 
-        for row in self.waypoints:
-            for point in row:
+        # To improve terrain resolution, remove a lot of waypoints
+        for row in self.waypoints[::x_ratio]:
+            for point in row[::y_ratio]:
                 plt.plot([point[0], last[0]], [point[1], last[1]], [point[2], last[2]], "r")
                 last = (point[0], point[1], point[2])
                 plt.plot(*last, "bo")
 
-        plt.show()
+        # If desired, save file
+        if name is not None:
+            plt.savefig(f"{name}.png", dpi=600)
+        else:
+            plt.show()
 
 
 if __name__ == "__main__":
-    a = WaypointPlotter(FILE, True)
+    bounds = [(950101, 950800), (798340, 800600), (3370, 3670)]
 
-    # a = WaypointGenerator(FILE)
-    # a.export()
-    # print(CAMERA_H)
-    # print(CAMERA_V)
-    # print(CLEARANCE)
-    # print(Z_FILTER)
+    a = WaypointPlotter(FILE, True, bounds, "a", 3, 7)
+    b = WaypointPlotter(FILE, False, bounds, "b", 3, 7)

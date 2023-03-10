@@ -6,3 +6,4 @@ figures/
 *$py.class
 data/ncsutest.h5
 .vscode/
+*.png

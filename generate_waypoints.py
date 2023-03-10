@@ -107,6 +107,7 @@ class WaypointGenerator:
 class WaypointPlotter(WaypointGenerator):
     def __init__(self, doc: str, plot_surface=False, plot_waypoints=True, lim=None) -> None:
         super().__init__(doc)
+        name = f"{'-surface' if plot_surface else ''}{'-waypoints' if plot_waypoints else ''}.png"
         
         # Create new variables to make terrain appearance independent of waypoints
         x = numpy.arange(self.spacing[:, 0].min(), self.spacing[:, 0].max(), SURFACE_RES, dtype=numpy.float64)
@@ -154,7 +155,7 @@ class WaypointPlotter(WaypointGenerator):
                 # graph.tick_params(axis="x", pad=0.2, labelsize=8, labelrotation=xrot)
                 # graph.tick_params(axis="y", pad=0.2, labelsize=8, labelrotation=yrot)
 
-                file = f"figures/e{e}a{a}-{'' if plot_surface else 'no'}surface.png"
+                file = f"figures/e{e}a{a}{name}"
                 plt.savefig(file, dpi=300)
                 print(f"saved {file}")
 
@@ -169,4 +170,6 @@ if __name__ == "__main__":
     bounds = [(950101, 950800), (798340, 800600), (3370, 3670)]
 
     WaypointPlotter(FILE, True, True, bounds)
+    WaypointPlotter(FILE, True, False, bounds)
+    WaypointPlotter(FILE, False, True, bounds)
     # b = WaypointPlotter(FILE, False, bounds, "b")

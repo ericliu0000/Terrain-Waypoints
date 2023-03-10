@@ -84,6 +84,14 @@ def site_slope_only() -> None:
     plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
+    plt.title("Gradient at Site")
+    plt.xlabel("Easting (x)\n(ft)", fontsize=9)
+    plt.ylabel("Northing (y)\n(ft)", fontsize=9)
+
+    plt.tick_params(axis="x", pad=1.5, labelsize=7)
+    plt.tick_params(axis="y", pad=1.5, labelsize=7)
+
+    plt.savefig("site_slope.png", dpi=600, bbox_inches="tight")
     plt.show()
 
 
@@ -148,8 +156,8 @@ def test_3d() -> None:
 
 
 if __name__ == "__main__":
-    site_test()
+    # site_test()
     # lasground_test()
-    # site_slope_only()
+    site_slope_only()
     # quadrant()
     # test_3d()

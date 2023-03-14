@@ -74,8 +74,10 @@ class Grid3:
         # Plot line between original point and waypoint
         for r1, r2 in zip(points.values, points.waypoints):
             for p1, p2 in zip(r1, r2):
-                plt.plot([p1[0], p2[0]], [p1[1], p2[1]], [p1[2], p2[2]], "r")
+                graph.plot([p1[0], p2[0]], [p1[1], p2[1]], [p1[2], p2[2]], "r")
 
+        graph.view_init(elev=0, azim=-90, )
+        plt.savefig("c.png", dpi=600)
         plt.show()
 
 
@@ -149,13 +151,20 @@ class Ruler:
             last = [x, y, z]
 
         print(f"Total length: {total}")
-        counts, bins = numpy.histogram(slopes)
+        print(f"Mean slope: {numpy.mean(numpy.abs(slopes))}")
+        print(f"Standard deviation: {numpy.std(slopes)}")
+
+        counts, bins = numpy.histogram(slopes, bins=numpy.linspace(-0.5, 0.5, 20))
+        plt.title("Waypoint Gradient")
+        plt.xlabel("Slope between waypoints")
+        plt.ylabel("Count")
         plt.hist(bins[:-1], bins, weights=counts)
-        plt.show()
+        plt.savefig("histogram_r8.png", dpi=300)
+        # plt.show()
 
 
 if __name__ == "__main__":
     # Grid()
-    # Grid3()
+    Grid3()
     # Reader()
-    Ruler()
+    # Ruler()

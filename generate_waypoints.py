@@ -28,7 +28,7 @@ class WaypointGenerator:
     spacing = []
     values = []
 
-    def __init__(self, doc: str, aclearance=CLEARANCE) -> None:
+    def __init__(self, doc: str, aclearance=CLEARANCE, rotation: float=-8) -> None:
         self.filtered = []
         self.waypoints = []
 
@@ -45,7 +45,7 @@ class WaypointGenerator:
         # Rotate points
         a, b = numpy.meshgrid(self.x_grid, self.y_grid)
         # TODO make this a constant when done
-        self.rotated = spin_around_point(a, b, 950500, 799500, -8)
+        self.rotated = spin_around_point(a, b, 950500, 799500, rotation)
 
         # Interpolate values and calculate gradient
         self.height = scipy.interpolate.griddata(self.spacing, self.values, self.rotated, method="linear")
@@ -168,8 +168,10 @@ class WaypointPlotter(WaypointGenerator):
 
 if __name__ == "__main__":
     bounds = [(950101, 950800), (798340, 800600), (3370, 3670)]
+    a = WaypointGenerator(FILE, rotation=8)
+    a.export()
 
-    WaypointPlotter(FILE, True, True, bounds)
-    WaypointPlotter(FILE, True, False, bounds)
-    WaypointPlotter(FILE, False, True, bounds)
+    # WaypointPlotter(FILE, True, True, bounds)
+    # WaypointPlotter(FILE, True, False, bounds)
+    # WaypointPlotter(FILE, False, True, bounds)
     # b = WaypointPlotter(FILE, False, bounds, "b")

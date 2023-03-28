@@ -28,7 +28,7 @@ class WaypointGenerator:
     spacing = []
     values = []
 
-    def __init__(self, doc: str, aclearance=CLEARANCE, rotation: float=-8) -> None:
+    def __init__(self, doc: str, aclearance=CLEARANCE, rotation: float=8) -> None:
         self.filtered = []
         self.waypoints = []
 
@@ -105,8 +105,8 @@ class WaypointGenerator:
 
 
 class WaypointPlotter(WaypointGenerator):
-    def __init__(self, doc: str, plot_surface=False, plot_waypoints=True, lim=None) -> None:
-        super().__init__(doc)
+    def __init__(self, doc: str, plot_surface=False, plot_waypoints=True, lim=None, rotation=0) -> None:
+        super().__init__(doc, rotation=rotation)
         name = f"{'-surface' if plot_surface else ''}{'-waypoints' if plot_waypoints else ''}.png"
         
         # Create new variables to make terrain appearance independent of waypoints
@@ -145,19 +145,22 @@ class WaypointPlotter(WaypointGenerator):
             for point in row:
                 plt.plot([point[0], last[0]], [point[1], last[1]], [point[2], last[2]], "r")
                 last = (point[0], point[1], point[2])
-                plt.plot(*last, "bo")
+                plt.plot(*last, "bo", markersize=1.6)
 
+        # plt.show()
+        graph.view_init(elev=20, azim=2)
+        plt.savefig("a.png", dpi=600)
         # do a bunch of views
-        for e in range(5, 31, 5):
-            for a in range(-90, 91, 15):
-                graph.view_init(elev=e, azim=a)
-                # xrot, yrot = max(-45, min((90 + a) % 180, 45)), max(-45, min(a % 180, 45))
-                # graph.tick_params(axis="x", pad=0.2, labelsize=8, labelrotation=xrot)
-                # graph.tick_params(axis="y", pad=0.2, labelsize=8, labelrotation=yrot)
+        # for e in range(5, 31, 5):
+        #     for a in range(-90, 91, 15):
+        #         graph.view_init(elev=e, azim=a)
+        #         # xrot, yrot = max(-45, min((90 + a) % 180, 45)), max(-45, min(a % 180, 45))
+        #         # graph.tick_params(axis="x", pad=0.2, labelsize=8, labelrotation=xrot)
+        #         # graph.tick_params(axis="y", pad=0.2, labelsize=8, labelrotation=yrot)
 
-                file = f"figures/e{e}a{a}{name}"
-                plt.savefig(file, dpi=300)
-                print(f"saved {file}")
+        #         file = f"figures/e{e}a{a}{name}"
+        #         plt.savefig(file, dpi=300)
+        #         print(f"saved {file}")
 
         # # If desired, save file
         # if name is not None:
@@ -168,10 +171,10 @@ class WaypointPlotter(WaypointGenerator):
 
 if __name__ == "__main__":
     bounds = [(950101, 950800), (798340, 800600), (3370, 3670)]
-    a = WaypointGenerator(FILE, rotation=8)
-    a.export()
+    # a = WaypointGenerator(FILE, rotation=8)
+    # a.export()
 
-    # WaypointPlotter(FILE, True, True, bounds)
+    WaypointPlotter(FILE, False, True, bounds, 2)
     # WaypointPlotter(FILE, True, False, bounds)
     # WaypointPlotter(FILE, False, True, bounds)
     # b = WaypointPlotter(FILE, False, bounds, "b")

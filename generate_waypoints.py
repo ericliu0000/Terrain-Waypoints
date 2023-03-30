@@ -171,10 +171,10 @@ class WaypointPlotter(WaypointGenerator):
 
 if __name__ == "__main__":
     bounds = [(950101, 950800), (798340, 800600), (3370, 3670)]
-    # a = WaypointGenerator(FILE, rotation=8)
-    # a.export()
+    a = WaypointGenerator(FILE, rotation=8)
+    a.export()
 
-    WaypointPlotter(FILE, False, True, bounds, 2)
+    # WaypointPlotter(FILE, False, True, bounds, 2)
     # WaypointPlotter(FILE, True, False, bounds)
     # WaypointPlotter(FILE, False, True, bounds)
     # b = WaypointPlotter(FILE, False, bounds, "b")

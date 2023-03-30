@@ -48,6 +48,9 @@ def lasground_test() -> None:
     z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 1)
+    # Bound plot
+    plt.imshow(plt.imread("data/site.png"), extent=[950132.25, 950764.18, 798442.81, 800597.99])
+
     plt.title("Original data")
 
     plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
@@ -60,11 +63,15 @@ def lasground_test() -> None:
     z = numpy.clip(gradient, z_min, z_max)
 
     plt.subplot(1, 2, 2)
+    # Bound plot
+    plt.imshow(plt.imread("data/site.png"), extent=[950132.25, 950764.18, 798442.81, 800597.99])
+
     plt.title("Surface objects removed")
 
     plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
+    plt.savefig("filter_comparison.png", dpi=600)
     plt.show()
 
 
@@ -157,7 +164,7 @@ def test_3d() -> None:
 
 if __name__ == "__main__":
     # site_test()
-    # lasground_test()
-    site_slope_only()
+    lasground_test()
+    # site_slope_only()
     # quadrant()
     # test_3d()

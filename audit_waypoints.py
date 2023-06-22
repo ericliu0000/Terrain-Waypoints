@@ -72,11 +72,16 @@ class Grid3:
         graph.set_zlim(z_min, z_min + self.length)
 
         # Plot line between original point and waypoint
+        # temp: unflip
+        flip = False
         for r1, r2 in zip(points.values, points.waypoints):
+            if flip:
+                r2 = r2[::-1]
+            flip = not flip
             for p1, p2 in zip(r1, r2):
                 graph.plot([p1[0], p2[0]], [p1[1], p2[1]], [p1[2], p2[2]], "r")
 
-        graph.view_init(elev=0, azim=-90, )
+        graph.view_init(elev=-1, azim=-92)
         plt.savefig("c.png", dpi=600)
         plt.show()
 
@@ -164,7 +169,7 @@ class Ruler:
 
 
 if __name__ == "__main__":
-    # Grid()
-    Grid3()
+    Grid()
+    # Grid3()
     # Reader()
     # Ruler()

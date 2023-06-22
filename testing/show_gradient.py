@@ -66,12 +66,12 @@ def lasground_test() -> None:
     # Bound plot
     plt.imshow(plt.imread("data/site.png"), extent=[950132.25, 950764.18, 798442.81, 800597.99])
 
-    plt.title("Surface objects removed")
+    plt.title("Filtered")
 
     plt.contourf(x, y, z, 20, cmap=plt.cm.Reds, vmin=z_min, vmax=z_max)
     plt.colorbar()
 
-    plt.savefig("filter_comparison.png", dpi=600)
+    plt.savefig("filter_comparison.png", dpi=900)
     plt.show()
 
 
